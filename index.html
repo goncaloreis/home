@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-mode="editorial">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +14,11 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Gonçalo Reis">
   <meta name="twitter:description" content="I build with frontier AI and invest early in founders.">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="data:,">
+  <link rel="preload" href="/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/tokens.css">
+  <link rel="stylesheet" href="/site.css">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -31,64 +35,72 @@
   </script>
 </head>
 <body>
-  <main>
-    <header class="row hero">
-      <div class="content">
-        <h1>Gonçalo Reis</h1>
-        <p>I build with frontier AI, mostly agents and the plumbing they need. <a href="https://www.linkedin.com/in/goncaloreis">I invest early</a> and back founders more than sectors. Building keeps my judgment current.</p>
-      </div>
-    </header>
+  <a class="skip" href="#main">Skip to main content</a>
+  <main id="main">
+    <div class="frame">
+      <header class="row hero">
+        <div class="content">
+          <h1>Gonçalo Reis</h1>
+          <p class="lead">I build with frontier AI, mostly agents and the plumbing they need. <a href="https://www.linkedin.com/in/goncaloreis">I invest early</a> and back founders more than sectors. Building keeps my judgment current.</p>
+          <p class="action"><a href="mailto:hello@reisierx.com">hello@reisierx.com</a></p>
+        </div>
+      </header>
 
-    <section class="row" aria-labelledby="building-label">
-      <h2 id="building-label" class="label">building</h2>
-      <div class="content">
-        <ul class="projects">
-          <li>
-            <p><a href="https://github.com/goncaloreis/open-matter">open-matter</a>. A one-kilobyte card inside a PDF, so models stop re-reading the same file.</p>
-            <p class="plate">spec, typescript, python, claude plugin</p>
-          </li>
-          <li>
-            <p><a href="https://github.com/goncaloreis/augustalabs-arcus-forensics">arcus-lab</a>. How I found a flag hidden as barcodes in a small GPT's activations. Reproducible, and confirmed by the challenge's server.</p>
-            <p class="plate">write-up and tools</p>
-          </li>
-          <li>
-            <p><a href="https://github.com/goncaloreis/home">This site</a>. Built in public by AI agents I direct.</p>
-            <p class="plate">html, css · building</p>
-          </li>
-        </ul>
-      </div>
-    </section>
+      <section class="row" aria-labelledby="building-label">
+        <h2 id="building-label" class="label">building</h2>
+        <div class="content">
+          <ul class="projects">
+            <li>
+              <p><a href="https://github.com/goncaloreis/open-matter">open-matter</a>. A one-kilobyte card inside a PDF, so models stop re-reading the same file.</p>
+              <p class="plate">spec, typescript, python, claude plugin</p>
+            </li>
+            <li>
+              <p><a href="https://github.com/goncaloreis/augustalabs-arcus-forensics">arcus-lab</a>. How I found a flag hidden as barcodes in a small GPT's activations. Reproducible, and confirmed by the challenge's server.</p>
+              <p class="plate">write-up and tools</p>
+            </li>
+            <li>
+              <p><a href="https://github.com/goncaloreis/home">This site</a>. Built in public by AI agents I direct.</p>
+              <p class="plate">html, css · building</p>
+            </li>
+          </ul>
+        </div>
+      </section>
 
-    <section class="row" aria-labelledby="investing-label">
-      <h2 id="investing-label" class="label">investing</h2>
-      <div class="content">
-        <p>I care more about how founders learn than about what they already know. Send me something you built: a link, a repo or a demo. A deck can wait.</p>
-      </div>
-    </section>
+      <section class="row" aria-labelledby="investing-label">
+        <h2 id="investing-label" class="label">investing</h2>
+        <div class="content">
+          <p>I care more about how founders learn than about what they already know. Send me something you built: a link, a repo or a demo. A deck can wait.</p>
+        </div>
+      </section>
 
-    <section class="row" aria-labelledby="before-label">
-      <h2 id="before-label" class="label">before</h2>
-      <div class="content">
-        <p><a href="https://www.linkedin.com/in/goncaloreis">Before this I co-founded and ran a venture-backed fashion company in Singapore.</a> I helped set up a venture firm in Lisbon and ran its investments for five years. I led European go-to-market for a Silicon Valley software company.</p>
-      </div>
-    </section>
+      <section class="row" aria-labelledby="before-label">
+        <h2 id="before-label" class="label">before</h2>
+        <div class="content">
+          <p><a href="https://www.linkedin.com/in/goncaloreis">Before this I co-founded and ran a venture-backed fashion company in Singapore.</a> I helped set up a venture firm in Lisbon and ran its investments for five years. I led European go-to-market for a Silicon Valley software company.</p>
+        </div>
+      </section>
 
-    <section class="row" aria-labelledby="contact-label">
-      <h2 id="contact-label" class="label">contact</h2>
-      <div class="content">
-        <p><a href="mailto:hello@reisierx.com">hello@reisierx.com</a></p>
-        <nav class="links" aria-label="Profiles">
-          <a href="https://github.com/goncaloreis" rel="me">GitHub</a><span class="sep" aria-hidden="true">·</span><a href="https://x.com/GoncaloReis" rel="me">X</a><span class="sep" aria-hidden="true">·</span><a href="https://www.linkedin.com/in/goncaloreis" rel="me">LinkedIn</a>
-        </nav>
-      </div>
-    </section>
-
-    <footer class="row">
-      <div class="content">
-        <p class="machine">ReisierX is the company I build and invest through. Built in public by AI agents I direct: <a href="https://github.com/goncaloreis/home/commits/main">log</a>, <a href="https://github.com/goncaloreis/home">source</a>. No cookies, no tracking. Last change 25 Nov 2026.</p>
-        <p class="motto">Nullius in verba.</p>
-      </div>
-    </footer>
+      <section class="row" aria-labelledby="contact-label">
+        <h2 id="contact-label" class="label">contact</h2>
+        <div class="content">
+          <p><a href="mailto:hello@reisierx.com">hello@reisierx.com</a></p>
+          <nav class="profiles" aria-label="Profiles">
+            <a href="https://github.com/goncaloreis" rel="me">GitHub</a><span class="sep" aria-hidden="true">·</span><a href="https://x.com/GoncaloReis" rel="me">X</a><span class="sep" aria-hidden="true">·</span><a href="https://www.linkedin.com/in/goncaloreis" rel="me">LinkedIn</a>
+          </nav>
+        </div>
+      </section>
+    </div>
   </main>
+
+  <footer class="site-footer">
+    <div class="frame">
+      <div class="row">
+        <div class="content">
+          <p class="machine">ReisierX is the company I build and invest through. Built in public by AI agents I direct: <a href="https://github.com/goncaloreis/home/commits/main">log</a>, <a href="https://github.com/goncaloreis/home">source</a>. No cookies, no tracking. Last change <time datetime="2026-11-25">25 Nov 2026</time>.</p>
+          <p class="motto">Nullius in verba.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

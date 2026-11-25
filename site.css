@@ -1,0 +1,256 @@
+/*
+ * reisierx.com: Product / Editorial mode (design standard 3.5).
+ * Every value comes from tokens.css; this file only uses var(...).
+ * Phone first; wider layouts at the token breakpoints 768px and 1024px.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--background);
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-serif);
+  font-size: var(--mode-body-size);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--mode-body-leading);
+  letter-spacing: var(--tracking-serif-lg);
+}
+
+/* Skip link (A3): off screen until it takes focus */
+.skip {
+  position: absolute;
+  top: 0;
+  left: var(--space-4);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-height-touch);
+  padding: 0 var(--space-4);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  transform: translateY(-100%);
+}
+
+.skip:focus-visible {
+  top: var(--space-4);
+  transform: none;
+}
+
+/* Page frame: one centered column, label column plus a 60ch text column */
+.frame {
+  max-width: var(--container-editorial);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, var(--mode-measure));
+  row-gap: var(--space-3);
+  padding: var(--mode-section-gap) 0;
+  border-top: var(--border-width) solid var(--border);
+}
+
+.hero {
+  padding-top: var(--space-16);
+  border-top: 0;
+}
+
+/* Type */
+h1 {
+  margin: 0 0 var(--space-6);
+  font-size: var(--text-5xl);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--leading-5xl);
+  letter-spacing: var(--tracking-serif-5xl);
+}
+
+.lead {
+  margin: 0;
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  letter-spacing: var(--tracking-serif-xl);
+}
+
+.label {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-sm);
+  letter-spacing: var(--tracking-sm);
+}
+
+p {
+  margin: 0;
+}
+
+p + p {
+  margin-top: var(--space-4);
+}
+
+/* Links (A2: underlined in running text; C4: no hue, monochrome primary) */
+a {
+  border-radius: var(--radius-sm);
+  color: var(--primary);
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--border-width);
+  text-underline-offset: var(--space-1);
+}
+
+a:hover {
+  text-decoration-thickness: var(--focus-ring-width);
+}
+
+a:active {
+  color: var(--muted-foreground);
+}
+
+/* Focus (A4) */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* The one primary action in the first viewport (P3, E3) */
+.action {
+  margin-top: var(--space-6);
+}
+
+.action a,
+.profiles a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-height-touch);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-base);
+  letter-spacing: var(--tracking-base);
+}
+
+/* Building list */
+.projects {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.projects li + li {
+  margin-top: var(--space-6);
+}
+
+.plate {
+  margin-top: var(--space-1);
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  letter-spacing: var(--tracking-sm);
+}
+
+p + .plate {
+  margin-top: var(--space-1);
+}
+
+/* Contact */
+.profiles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+/* Touch: every profile target is at least 44 by 44 (G3); X alone needs the width */
+@media (pointer: coarse) {
+  .profiles a {
+    justify-content: center;
+    min-width: var(--control-height-touch);
+  }
+}
+
+.sep {
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  user-select: none;
+}
+
+/* Footer */
+.site-footer .row {
+  padding-bottom: var(--space-16);
+}
+
+.machine {
+  /* 60ch of the 14px sans still runs past 75 characters; container-md holds it near 70 (T4) */
+  max-width: var(--container-md);
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  letter-spacing: var(--tracking-sm);
+}
+
+.machine a {
+  color: var(--muted-foreground);
+}
+
+.motto {
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+  letter-spacing: var(--tracking-serif-base);
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .frame {
+    padding: 0 var(--space-10);
+  }
+
+  h1 {
+    font-size: var(--text-6xl);
+    line-height: var(--leading-6xl);
+    letter-spacing: var(--tracking-serif-6xl);
+  }
+}
+
+/* Laptop and up: labels sit in the left margin, text keeps one left edge */
+@media (min-width: 1024px) {
+  .frame {
+    max-width: calc(var(--space-32) + var(--space-10) + var(--mode-measure) + var(--space-10) * 2);
+  }
+
+  .row {
+    grid-template-columns: var(--space-32) minmax(0, var(--mode-measure));
+    column-gap: var(--space-10);
+    align-items: baseline;
+  }
+
+  .row > .content {
+    grid-column: 2;
+  }
+
+  .hero {
+    padding-top: var(--space-32);
+  }
+
+  h1 {
+    font-size: var(--text-7xl);
+    line-height: var(--leading-7xl);
+    letter-spacing: var(--tracking-serif-7xl);
+  }
+}
