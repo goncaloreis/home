@@ -1,0 +1,492 @@
+/*
+ * Suite Design Standard v1: Static HTML Tokens
+ * Source of truth: charter/design-standard.md
+ * Defaults: monochrome accent, en-GB locale / EUR, light + dark parity.
+ */
+
+/* ==========================================================================
+   1. Self-hosted typography & metric-matched fallbacks (T1, G4, B19)
+   ========================================================================== */
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 600;
+  src: url("./fonts/inter-latin-ext-opsz-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 600;
+  src: url("./fonts/inter-latin-opsz-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("Liberation Sans");
+  size-adjust: 107%;
+  ascent-override: 90.49%;
+  descent-override: 22.56%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 600;
+  src: url("./fonts/source-serif-4-latin-ext-opsz-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 600;
+  src: url("./fonts/source-serif-4-latin-opsz-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Source Serif 4 Fallback";
+  src: local("Georgia"), local("Liberation Serif");
+  size-adjust: 103.5%;
+  ascent-override: 97%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+/* ==========================================================================
+   2. Light theme & invariant tokens (:root, Section 2)
+   ========================================================================== */
+
+:root {
+  color-scheme: light dark;
+
+  /* Semantic color pairs (Section 2.1, Stone base, monochrome primary) */
+  --background: #FAFAF9;
+  --foreground: #1C1917;
+  --card: #FFFFFF;
+  --card-foreground: #1C1917;
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1917;
+  --muted: #F5F5F4;
+  --muted-foreground: #57534E;
+  --secondary: #F5F5F4;
+  --secondary-foreground: #1C1917;
+  --accent: #F5F5F4;
+  --accent-foreground: #1C1917;
+  --primary: #1C1917;
+  --primary-foreground: #FAFAF9;
+  --destructive: #B91C1C;
+  --destructive-foreground: #FFFFFF;
+  --success: #15803D;
+  --success-foreground: #FFFFFF;
+  --warning: #B45309;
+  --warning-foreground: #FFFFFF;
+  --border: #E7E5E4;
+  --input: #78716C;
+  --ring: #2563EB;
+
+  /* Chart tokens (Section 2.1, C8) */
+  --chart-1: #2A78D6;
+  --chart-2: #EB6834;
+  --chart-3: #1BAF7A;
+  --chart-4: #EDA100;
+  --chart-5: #E87BA4;
+  --chart-6: #008300;
+  --chart-7: #6250D6;
+  --chart-8: #E34948;
+  --chart-context: #A8A29E;
+
+  /* Sequential chart scale (chart-1 hue, light to dark) */
+  --chart-seq-1: #CDE2FB;
+  --chart-seq-2: #9EC5F4;
+  --chart-seq-3: #6DA7EC;
+  --chart-seq-4: #3987E5;
+  --chart-seq-5: #256ABF;
+  --chart-seq-6: #184F95;
+  --chart-seq-7: #0D366B;
+
+  /* Diverging chart endpoints (midpoint is --muted) */
+  --chart-div-low: var(--chart-1);
+  --chart-div-mid: var(--muted);
+  --chart-div-high: var(--chart-8);
+
+  /* Chart geometry (Section 3.4, X5) */
+  --chart-line-width: 2px;
+  --chart-bar-max-width: 24px;
+  --chart-mark-gap: 2px;
+  --chart-gridline-width: 1px;
+
+  /* Shadows (Section 2.1, C6: Stone tinted, never black) */
+  --shadow-sm: 0 1px 2px rgb(28 25 23 / 0.06), 0 1px 1px rgb(28 25 23 / 0.04);
+  --shadow-md: 0 4px 12px rgb(28 25 23 / 0.08), 0 1px 2px rgb(28 25 23 / 0.06);
+  --shadow-lg: 0 16px 40px rgb(28 25 23 / 0.12), 0 4px 8px rgb(28 25 23 / 0.06);
+
+  /* Radius base (Section 2.1, C7; derived tokens scoped on :root and [data-mode]) */
+  --radius: 8px;
+  --radius-full: 9999px;
+
+  /* Typography families (Section 2.2, T1) */
+  --font-sans: "Inter", "Inter Fallback", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: "Source Serif 4", "Source Serif 4 Fallback", ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Font weights (Section 2.2, T3: max 3 per build, nothing > 600) */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Type scale: size, line-height (multiple of 4px), tracking (Section 2.2, T2) */
+  --text-xs: 0.75rem;
+  --leading-xs: 1rem;
+  --tracking-xs: 0em;
+  --tracking-serif-xs: 0em;
+
+  --text-sm: 0.875rem;
+  --leading-sm: 1.25rem;
+  --tracking-sm: 0em;
+  --tracking-serif-sm: 0em;
+
+  --text-base: 1rem;
+  --leading-base: 1.5rem;
+  --leading-prose: 1.75rem;
+  --tracking-base: -0.01em;
+  --tracking-serif-base: -0.005em;
+
+  --text-lg: 1.125rem;
+  --leading-lg: 1.75rem;
+  --tracking-lg: -0.01em;
+  --tracking-serif-lg: -0.005em;
+
+  --text-xl: 1.25rem;
+  --leading-xl: 1.75rem;
+  --tracking-xl: -0.01em;
+  --tracking-serif-xl: -0.005em;
+
+  --text-2xl: 1.5rem;
+  --leading-2xl: 2rem;
+  --tracking-2xl: -0.015em;
+  --tracking-serif-2xl: -0.0075em;
+
+  --text-3xl: 1.875rem;
+  --leading-3xl: 2.25rem;
+  --tracking-3xl: -0.015em;
+  --tracking-serif-3xl: -0.0075em;
+
+  --text-4xl: 2.25rem;
+  --leading-4xl: 2.5rem;
+  --tracking-4xl: -0.02em;
+  --tracking-serif-4xl: -0.01em;
+
+  --text-5xl: 3rem;
+  --leading-5xl: 3.25rem;
+  --tracking-5xl: -0.02em;
+  --tracking-serif-5xl: -0.01em;
+
+  --text-6xl: 3.75rem;
+  --leading-6xl: 4rem;
+  --tracking-6xl: -0.025em;
+  --tracking-serif-6xl: -0.0125em;
+
+  --text-7xl: 4.5rem;
+  --leading-7xl: 4.75rem;
+  --tracking-7xl: -0.025em;
+  --tracking-serif-7xl: -0.0125em;
+
+  --tracking-caps: 0.05em;
+  --measure-prose: 65ch;
+  --measure-editorial: 60ch;
+
+  /* Spacing scale: 4px grid (Section 2.3, G1) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Layout & control invariants (Section 2.3, G3; Section 2.5, A4; Section 3.2) */
+  --border-width: 1px;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-inner: 0 0 0 var(--focus-ring-offset) var(--background);
+  --focus-ring-two-tone: 0 0 0 var(--focus-ring-offset) var(--background), 0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--ring);
+  --control-height-compact: 32px;
+  --control-height-default: 40px;
+  --control-height-touch: 44px;
+  --target-min: 24px;
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --topbar-height: 48px;
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 56px;
+  --detail-panel-width: 400px;
+  --container-xs: 320px;
+  --container-md: 448px;
+  --container-lg: 512px;
+  --container-workspace: none;
+  --container-explainer: 1080px;
+  --container-editorial: 1200px;
+
+  /* Breakpoints (matches tokens.json breakpoints) */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* Motion physics (Section 2.6, M2, M3, M6) */
+  --duration-1: 100ms;
+  --duration-2: 150ms;
+  --duration-3: 200ms;
+  --duration-4: 300ms;
+  --duration-chart: 400ms;
+  --duration-reduced: 150ms;
+  --duration-exit-1: 75ms;
+  --duration-exit-2: 112ms;
+  --duration-exit-3: 150ms;
+  --duration-exit-4: 225ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-linear: linear;
+  --scale-popover-enter: 0.96;
+
+  /* Mode defaults (Explainer unless overridden by [data-mode]) */
+  --mode-body-size: var(--text-base);
+  --mode-body-leading: var(--leading-prose);
+  --mode-control-height: var(--control-height-default);
+  --mode-row-height: var(--control-height-default);
+  --mode-section-gap: var(--space-12);
+  --mode-measure: var(--measure-prose);
+  --mode-container-max: var(--container-explainer);
+}
+
+:root,
+[data-mode] {
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 1.5);
+}
+
+/* ==========================================================================
+   3. Dark theme (prefers-color-scheme + explicit data-theme, Section 6.2)
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #1C1917;
+    --foreground: #F5F5F4;
+    --card: #221F1D;
+    --card-foreground: #F5F5F4;
+    --popover: #292524;
+    --popover-foreground: #F5F5F4;
+    --muted: #292524;
+    --muted-foreground: #A8A29E;
+    --secondary: #292524;
+    --secondary-foreground: #F5F5F4;
+    --accent: #292524;
+    --accent-foreground: #F5F5F4;
+    --primary: #F5F5F4;
+    --primary-foreground: #1C1917;
+    --destructive: #F87171;
+    --destructive-foreground: #1C1917;
+    --success: #4ADE80;
+    --success-foreground: #1C1917;
+    --warning: #FBBF24;
+    --warning-foreground: #1C1917;
+    --border: #44403C;
+    --input: #78716C;
+    --ring: #60A5FA;
+
+    --chart-1: #3987E5;
+    --chart-2: #D95926;
+    --chart-3: #199E70;
+    --chart-4: #C98500;
+    --chart-5: #D55181;
+    --chart-6: #008300;
+    --chart-7: #9085E9;
+    --chart-8: #E66767;
+    --chart-context: #57534E;
+
+    --shadow-sm: none;
+    --shadow-md: 0 4px 12px rgb(12 10 9 / 0.5), 0 1px 2px rgb(12 10 9 / 0.3);
+    --shadow-lg: 0 16px 40px rgb(12 10 9 / 0.5), 0 4px 8px rgb(12 10 9 / 0.3);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #1C1917;
+  --foreground: #F5F5F4;
+  --card: #221F1D;
+  --card-foreground: #F5F5F4;
+  --popover: #292524;
+  --popover-foreground: #F5F5F4;
+  --muted: #292524;
+  --muted-foreground: #A8A29E;
+  --secondary: #292524;
+  --secondary-foreground: #F5F5F4;
+  --accent: #292524;
+  --accent-foreground: #F5F5F4;
+  --primary: #F5F5F4;
+  --primary-foreground: #1C1917;
+  --destructive: #F87171;
+  --destructive-foreground: #1C1917;
+  --success: #4ADE80;
+  --success-foreground: #1C1917;
+  --warning: #FBBF24;
+  --warning-foreground: #1C1917;
+  --border: #44403C;
+  --input: #78716C;
+  --ring: #60A5FA;
+
+  --chart-1: #3987E5;
+  --chart-2: #D95926;
+  --chart-3: #199E70;
+  --chart-4: #C98500;
+  --chart-5: #D55181;
+  --chart-6: #008300;
+  --chart-7: #9085E9;
+  --chart-8: #E66767;
+  --chart-context: #57534E;
+
+  --shadow-sm: none;
+  --shadow-md: 0 4px 12px rgb(12 10 9 / 0.5), 0 1px 2px rgb(12 10 9 / 0.3);
+  --shadow-lg: 0 16px 40px rgb(12 10 9 / 0.5), 0 4px 8px rgb(12 10 9 / 0.3);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   4. Device adaptation: high contrast, forced colors, coarse pointer, motion
+   ========================================================================== */
+
+@media (prefers-contrast: more) {
+  :root {
+    --border: var(--input);
+  }
+}
+
+@media (forced-colors: active) {
+  :root {
+    --background: Canvas;
+    --foreground: CanvasText;
+    --border: ButtonText;
+    --input: ButtonText;
+    --ring: Highlight;
+    --primary: Highlight;
+    --primary-foreground: HighlightText;
+  }
+
+  :focus-visible {
+    outline: var(--focus-ring-width) solid Highlight;
+    outline-offset: var(--focus-ring-offset);
+  }
+}
+
+@media (pointer: coarse) {
+  :root {
+    --mode-control-height: var(--control-height-touch);
+    --mode-row-height: var(--control-height-touch);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-1: 0ms;
+    --duration-2: 150ms;
+    --duration-3: 150ms;
+    --duration-4: 150ms;
+    --duration-chart: 0ms;
+    --duration-exit-1: 0ms;
+    --duration-exit-2: 150ms;
+    --duration-exit-3: 150ms;
+    --duration-exit-4: 150ms;
+    --scale-popover-enter: 1;
+  }
+}
+
+/* ==========================================================================
+   5. Layer 2 mode dials ([data-mode], Section 3.2)
+   ========================================================================== */
+
+[data-mode="workspace"] {
+  --radius: 8px;
+  --mode-body-size: var(--text-sm);
+  --mode-body-leading: var(--leading-sm);
+  --mode-control-height: var(--control-height-compact);
+  --mode-row-height: var(--control-height-compact);
+  --mode-section-gap: var(--space-6);
+  --mode-measure: var(--measure-prose);
+  --mode-container-max: var(--container-workspace);
+}
+
+[data-mode="explainer"] {
+  --radius: 8px;
+  --mode-body-size: var(--text-base);
+  --mode-body-leading: var(--leading-prose);
+  --mode-control-height: var(--control-height-default);
+  --mode-row-height: var(--control-height-default);
+  --mode-section-gap: var(--space-12);
+  --mode-measure: var(--measure-prose);
+  --mode-container-max: var(--container-explainer);
+}
+
+[data-mode="editorial"] {
+  --radius: 4px;
+  --mode-body-size: var(--text-lg);
+  --mode-body-leading: var(--leading-lg);
+  --mode-control-height: var(--control-height-touch);
+  --mode-row-height: var(--space-12);
+  --mode-section-gap: var(--space-16);
+  --mode-measure: var(--measure-editorial);
+  --mode-container-max: var(--container-editorial);
+}
+
+@media (min-width: 1024px) {
+  [data-mode="editorial"] {
+    --mode-section-gap: var(--space-24);
+  }
+}
+
+@media (pointer: coarse) {
+  [data-mode="workspace"],
+  [data-mode="explainer"],
+  [data-mode="editorial"] {
+    --mode-control-height: var(--control-height-touch);
+    --mode-row-height: var(--control-height-touch);
+  }
+}
+
+/* Two-tone focus ring on colored or image backgrounds (A4) */
+.focus-ring-two-tone:focus-visible {
+  outline: var(--focus-ring-width) solid var(--ring);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-ring-inner);
+}
