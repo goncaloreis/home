@@ -4,6 +4,23 @@
  * Phone first; wider layouts at the token breakpoints 768px and 1024px.
  */
 
+/* The display serif uses font-display: optional so a late swap cannot
+ * shift the first viewport (G4). tokens.css keeps font-display: swap, so
+ * this face is a site-level family that falls back to the token fallback
+ * stack and never to the swap face. The latin file is the one used above
+ * the fold and is already preloaded. */
+@font-face {
+  font-family: "Source Serif 4 Display";
+  font-style: normal;
+  font-display: optional;
+  font-weight: 300 600;
+  src: url("./fonts/source-serif-4-latin-opsz-normal.woff2") format("woff2-variations");
+}
+
+:root {
+  --font-serif: "Source Serif 4 Display", "Source Serif 4 Fallback", ui-serif, Georgia, serif;
+}
+
 *,
 *::before,
 *::after {
