@@ -1,89 +1,258 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gonçalo Reis</title>
-  <meta name="description" content="I build with frontier AI and invest early in founders.">
+  <meta name="color-scheme" content="light dark">
+  <title>ReisierX</title>
+  <meta name="description" content="ReisierX. A company that builds. Book a working session: one hour on your company, with Gonçalo Reis.">
   <link rel="canonical" href="https://reisierx.com/">
-  <style>
-    :root {
-      --paper: #F7F5F0;
-      --ink: #141414;
-      --cobalt: #1F3FA8;
-      --graphite: #5C5B57;
-      --rule: #DCD8CE;
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ReisierX">
+  <meta property="og:description" content="ReisierX. A company that builds. Book a working session: one hour on your company, with Gonçalo Reis.">
+  <meta property="og:url" content="https://reisierx.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ReisierX">
+  <meta name="twitter:description" content="ReisierX. A company that builds. Book a working session: one hour on your company, with Gonçalo Reis.">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ReisierX",
+      "url": "https://reisierx.com/",
+      "description": "A company that builds. Paid working sessions with Gonçalo Reis on a build, a market move or a live deal.",
+      "founder": {
+        "@type": "Person",
+        "name": "Gonçalo Reis",
+        "sameAs": [
+          "https://github.com/goncaloreis",
+          "https://x.com/GoncaloReis"
+        ]
+      }
     }
-    * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
-      font-size: 1.25rem;
-      line-height: 1.45;
-    }
-    main {
-      max-width: 36em;
-      margin: 0 auto;
-      padding: 22vh 1.5rem 4rem;
-    }
-    @media (max-width: 40em) {
-      main { padding-top: 16vh; }
-      body { font-size: 1.125rem; }
-    }
-    h1 {
-      margin: 0 0 1.15rem;
-      font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-    }
-    p { margin: 0 0 1rem; }
-    nav {
-      margin: 2rem 0 0;
-      font-size: 1.125rem;
-    }
-    nav a {
-      color: var(--cobalt);
-      text-decoration: underline;
-      text-underline-offset: 0.18em;
-    }
-    nav a:hover { text-decoration-thickness: 0.12em; }
-    nav a:focus-visible {
-      outline: 2px solid var(--cobalt);
-      outline-offset: 3px;
-    }
-    .sep {
-      color: var(--graphite);
-      margin: 0 0.55rem;
-      user-select: none;
-    }
-    footer {
-      margin-top: 3rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--rule);
-      color: var(--graphite);
-      font-family: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-      font-size: 0.875rem;
-      letter-spacing: 0.01em;
-    }
-    footer p { margin: 0; }
-  </style>
+  </script>
 </head>
 <body>
-  <main>
-    <h1>Gonçalo Reis</h1>
-    <p>I build with frontier AI and invest early in founders.</p>
-    <p>This site is built in public, one change at a time. Each change goes live here.</p>
-    <nav aria-label="Profiles and change log">
-      <a href="https://github.com/goncaloreis">GitHub</a><span class="sep" aria-hidden="true">·</span><a href="https://x.com/GoncaloReis">X</a><span class="sep" aria-hidden="true">·</span><a href="https://github.com/goncaloreis/home/commits/main">Log</a>
-    </nav>
-    <footer>
-      <p>Last change 25 Nov 2026</p>
+  <a class="skip" href="#book">Skip to booking</a>
+
+  <div class="toolbar">
+    <label class="flip-label">
+      <input type="checkbox" id="flip" aria-label="Switch between light and dark">
+      <span class="box" aria-hidden="true"></span>
+      <span class="t-dark">Carbon copy (dark)</span><span class="t-light">Top sheet (light)</span>
+    </label>
+  </div>
+
+  <div class="sheet">
+    <header class="head">
+      <div>
+        <p class="wordmark">ReisierX</p>
+        <p class="claim">A company that builds.</p>
+      </div>
+      <p class="doc"><span class="title">Work order</span><span class="sub">ReisierX working session</span></p>
+    </header>
+
+    <main>
+      <div class="top">
+        <section class="field f-offer" aria-labelledby="offer-h">
+          <p class="lab"><span>01</span><span>Offer</span></p>
+          <h1 id="offer-h">One hour. All of it on your company.</h1>
+          <p class="lead">A build, a market move or a live deal. You work on it with Gonçalo Reis, on live video.</p>
+        </section>
+
+        <!-- Offer rate and length: single source of truth in real DOM text -->
+        <aside class="stub" aria-labelledby="stub-h">
+          <p class="lab" id="stub-h">Stub · keep this part</p>
+          <p class="what">ReisierX working session</p>
+          <p class="p" data-offer-price>USD 115</p>
+          <p class="l"><span data-offer-length>60 minutes</span>, live video</p>
+          <a class="book" href="#book">Book a working session</a>
+          <p class="note"><span class="ph">booking opens soon</span></p>
+          <span class="stamp" aria-hidden="true">Paid at booking</span>
+        </aside>
+
+        <section class="field f-gauge" aria-labelledby="gauge-h">
+          <div class="gauge-head">
+            <p class="lab" id="gauge-h"><span>02</span><span>Where the hour goes</span></p>
+            <span class="gauge-unit">Minutes</span>
+          </div>
+          <div class="meters">
+            <div class="m-row">
+              <span>Your company</span>
+              <span class="m-bar" aria-hidden="true"><i style="--v:60"></i></span>
+              <span class="m-fig">60 min</span>
+            </div>
+            <div class="m-row zero">
+              <span>Presentation about ReisierX</span>
+              <span class="m-bar" aria-hidden="true"><i style="--v:0"></i></span>
+              <span class="m-fig">0</span>
+            </div>
+            <div class="m-row zero">
+              <span>Questions about his career</span>
+              <span class="m-bar" aria-hidden="true"><i style="--v:0"></i></span>
+              <span class="m-fig">0</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="field f-terms">
+          <div class="subcell">
+            <p class="lab"><span>03</span><span>Brief due</span></p>
+            <p>At least 24 hours before. No brief, no session.</p>
+          </div>
+          <div class="subcell">
+            <p class="lab"><span>04</span><span>Payment</span></p>
+            <p>At booking. Confirmed only once paid.</p>
+          </div>
+        </div>
+
+        <section class="field f-proof" aria-labelledby="proof-h">
+          <p class="lab" id="proof-h"><span>05</span><span>Built in the open</span></p>
+          <ul class="proof-strip">
+            <li>
+              <a href="https://github.com/goncaloreis/open-matter">open-matter</a>
+              <span>PDF card spec and libraries</span>
+            </li>
+            <li>
+              <a href="https://github.com/goncaloreis/augustalabs-arcus-forensics">arcus-lab</a>
+              <span>Model forensics write-up</span>
+            </li>
+            <li>
+              <a href="https://github.com/goncaloreis/home">This site</a>
+              <span>Built in public by AI agents</span>
+            </li>
+            <li>
+              <a href="https://github.com/goncaloreis">GitHub</a>
+              <span>Check the rest of the building</span>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <section class="part" aria-labelledby="brief-h">
+        <div class="part-head"><span class="num">06</span><h2 id="brief-h">Your brief</h2></div>
+        <p>Send your brief at least 24 hours before the hour. Short is fine; it only has to answer three things. No brief, no session.</p>
+        <div class="template-wrap">
+          <pre class="template" tabindex="0" aria-label="Brief template">1. The problem:
+2. A link to the product, repo or materials:
+3. What I want to leave the hour with:</pre>
+          <p class="hint">One click selects the whole template. Copy it, fill it in, send it with your booking.</p>
+        </div>
+      </section>
+
+      <section class="part" aria-labelledby="record-h">
+        <div class="part-head"><span class="num">07</span><h2 id="record-h">Shop record</h2></div>
+        <p>Check the work before you book. Claims should be checkable.</p>
+        <table class="record">
+          <caption class="lab">Built</caption>
+          <thead>
+            <tr>
+              <th scope="col" class="lab">Work</th>
+              <th scope="col" class="lab">What it is</th>
+              <th scope="col" class="lab">Check</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="kind">open-matter</td>
+              <td>A spec and libraries that let models skip re-reading a PDF, by writing a small card inside the file.</td>
+              <td><a href="https://github.com/goncaloreis/open-matter">Source</a></td>
+            </tr>
+            <tr>
+              <td class="kind">arcus-lab</td>
+              <td>A reproducible model forensics write-up: a flag hidden as barcodes in a small GPT's activations, confirmed by the challenge's server.</td>
+              <td><a href="https://github.com/goncaloreis/augustalabs-arcus-forensics">Write-up</a></td>
+            </tr>
+            <tr>
+              <td class="kind">This site</td>
+              <td>Built in public by AI agents Gonçalo Reis directs. Plain HTML and CSS.</td>
+              <td><a href="https://github.com/goncaloreis/home">Source and log</a></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="record">
+          <caption class="lab">Companies founded or taken to market</caption>
+          <tbody>
+            <tr>
+              <td class="kind">Founded</td>
+              <td>Co-founded and ran a venture-backed fashion company in Singapore.</td>
+            </tr>
+            <tr>
+              <td class="kind">Market</td>
+              <td>Led European go-to-market for a Silicon Valley software company.</td>
+            </tr>
+            <tr>
+              <td class="kind">Set up</td>
+              <td>Helped set up a Lisbon venture firm and ran its investments for five years.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="more">The rest of the building is on <a href="https://github.com/goncaloreis">GitHub</a>.</p>
+      </section>
+
+      <section class="part" aria-labelledby="accept-h">
+        <div class="part-head"><span class="num">08</span><h2 id="accept-h">Accepted, not accepted</h2></div>
+        <div class="accept">
+          <div class="yes">
+            <h3 class="lab">Accepted</h3>
+            <ul>
+              <li><span class="mk" aria-hidden="true">✓</span><span>Founders and operators already building: a live product, a repo, a prototype or a launch in motion. Especially with AI or agents, or the plumbing those systems need.</span></li>
+              <li><span class="mk" aria-hidden="true">✓</span><span>A product decision, or a hard technical or commercial choice.</span></li>
+              <li><span class="mk" aria-hidden="true">✓</span><span>Operators taking an existing product into a new market, especially Europe or the US, with a plan, a pipeline or a launch problem.</span></li>
+              <li><span class="mk" aria-hidden="true">✓</span><span>Founders and operators in the middle of a live deal: a raise, a partnership or a sale.</span></li>
+            </ul>
+          </div>
+          <div class="no">
+            <h3 class="lab">Not accepted</h3>
+            <ul>
+              <li><span class="mk" aria-hidden="true">✕</span><span>An idea with nothing built yet.</span></li>
+              <li><span class="mk" aria-hidden="true">✕</span><span>Students, job seekers and recruiters.</span></li>
+              <li><span class="mk" aria-hidden="true">✕</span><span>Career guidance, or questions about his career.</span></li>
+              <li><span class="mk" aria-hidden="true">✕</span><span>A pitch for capital, or an introduction. <span class="closed-tag">Closed</span> No door here. A fundraising introduction is a different door.</span></li>
+              <li><span class="mk" aria-hidden="true">✕</span><span>There is no free first call. Every session is paid and prepared.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="part" id="book" aria-labelledby="proc-h">
+        <div class="part-head"><span class="num">09</span><h2 id="proc-h">Procedure</h2></div>
+        <ol class="procedure">
+          <li>
+            <strong>Pick a time.</strong>
+            <p>Choose a slot on live video.</p>
+          </li>
+          <li>
+            <strong>Pay at booking.</strong>
+            <p>The slot is confirmed only once paid.</p>
+          </li>
+          <li>
+            <strong>Send the brief.</strong>
+            <p>At least 24 hours before the session.</p>
+          </li>
+          <li>
+            <strong>The hour.</strong>
+            <p>Spent on your company, from minute one.</p>
+          </li>
+        </ol>
+        <div class="final">
+          <a class="book" href="#book">Book a working session</a>
+          <span class="ph">booking opens soon</span>
+        </div>
+        <p class="terms"><span class="ph">draft</span>Pay when you book. Send your brief at least 24 hours before. You can reschedule or cancel free of charge up to 48 hours before the session. After that the fee is kept.</p>
+      </section>
+    </main>
+
+    <!-- Update Last change and sitemap.xml lastmod to the merge date when merging -->
+    <footer class="foot">
+      <div>
+        <p><strong>ReisierX.</strong> This site is built in public by AI agents Gonçalo Reis directs: <a href="https://github.com/goncaloreis/home/commits/main">log</a>, <a href="https://github.com/goncaloreis/home">source</a>.</p>
+        <p>No cookies, no tracking. Questions: <a href="mailto:hello@reisierx.com">hello@reisierx.com</a>. Last change 25 Nov 2026.</p>
+      </div>
+      <p class="seal">Nullius in verba<small>Check the work</small></p>
     </footer>
-  </main>
+  </div>
 </body>
 </html>

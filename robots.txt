@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://reisierx.com/sitemap.xml
