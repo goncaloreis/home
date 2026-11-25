@@ -467,6 +467,7 @@ h2 {
   .record thead { display: none; }
   .record tr { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--rule); padding: 0.6rem 0; }
   .record td { border: 0; padding: 0.1rem 0; }
+  .record td:last-child { white-space: normal; }
 }
 
 @media print {
