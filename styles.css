@@ -232,6 +232,11 @@ a:hover {
   min-height: var(--control-height-touch);
 }
 
+/* Skip target: no ring around the whole main region */
+main:focus {
+  outline: 0;
+}
+
 /* A working session */
 .session:focus {
   outline: 0;

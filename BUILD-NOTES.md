@@ -28,7 +28,7 @@ The page shows no data, so S2's data states do not apply. Control and content st
 | Element | Default | Hover | Focus-visible | Active | Other |
 |---|---|---|---|---|---|
 | Text links | Underlined | Underline dims | Token ring, 2px, 2px offset | Browser default | Visited same as default |
-| Skip link | Off screen | n/a | On screen, token ring | n/a | Lands on the session section |
+| Skip link | Off screen | n/a | On screen, token ring | n/a | Lands on the main content |
 | Booking | "Booking is not open yet." (status) | n/a | n/a | n/a | Live state: one primary button, markup in the comment |
 | Price | Filled from env | n/a | n/a | n/a | Missing env: "[price set at deploy]" |
 | Hero | Recommended | n/a | n/a | n/a | Variants A and B via build env |
