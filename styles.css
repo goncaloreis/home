@@ -124,7 +124,7 @@ a:hover {
   max-width: var(--measure-editorial);
   font-size: var(--text-lg);
   line-height: var(--leading-lg);
-  color: var(--muted-foreground);
+  color: var(--foreground);
 }
 
 .hero-action {
@@ -212,7 +212,7 @@ a:hover {
   font-size: var(--text-base);
   line-height: var(--leading-prose);
   letter-spacing: var(--tracking-base);
-  color: var(--muted-foreground);
+  color: var(--foreground);
   max-width: var(--measure-prose);
 }
 
