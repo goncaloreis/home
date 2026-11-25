@@ -119,14 +119,17 @@ a:hover {
   letter-spacing: var(--tracking-serif-5xl);
   max-width: var(--container-lg);
   text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 
 .hero-lead {
   margin-top: var(--space-6);
-  max-width: var(--measure-editorial);
+  max-width: var(--container-lg);
   font-size: var(--text-lg);
   line-height: var(--leading-lg);
   color: var(--foreground);
+  /* Reserve the fallback wrap (5 lines) so a late Inter swap cannot shrink the first screen. */
+  min-height: calc(var(--leading-lg) + var(--leading-lg) + var(--leading-lg) + var(--leading-lg) + var(--leading-lg));
 }
 
 .hero-action {
@@ -161,7 +164,7 @@ a:hover {
 }
 
 .prose {
-  max-width: var(--measure-editorial);
+  max-width: var(--container-lg);
   display: grid;
   gap: var(--space-4);
 }
@@ -195,7 +198,16 @@ a:hover {
   margin-bottom: var(--space-4);
 }
 
-/* In the lab: secondary, set smaller */
+/* Finished experiments: secondary, set smaller */
+.experiments {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.experiments > p {
+  max-width: var(--container-lg);
+}
+
 .lab-list {
   display: grid;
   gap: var(--space-8);
@@ -234,15 +246,29 @@ a:hover {
   min-height: var(--control-height-touch);
 }
 
-/* Skip target: no ring around the whole main region */
-main:focus {
-  outline: 0;
+.artefact {
+  margin: 0;
+  max-width: 100%;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.artefact code {
+  white-space: inherit;
+  overflow-wrap: anywhere;
+}
+
+/* Skip and session targets: visible ring from tokens */
+main:focus,
+.session:focus {
+  outline: var(--focus-ring-width) solid var(--ring);
+  outline-offset: var(--focus-ring-offset);
 }
 
 /* A working session */
-.session:focus {
-  outline: 0;
-}
 
 .session:focus-visible .section-label {
   outline: var(--focus-ring-width) solid var(--ring);
@@ -285,6 +311,7 @@ main:focus {
 }
 
 .terms {
+  max-width: var(--container-md);
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
   color: var(--muted-foreground);
@@ -356,6 +383,7 @@ main:focus {
   .hero-lead {
     font-size: var(--text-xl);
     line-height: var(--leading-xl);
+    min-height: auto;
   }
 
   .block .wrap {

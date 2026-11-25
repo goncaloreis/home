@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>ReisierX</title>
-  <meta name="description" content="ReisierX is Gonçalo Reis's firm. We build companies from the inside.">
+  <meta name="description" content="ReisierX is Gonçalo Reis's firm. We found, build and run companies, take them into new markets, and build with frontier AI, alongside the people who run them.">
   <link rel="canonical" href="https://reisierx.com/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="ReisierX">
-  <meta property="og:description" content="ReisierX is Gonçalo Reis's firm. We build companies from the inside.">
+  <meta property="og:description" content="ReisierX is Gonçalo Reis's firm. We found, build and run companies, take them into new markets, and build with frontier AI, alongside the people who run them.">
   <meta property="og:url" content="https://reisierx.com/">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="ReisierX">
-  <meta name="twitter:description" content="ReisierX is Gonçalo Reis's firm. We build companies from the inside.">
+  <meta name="twitter:description" content="ReisierX is Gonçalo Reis's firm. We found, build and run companies, take them into new markets, and build with frontier AI, alongside the people who run them.">
   <link rel="icon" href="data:,">
   <link rel="preload" href="/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -25,7 +25,7 @@
       "@type": "Organization",
       "name": "ReisierX",
       "url": "https://reisierx.com/",
-      "description": "ReisierX is Gonçalo Reis's firm. We build companies from the inside.",
+      "description": "ReisierX is Gonçalo Reis's firm. We found, build and run companies, take them into new markets, and build with frontier AI, alongside the people who run them.",
       "founder": {
         "@type": "Person",
         "name": "Gonçalo Reis",
@@ -48,34 +48,43 @@
   </header>
 
   <main id="main" tabindex="-1">
-    <!-- First screen. Copy: Growth copy-v2, section 1, recommended option. -->
-    <section class="hero" aria-labelledby="hero-h" data-hero-variant="recommended">
+    <section class="hero" aria-labelledby="hero-h">
       <div class="wrap">
-        <h1 id="hero-h">We build companies from the inside.</h1>
-        <p class="hero-lead">This is Gonçalo Reis's firm. The work is founding, building and running companies, and taking them into new markets, alongside the people who run them.</p>
+        <h1 id="hero-h">Companies, built from the inside.</h1>
+        <p class="hero-lead">ReisierX is Gonçalo Reis's firm. We found, build and run companies, take them into new markets, and build with frontier AI, alongside the people who run them.</p>
         <p class="hero-action"><a class="text-action" href="#session">Book a working session</a></p>
       </div>
     </section>
 
-    <!-- Hero variants for Gonçalo's pick (Growth copy-v2, section 1). Not rendered.
-         build.mjs swaps one in when HERO_VARIANT is set to "a" or "b". -->
-    <template data-hero-variant="a">
-      <h1>A firm that builds from the inside.</h1>
-      <p class="hero-lead">ReisierX is Gonçalo Reis's company. We work inside the companies we build, and inside the markets we enter, with the people who run them.</p>
-    </template>
-    <template data-hero-variant="b">
-      <h1>The work happens inside the company.</h1>
-      <p class="hero-lead">ReisierX is Gonçalo Reis's firm. We start, build and run companies, and we take them into new markets, working alongside the founders.</p>
-    </template>
-
     <section class="block companies" aria-labelledby="companies-h">
       <div class="wrap">
-        <h2 id="companies-h" class="section-label">Companies</h2>
+        <h2 id="companies-h" class="section-label">Built and run</h2>
         <ul class="record">
-          <li>Gonçalo co-founded and ran a venture-backed fashion company in Singapore.</li>
-          <li>He led European go-to-market for a Silicon Valley software company.</li>
-          <li>He helped set up a Lisbon venture firm and ran its investments for five years.</li>
+          <li>Co-founded and ran a venture-backed fashion company in Singapore.</li>
+          <li>Led European go-to-market for a Silicon Valley software company.</li>
+          <li>Helped set up a Lisbon venture firm and ran its investments for five years.</li>
         </ul>
+      </div>
+    </section>
+
+    <section class="block lab" aria-labelledby="lab-h">
+      <div class="wrap">
+        <h2 id="lab-h" class="section-label">Finished experiments</h2>
+        <div class="experiments">
+          <p>Built in the open, run to a result, then closed.</p>
+          <ul class="lab-list">
+            <li>
+              <h3>open-matter</h3>
+              <p>A spec and libraries that write a small card inside a PDF, so the next model skips re-reading the file. Tools that do not look still get a normal PDF.</p>
+              <p class="lab-more"><a href="https://github.com/goncaloreis/open-matter">Read the spec</a></p>
+            </li>
+            <li>
+              <h3>A hidden flag in a small language model</h3>
+              <p>A 191 MB file posed as a poem and was secretly a small GPT. The flag was not in anything it said. It was painted as barcodes into its layer activations. Read out, scanned, and confirmed by the challenge's server.</p>
+              <pre class="artefact"><code>flag{within_layers_interlinked_}</code></pre>
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -84,28 +93,9 @@
         <h2 id="how-h" class="section-label">How we work</h2>
         <div class="prose">
           <p class="statement">We work inside the company, on the work itself, alongside the founder.</p>
-          <p>The hour is spent on a live problem: a product being built, a market being entered, or a deal in motion.</p>
-          <p>It is not a presentation about ReisierX, and not a talk about anyone's career.</p>
-          <p>We work with founders and operators who already have something in motion. We do not take ideas with nothing built yet, or pitches for capital. Those are not offered here.</p>
-          <p>Every session is paid and prepared. There is no free first call.</p>
+          <p>The way in is a working session: one paid, prepared hour on a live problem. A product being built, a market being entered, or a deal in motion.</p>
+          <p>We take on companies already in motion. Ideas with nothing built, and pitches for capital, are not offered here.</p>
         </div>
-      </div>
-    </section>
-
-    <section class="block lab" aria-labelledby="lab-h">
-      <div class="wrap">
-        <h2 id="lab-h" class="section-label">In the lab</h2>
-        <ul class="lab-list">
-          <li>
-            <h3>open-matter</h3>
-            <p>A spec and libraries that let models skip re-reading a PDF, by writing a small card inside the file. <a href="https://github.com/goncaloreis/open-matter">The source is on GitHub.</a></p>
-          </li>
-          <li>
-            <h3>A model-forensics write-up</h3>
-            <p>A flag hidden as barcodes in a small GPT's activations, confirmed by the challenge's server.</p>
-          </li>
-        </ul>
-        <p class="lab-more"><a href="https://github.com/goncaloreis">See more on GitHub</a></p>
       </div>
     </section>
 
