@@ -3,86 +3,91 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>Gonçalo Reis</title>
   <meta name="description" content="I build with frontier AI and invest early in founders.">
   <link rel="canonical" href="https://reisierx.com/">
-  <style>
-    :root {
-      --paper: #F7F5F0;
-      --ink: #141414;
-      --cobalt: #1F3FA8;
-      --graphite: #5C5B57;
-      --rule: #DCD8CE;
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Gonçalo Reis">
+  <meta property="og:description" content="I build with frontier AI and invest early in founders.">
+  <meta property="og:url" content="https://reisierx.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Gonçalo Reis">
+  <meta name="twitter:description" content="I build with frontier AI and invest early in founders.">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Gonçalo Reis",
+      "url": "https://reisierx.com/",
+      "description": "I build with frontier AI and invest early in founders.",
+      "sameAs": [
+        "https://github.com/goncaloreis",
+        "https://x.com/GoncaloReis",
+        "https://www.linkedin.com/in/goncaloreis"
+      ]
     }
-    * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
-      font-size: 1.25rem;
-      line-height: 1.45;
-    }
-    main {
-      max-width: 36em;
-      margin: 0 auto;
-      padding: 22vh 1.5rem 4rem;
-    }
-    @media (max-width: 40em) {
-      main { padding-top: 16vh; }
-      body { font-size: 1.125rem; }
-    }
-    h1 {
-      margin: 0 0 1.15rem;
-      font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-    }
-    p { margin: 0 0 1rem; }
-    nav {
-      margin: 2rem 0 0;
-      font-size: 1.125rem;
-    }
-    nav a {
-      color: var(--cobalt);
-      text-decoration: underline;
-      text-underline-offset: 0.18em;
-    }
-    nav a:hover { text-decoration-thickness: 0.12em; }
-    nav a:focus-visible {
-      outline: 2px solid var(--cobalt);
-      outline-offset: 3px;
-    }
-    .sep {
-      color: var(--graphite);
-      margin: 0 0.55rem;
-      user-select: none;
-    }
-    footer {
-      margin-top: 3rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--rule);
-      color: var(--graphite);
-      font-family: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-      font-size: 0.875rem;
-      letter-spacing: 0.01em;
-    }
-    footer p { margin: 0; }
-  </style>
+  </script>
 </head>
 <body>
   <main>
-    <h1>Gonçalo Reis</h1>
-    <p>I build with frontier AI and invest early in founders.</p>
-    <p>This site is built in public, one change at a time. Each change goes live here.</p>
-    <nav aria-label="Profiles and change log">
-      <a href="https://github.com/goncaloreis">GitHub</a><span class="sep" aria-hidden="true">·</span><a href="https://x.com/GoncaloReis">X</a><span class="sep" aria-hidden="true">·</span><a href="https://github.com/goncaloreis/home/commits/main">Log</a>
-    </nav>
-    <footer>
-      <p>Last change 25 Nov 2026</p>
+    <header class="row hero">
+      <div class="content">
+        <h1>Gonçalo Reis</h1>
+        <p>I build with frontier AI, mostly agents and the plumbing they need. I invest early and back founders more than sectors. Building keeps my judgment current.</p>
+      </div>
+    </header>
+
+    <section class="row" aria-labelledby="building-label">
+      <h2 id="building-label" class="label">building</h2>
+      <div class="content">
+        <ul class="projects">
+          <li>
+            <p><a href="https://github.com/goncaloreis/open-matter">open-matter</a>. A one-kilobyte card inside a PDF, so models stop re-reading the same file.</p>
+            <p class="plate">spec, typescript, python, claude plugin</p>
+          </li>
+          <li>
+            <p><a href="https://github.com/goncaloreis/augustalabs-arcus-forensics">augustalabs-arcus-forensics</a>. How I found a flag hidden as barcodes in a small GPT's activations. Reproducible, and confirmed by the challenge's server.</p>
+            <p class="plate">write-up and tools</p>
+          </li>
+          <li>
+            <p><a href="https://github.com/goncaloreis/home">This site</a>. Built in public by AI agents I direct.</p>
+            <p class="plate">html, css · building</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="row" aria-labelledby="investing-label">
+      <h2 id="investing-label" class="label">investing</h2>
+      <div class="content">
+        <p>I care more about how founders learn than about what they already know. Send me something you built: a link, a repo or a demo. A deck can wait.</p>
+      </div>
+    </section>
+
+    <section class="row" aria-labelledby="before-label">
+      <h2 id="before-label" class="label">before</h2>
+      <div class="content">
+        <p>Before this I co-founded and ran a venture-backed fashion company in Singapore. I helped set up a venture firm in Lisbon and ran its investments for five years. I led European go-to-market for a Silicon Valley software company.</p>
+      </div>
+    </section>
+
+    <section class="row" aria-labelledby="contact-label">
+      <h2 id="contact-label" class="label">contact</h2>
+      <div class="content">
+        <!-- Contact email placeholder: add hello@reisierx.com once alias is confirmed -->
+        <nav class="links" aria-label="Profiles">
+          <a href="https://github.com/goncaloreis" rel="me">GitHub</a><span class="sep" aria-hidden="true">·</span><a href="https://x.com/GoncaloReis" rel="me">X</a><span class="sep" aria-hidden="true">·</span><a href="https://www.linkedin.com/in/goncaloreis" rel="me">LinkedIn</a>
+        </nav>
+      </div>
+    </section>
+
+    <footer class="row">
+      <div class="content">
+        <p class="machine">ReisierX is the company I build and invest through. Built in public by AI agents I direct: <a href="https://github.com/goncaloreis/home/commits/main">log</a>, <a href="https://github.com/goncaloreis/home">source</a>. No cookies, no tracking. Last change 25 Nov 2026.</p>
+        <p class="motto">Nullius in verba.</p>
+      </div>
     </footer>
   </main>
 </body>
