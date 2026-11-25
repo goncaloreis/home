@@ -1,5 +1,5 @@
 /* ReisierX company page. Product / Editorial mode, phone first.
-   Every value comes from tokens.css (suite M1a). No raw values here. */
+   Every value comes from tokens.css. No raw values here. */
 
 *,
 *::before,
@@ -22,6 +22,7 @@ body {
   letter-spacing: var(--tracking-lg);
   font-weight: var(--font-weight-normal);
   font-optical-sizing: auto;
+  overflow-wrap: anywhere;
 }
 
 h1,
@@ -117,7 +118,7 @@ a:hover {
   font-size: var(--text-5xl);
   line-height: var(--leading-5xl);
   letter-spacing: var(--tracking-serif-5xl);
-  max-width: var(--container-lg);
+  max-width: var(--container-xs);
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
@@ -155,6 +156,7 @@ a:hover {
 }
 
 .section-label {
+  align-self: start;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
@@ -169,7 +171,12 @@ a:hover {
   gap: var(--space-4);
 }
 
-/* Companies: the serious proof, set large */
+/* Track record: the serious proof, set large */
+.record-lead {
+  max-width: var(--container-lg);
+  margin-bottom: var(--space-4);
+}
+
 .record {
   display: grid;
 }
@@ -227,7 +234,7 @@ a:hover {
   line-height: var(--leading-prose);
   letter-spacing: var(--tracking-base);
   color: var(--foreground);
-  max-width: var(--measure-prose);
+  max-width: var(--container-lg);
 }
 
 .lab-list a,
@@ -261,18 +268,19 @@ a:hover {
   overflow-wrap: anywhere;
 }
 
-/* Skip and session targets: visible ring from tokens */
-main:focus,
-.session:focus {
+/* Jump targets: keyboard ring on the section label, not the full block */
+
+.session:focus-visible .section-label,
+.contact:focus-visible .section-label {
   outline: var(--focus-ring-width) solid var(--ring);
   outline-offset: var(--focus-ring-offset);
 }
 
-/* A working session */
-
-.session:focus-visible .section-label {
-  outline: var(--focus-ring-width) solid var(--ring);
-  outline-offset: var(--focus-ring-offset);
+.contact-email {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-height-touch);
+  font-weight: var(--font-weight-medium);
 }
 
 .session-title {
@@ -401,10 +409,6 @@ main:focus,
   .lab-list {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-12);
-  }
-
-  .lab-more {
-    grid-column: 2;
   }
 
 }
