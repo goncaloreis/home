@@ -1,89 +1,142 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB" data-mode="editorial">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gonçalo Reis</title>
-  <meta name="description" content="I build with frontier AI and invest early in founders.">
+  <meta name="color-scheme" content="light dark">
+  <title>ReisierX</title>
+  <meta name="description" content="ReisierX is Gonçalo Reis's firm. We build companies from the inside.">
   <link rel="canonical" href="https://reisierx.com/">
-  <style>
-    :root {
-      --paper: #F7F5F0;
-      --ink: #141414;
-      --cobalt: #1F3FA8;
-      --graphite: #5C5B57;
-      --rule: #DCD8CE;
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ReisierX">
+  <meta property="og:description" content="ReisierX is Gonçalo Reis's firm. We build companies from the inside.">
+  <meta property="og:url" content="https://reisierx.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ReisierX">
+  <meta name="twitter:description" content="ReisierX is Gonçalo Reis's firm. We build companies from the inside.">
+  <link rel="icon" href="data:,">
+  <link rel="preload" href="/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/tokens.css">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ReisierX",
+      "url": "https://reisierx.com/",
+      "description": "ReisierX is Gonçalo Reis's firm. We build companies from the inside.",
+      "founder": {
+        "@type": "Person",
+        "name": "Gonçalo Reis",
+        "sameAs": [
+          "https://github.com/goncaloreis",
+          "https://x.com/GoncaloReis"
+        ]
+      }
     }
-    * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
-      font-size: 1.25rem;
-      line-height: 1.45;
-    }
-    main {
-      max-width: 36em;
-      margin: 0 auto;
-      padding: 22vh 1.5rem 4rem;
-    }
-    @media (max-width: 40em) {
-      main { padding-top: 16vh; }
-      body { font-size: 1.125rem; }
-    }
-    h1 {
-      margin: 0 0 1.15rem;
-      font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-    }
-    p { margin: 0 0 1rem; }
-    nav {
-      margin: 2rem 0 0;
-      font-size: 1.125rem;
-    }
-    nav a {
-      color: var(--cobalt);
-      text-decoration: underline;
-      text-underline-offset: 0.18em;
-    }
-    nav a:hover { text-decoration-thickness: 0.12em; }
-    nav a:focus-visible {
-      outline: 2px solid var(--cobalt);
-      outline-offset: 3px;
-    }
-    .sep {
-      color: var(--graphite);
-      margin: 0 0.55rem;
-      user-select: none;
-    }
-    footer {
-      margin-top: 3rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--rule);
-      color: var(--graphite);
-      font-family: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-      font-size: 0.875rem;
-      letter-spacing: 0.01em;
-    }
-    footer p { margin: 0; }
-  </style>
+  </script>
 </head>
 <body>
-  <main>
-    <h1>Gonçalo Reis</h1>
-    <p>I build with frontier AI and invest early in founders.</p>
-    <p>This site is built in public, one change at a time. Each change goes live here.</p>
-    <nav aria-label="Profiles and change log">
-      <a href="https://github.com/goncaloreis">GitHub</a><span class="sep" aria-hidden="true">·</span><a href="https://x.com/GoncaloReis">X</a><span class="sep" aria-hidden="true">·</span><a href="https://github.com/goncaloreis/home/commits/main">Log</a>
-    </nav>
-    <footer>
-      <p>Last change 25 Nov 2026</p>
-    </footer>
+  <a class="skip" href="#main">Skip to main content</a>
+
+  <!-- Shared chrome: header. Keep in step with the design-standard branch. -->
+  <header class="site-header">
+    <div class="wrap">
+      <a class="wordmark" href="/">ReisierX</a>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <!-- First screen. Copy: Growth copy-v2, section 1, recommended option. -->
+    <section class="hero" aria-labelledby="hero-h" data-hero-variant="recommended">
+      <div class="wrap">
+        <h1 id="hero-h">We build companies from the inside.</h1>
+        <p class="hero-lead">This is Gonçalo Reis's firm. The work is founding, building and running companies, and taking them into new markets, alongside the people who run them.</p>
+        <p class="hero-action"><a class="text-action" href="#session">Book a working session</a></p>
+      </div>
+    </section>
+
+    <!-- Hero variants for Gonçalo's pick (Growth copy-v2, section 1). Not rendered.
+         build.mjs swaps one in when HERO_VARIANT is set to "a" or "b". -->
+    <template data-hero-variant="a">
+      <h1>A firm that builds from the inside.</h1>
+      <p class="hero-lead">ReisierX is Gonçalo Reis's company. We work inside the companies we build, and inside the markets we enter, with the people who run them.</p>
+    </template>
+    <template data-hero-variant="b">
+      <h1>The work happens inside the company.</h1>
+      <p class="hero-lead">ReisierX is Gonçalo Reis's firm. We start, build and run companies, and we take them into new markets, working alongside the founders.</p>
+    </template>
+
+    <section class="block companies" aria-labelledby="companies-h">
+      <div class="wrap">
+        <h2 id="companies-h" class="section-label">Companies</h2>
+        <ul class="record">
+          <li>Gonçalo co-founded and ran a venture-backed fashion company in Singapore.</li>
+          <li>He led European go-to-market for a Silicon Valley software company.</li>
+          <li>He helped set up a Lisbon venture firm and ran its investments for five years.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block how" aria-labelledby="how-h">
+      <div class="wrap">
+        <h2 id="how-h" class="section-label">How we work</h2>
+        <div class="prose">
+          <p class="statement">We work inside the company, on the work itself, alongside the founder.</p>
+          <p>The hour is spent on a live problem: a product being built, a market being entered, or a deal in motion.</p>
+          <p>It is not a presentation about ReisierX, and not a talk about anyone's career.</p>
+          <p>We work with founders and operators who already have something in motion. We do not take ideas with nothing built yet, or pitches for capital. Those are not offered here.</p>
+          <p>Every session is paid and prepared. There is no free first call.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block lab" aria-labelledby="lab-h">
+      <div class="wrap">
+        <h2 id="lab-h" class="section-label">In the lab</h2>
+        <ul class="lab-list">
+          <li>
+            <h3>open-matter</h3>
+            <p>A spec and libraries that let models skip re-reading a PDF, by writing a small card inside the file. <a href="https://github.com/goncaloreis/open-matter">The source is on GitHub.</a></p>
+          </li>
+          <li>
+            <h3>A model-forensics write-up</h3>
+            <p>A flag hidden as barcodes in a small GPT's activations, confirmed by the challenge's server.</p>
+          </li>
+        </ul>
+        <p class="lab-more"><a href="https://github.com/goncaloreis">See more on GitHub</a></p>
+      </div>
+    </section>
+
+    <section class="block session" id="session" aria-labelledby="session-h" tabindex="-1">
+      <div class="wrap">
+        <h2 id="session-h" class="section-label">A working session</h2>
+        <div class="prose">
+          <p class="session-title">One hour. All of it on your company.</p>
+          <p>If the work is a good fit, you can book an hour with Gonçalo Reis, on live video. The hour is spent on your company: a build, a market move, or a live deal.</p>
+          <p class="price">The session is <span data-offer-price>{{OFFER_PRICE}}</span>.</p>
+          <p>Send a short brief at least 24 hours before. It only has to cover three things: the problem; a link to the product, repo or materials; and what you want to leave with. No brief, no session.</p>
+          <!-- Booking state. Paid booking is not set up yet, so there is no button.
+               When it is live, replace with: <a class="button" href="[booking URL]">Book a working session</a> -->
+          <p class="booking-state" id="book" role="status">Booking is not open yet.</p>
+          <p class="terms">Pay when you book. Send your brief at least 24 hours before. You can reschedule or cancel free of charge up to 48 hours before the session. After that the fee is kept.</p>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <!-- Shared chrome: footer. Keep in step with the design-standard branch.
+       Update "Last change" and sitemap.xml lastmod to the merge date when merging. -->
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div class="footer-lines">
+        <p>Questions: <a href="mailto:hello@reisierx.com">hello@reisierx.com</a>.</p>
+        <p>ReisierX. This site is built in public by AI agents Gonçalo Reis directs: <a href="https://github.com/goncaloreis/home/commits/main">log</a>, <a href="https://github.com/goncaloreis/home">source</a>.</p>
+        <p>No cookies, no tracking. Last change <time datetime="2026-11-25">25 Nov 2026</time>.</p>
+      </div>
+      <p class="seal"><span lang="la">Nullius in verba</span><small>Check the work</small></p>
+    </div>
+  </footer>
 </body>
 </html>
