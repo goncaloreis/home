@@ -282,10 +282,17 @@ a:hover { color: var(--form); }
   letter-spacing: 0.06em;
   padding: 0.9rem 1rem;
   text-decoration: none;
-  margin-top: 0.55rem;
+  margin: 0.55rem 0 0;
 }
 .book:hover { color: var(--on-button); filter: brightness(1.12); }
-.stub .note { margin: 0.15rem 0 0; }
+.book-pending {
+  background: var(--track);
+  color: var(--muted);
+  border: 1px solid var(--rule);
+  cursor: default;
+  filter: none;
+}
+.book-pending:hover { color: var(--muted); filter: none; }
 .stamp {
   align-self: start;
   margin-top: auto;
@@ -454,13 +461,40 @@ h2 {
 }
 
 @media (max-width: 36rem) {
-  .head { flex-wrap: nowrap; align-items: start; }
+  body { padding: 0.45rem 0.45rem 2.5rem; }
+  .toolbar { margin-bottom: 0.35rem; }
+  .flip-label { padding: 0.32rem 0.55rem; font-size: 0.7rem; }
+  .head { flex-wrap: nowrap; align-items: start; padding: 0.7rem 0.95rem 0.55rem; }
+  .wordmark { font-size: 1.7rem; }
+  .claim { margin-top: 0.2rem; }
   .doc .sub { display: none; }
   .doc .title { font-size: 1.05rem; }
-  .m-row { grid-template-columns: minmax(0, 1fr) 3.5rem; gap: 0.25rem 0.6rem; }
-  .m-bar { grid-column: 1; }
-  .m-row span:first-child { grid-column: 1 / -1; }
-  .f-terms { grid-template-columns: 1fr; }
+
+  /* First phone screen: offer, price, full gauge, then proof (at least the first row). */
+  .f-offer { grid-row: 1; padding: 0.65rem 0.95rem 0.7rem; }
+  .f-offer h1 { font-size: 1.55rem; }
+  .f-offer .lead { margin-top: 0.4rem; }
+  .stub { grid-row: 2; padding: 0.65rem 0.95rem 0.7rem; gap: 0.2rem; }
+  .stub-keep { display: none; }
+  .stub .what { margin-top: 0.1rem; font-size: 0.95rem; }
+  .stub .p { margin-top: 0.1rem; font-size: 1.7rem; }
+  .stub .book, .stub .book-pending { margin-top: 0.4rem; padding: 0.7rem 0.9rem; }
+  .stub .stamp { display: none; }
+  .f-gauge { grid-row: 3; padding: 0.55rem 0.95rem 0.6rem; }
+  .gauge-head { margin-bottom: 0.3rem; }
+  .meters { gap: 0.28rem; }
+  .m-row {
+    grid-template-columns: minmax(7.25rem, 9.5rem) minmax(0, 1fr) 3rem;
+    gap: 0.35rem 0.55rem;
+    font-size: 0.8125rem;
+  }
+  .m-bar { grid-column: auto; height: 0.48rem; }
+  .m-row span:first-child { grid-column: auto; }
+  .f-proof { grid-row: 4; padding: 0.55rem 0.95rem 0.7rem; }
+  .proof-strip { margin-top: 0.3rem; gap: 0.4rem 0.7rem; }
+  .proof-strip li { padding-top: 0.3rem; font-size: 0.8rem; }
+  .f-terms { grid-row: 5; grid-template-columns: 1fr; }
+
   .accept { grid-template-columns: 1fr; }
   .procedure { grid-template-columns: 1fr; }
   .record .kind { width: auto; }

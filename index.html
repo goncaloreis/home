@@ -64,12 +64,11 @@
 
         <!-- Offer rate and length: single source of truth in real DOM text -->
         <aside class="stub" aria-labelledby="stub-h">
-          <p class="lab" id="stub-h">Stub · keep this part</p>
+          <p class="lab" id="stub-h">Stub <span class="stub-keep">· keep this part</span></p>
           <p class="what">ReisierX working session</p>
           <p class="p" data-offer-price>USD 115</p>
           <p class="l"><span data-offer-length>60 minutes</span>, live video</p>
-          <a class="book" href="#book">Book a working session</a>
-          <p class="note"><span class="ph">booking opens soon</span></p>
+          <p class="book book-pending" aria-disabled="true">Booking opens soon</p>
           <span class="stamp" aria-hidden="true">Paid at booking</span>
         </aside>
 
@@ -190,7 +189,7 @@
             </tr>
           </tbody>
         </table>
-        <p class="more">The rest of the building is on <a href="https://github.com/goncaloreis">GitHub</a>.</p>
+        <p class="more">See the rest on <a href="https://github.com/goncaloreis">GitHub</a>.</p>
       </section>
 
       <section class="part" aria-labelledby="accept-h">
@@ -239,8 +238,7 @@
           </li>
         </ol>
         <div class="final">
-          <a class="book" href="#book">Book a working session</a>
-          <span class="ph">booking opens soon</span>
+          <p class="book book-pending" aria-disabled="true">Booking opens soon</p>
         </div>
         <p class="terms"><span class="ph">draft</span>Pay when you book. Send your brief at least 24 hours before. You can reschedule or cancel free of charge up to 48 hours before the session. After that the fee is kept.</p>
       </section>
