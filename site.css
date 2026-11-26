@@ -154,10 +154,6 @@ a {
   inset: calc(-1 * var(--hit-slop));
 }
 
-.n-still {
-  text-decoration: none;
-}
-
 /* The creed: exactly one screen with the masthead. */
 .creed {
   display: flex;
@@ -429,6 +425,7 @@ a {
 }
 
 .six .text {
+  grid-column: 2;
   white-space: pre-line;
 }
 

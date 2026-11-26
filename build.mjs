@@ -21,10 +21,11 @@ const claims = [
   ["1: keeping going for thirty gets there nineteen times in twenty", odds(1 / 10, 30) >= 0.95],
   ["2: seven attempts are better than even", attemptsFor(1 / 10, 0.5) === 7],
   ["2: forty-four attempts are all but certain (99 in 100)", attemptsFor(1 / 10, 0.99) === 44],
-  ["4: at one in twenty, the same certainty takes ninety", attemptsFor(1 / 20, 0.99) === 90],
+  ["4: at one in ten, nine in ten takes twenty-two attempts", attemptsFor(1 / 10, 0.9) === 22],
+  ["4: at one in twenty, the same nine in ten takes forty-five", attemptsFor(1 / 20, 0.9) === 45],
   ["5: five attempts on easy ground (one in five) are enough for two in three", Math.abs(odds(1 / 5, 5) - 2 / 3) < 0.03],
-  ["5: five attempts on difficult ground (one in thirty) are enough for about one in six", Math.abs(odds(1 / 30, 5) - 1 / 6) < 0.02],
-  ["5: whoever keeps going (ninety attempts) nearly always arrives", odds(1 / 30, 90) >= 0.95],
+  ["5: five attempts on difficult ground (one in twenty) are enough for fewer than one in four", odds(1 / 20, 5) < 0.25 && odds(1 / 20, 5) > 0.2],
+  ["5: whoever keeps going (forty-five attempts) arrives nine times in ten", odds(1 / 20, 45) >= 0.9],
 ];
 for (const [claim, holds] of claims) {
   if (!holds) {
@@ -57,20 +58,28 @@ const figures = {
     ],
   },
   corners: {
-    slots: 90,
+    slots: 45,
     bands: [
-      { title: "Done properly: one in ten", p: 1 / 10, n: 44, marks: [44] },
-      { title: "Corners cut: one in twenty", p: 1 / 20, n: 90, marks: [90] },
+      { title: "Done properly: one in ten", p: 1 / 10, n: 22, marks: [22] },
+      { title: "Corners cut: one in twenty", p: 1 / 20, n: 45, marks: [45] },
     ],
   },
   ground: {
-    slots: 90,
+    slots: 45,
     bands: [
-      { title: "Easy ground: one in five", p: 1 / 5, n: 90, marks: [5] },
-      { title: "Difficult ground: one in thirty", p: 1 / 30, n: 90, marks: [5, 90] },
+      { title: "Easy ground: one in five", p: 1 / 5, n: 45, marks: [5] },
+      { title: "Difficult ground: one in twenty", p: 1 / 20, n: 45, marks: [5, 45] },
     ],
   },
 };
+
+// On a phone, more than 45 strokes in a band blur into one grey block.
+for (const [id, f] of Object.entries(figures)) {
+  if (f.slots > 45 || f.bands.some((b) => b.n > f.slots)) {
+    console.error(`Figure ${id} draws more than 45 strokes.`);
+    process.exit(1);
+  }
+}
 
 const chance = (band, n) => (band.copies ? band.p : odds(band.p, n));
 const css = [];

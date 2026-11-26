@@ -24,13 +24,14 @@ by then.
 2. Every attempt moves the odds: at one in ten, 7 attempts are better than even, 44 are 99%.
 3. A copied attempt moves nothing: worked out again each time, 22 attempts reach 90%;
    repeated, they stay at 10%.
-4. A cut corner doubles the work: one in twenty needs 90 attempts where one in ten needs 44.
-5. Hard ground empties first: after five attempts two in three arrive on easy ground, one in
-   six on hard; whoever keeps going for ninety arrives 95% of the time.
+4. A cut corner doubles the work: to reach nine in ten, one in twenty needs 45 attempts where
+   one in ten needs 22.
+5. Hard ground empties first: after five attempts two in three arrive on easy ground (one in
+   five), fewer than one in four on hard (one in twenty); keep going for 45 and 90% arrive.
 
 One witness per author stands with the line it fits: Kipling's 'If—' (1910) with line 1,
 Roosevelt's Sorbonne speech (1910) with line 2, Henley's 'Invictus' (1875) with line 5.
-The page closes on line 6, the reader's, at the size of the creed: "If that is how you work,
+The page closes, at the size of the creed, on "If that is how you work,
 write to hello@reisierx.com".
 
 ## Medium and files
