@@ -1,5 +1,5 @@
 /*
- * ReisierX. One page: the creed, the argument, the address.
+ * ReisierX. One page: the creed, the five lines worked out, and line 6.
  * Every value is a name from tokens.css. Phone first.
  */
 
@@ -28,6 +28,8 @@ body {
   font-kerning: normal;
   font-variant-ligatures: common-ligatures;
   text-rendering: optimizeLegibility;
+  /* The query container for --viewport: the page's widths are measured from here. */
+  container-type: inline-size;
 }
 
 h1,
@@ -62,10 +64,12 @@ a {
 
 /* Hover only where there is a real pointer, so a tap never leaves a mark behind. */
 @media (hover: hover) {
-  a:hover,
-  .n:hover,
-  .cue a:hover {
+  a:hover {
     text-decoration-color: var(--red);
+  }
+
+  .n:hover {
+    text-decoration-thickness: var(--focus-width);
   }
 }
 
@@ -87,12 +91,20 @@ a {
   border: 0;
 }
 
-/* The page: one column of content with a hanging margin for the red numbers. */
+/* The page. On phones it is the screen less its padding. From 640 px its width is set by
+   the creed: the right edge is where line 2 ends, and the address, the figures and the cue
+   end there too. */
 .page {
-  max-width: var(--page-max);
-  margin-inline: auto;
+  /* Everything on the first screen that is not the creed, at its reserved size. */
+  --first-chrome: calc(var(--masthead) + var(--foot-height) + var(--space-8) + var(--origin-lines) * var(--lead-origin) + 2 * var(--space-6));
+  --avail: calc(var(--viewport) - 2 * var(--pad) - var(--num));
+  /* The creed's size: as wide as the widest piece allows, as tall as the screen allows,
+     never below a floor that still fits the width. */
+  --hero-w: calc(var(--avail) / var(--creed-em-narrow));
+  --hero-h: calc((100svh - var(--first-chrome)) / var(--creed-tall-narrow));
+  --hero: min(var(--hero-w), max(var(--creed-min-narrow), min(var(--hero-h), var(--creed-max-narrow))));
+  --creed-height: calc(var(--creed-tall-narrow) * var(--hero));
   padding-inline: var(--pad);
-  container-type: inline-size;
 }
 
 /* Masthead: what ReisierX is, and the address. Fixed height, so the creed never moves. */
@@ -115,11 +127,12 @@ a {
   white-space: nowrap;
 }
 
-.write-top {
+.write-top,
+.cue {
   display: none;
 }
 
-/* The numbers: red, hanging, each a link to its argument and back. */
+/* The numbers: red, hanging in the margin. Those that link are underlined at rest. */
 .n {
   justify-self: start;
   position: relative;
@@ -129,9 +142,10 @@ a {
   line-height: var(--lead-meta);
   font-weight: var(--weight-text);
   letter-spacing: var(--track-text);
+  font-variation-settings: normal;
   font-variant-numeric: tabular-nums;
   color: var(--red);
-  text-decoration-color: transparent;
+  text-decoration-color: var(--red);
 }
 
 .n::after {
@@ -140,8 +154,11 @@ a {
   inset: calc(-1 * var(--hit-slop));
 }
 
-/* The creed. Exactly one screen with the masthead. Designed breaks below 1024 px,
-   sized from the widest piece so no font can rewrap it. */
+.n-still {
+  text-decoration: none;
+}
+
+/* The creed: exactly one screen with the masthead. */
 .creed {
   display: flex;
   flex-direction: column;
@@ -149,17 +166,21 @@ a {
   min-height: calc(100svh - var(--masthead));
 }
 
-.lines {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-block: var(--space-6) var(--space-16);
+/* The creed and its provenance sit centred in the space left by the masthead and the cue,
+   computed from reserved sizes rather than measured ones, so a late font moves nothing. */
+.first {
+  flex: none;
+  padding-top: max(var(--space-6), calc((100svh - var(--first-chrome) - var(--creed-height)) / 2 + var(--space-6)));
+  padding-bottom: var(--space-6);
+}
+
+.lines,
+.six {
   font-family: var(--font-display);
   font-weight: var(--weight-display);
   letter-spacing: var(--track-display);
   line-height: var(--lead-display);
-  font-size: min(calc((var(--content) - var(--num)) / var(--creed-em-narrow)), var(--creed-max-narrow));
+  font-size: var(--hero);
 }
 
 .line {
@@ -168,64 +189,84 @@ a {
   align-items: baseline;
 }
 
-.line.premise {
-  margin-bottom: var(--creed-gap);
-}
-
-/* Each line is one text node. Below 1024 px its newline is the designed break and the
-   turnover line hangs in; above, the newline is an ordinary space. */
+/* Phones: each line breaks where it was designed to, flush left, a stanza apart. */
 .line .text {
   white-space: pre-line;
-  padding-left: var(--turnover);
-  text-indent: calc(-1 * var(--turnover));
+}
+
+.line + .line {
+  margin-top: var(--stanza-gap);
+}
+
+.line.premise {
+  margin-bottom: var(--premise-gap-narrow);
+}
+
+/* Where the five lines come from: facts a reader can check. Its lines are reserved,
+   so however it wraps, nothing above it moves. */
+.origin {
+  margin-top: var(--space-8);
+  padding-left: var(--num);
+  max-width: calc(var(--num) + var(--measure-origin));
+  font-size: var(--size-origin);
+  line-height: var(--lead-origin);
+  color: var(--ink-soft);
+  text-wrap: pretty;
 }
 
 .first-foot {
+  flex: none;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: flex-start;
   gap: var(--space-2);
+  height: var(--foot-height);
+  margin-top: auto;
   padding: 0 0 var(--space-6) var(--num);
   font-size: var(--size-cite);
   line-height: var(--lead-cite);
-  color: var(--ink-soft);
 }
 
-.first-foot a {
-  color: var(--ink);
-}
-
-.cue a {
-  text-decoration-color: transparent;
-}
-
-/* The argument: five notes, each the line, the reason, and a witness. */
+/* The five lines, worked out: the line it answers, the claim, the reason, the figure. */
 .argument {
   padding-top: var(--space-24);
 }
 
-.note {
+.proof {
   display: grid;
-  grid-template-columns: var(--num) minmax(0, var(--measure));
-  row-gap: var(--space-5);
+  grid-template-columns: var(--num) minmax(0, 1fr);
+  align-items: baseline;
   scroll-margin-top: var(--space-8);
 }
 
-.note + .note {
+.proof + .proof {
   margin-top: var(--space-24);
 }
 
-/* The number sits in the margin column and shares the heading's first baseline. */
-.note > .n {
+.proof > .n {
   grid-column: 1;
   grid-row: 1;
-  align-self: baseline;
 }
 
-.note-line {
+.kicker,
+.claim,
+.reason,
+.fig,
+.gloss {
   grid-column: 2;
+}
+
+.kicker {
   grid-row: 1;
-  align-self: baseline;
+  font-size: var(--size-meta);
+  line-height: var(--lead-meta);
+  color: var(--ink-soft);
+}
+
+.claim {
+  margin-top: var(--space-2);
+  max-width: var(--measure);
   font-family: var(--font-display);
   font-size: var(--size-line);
   line-height: var(--lead-line);
@@ -234,52 +275,48 @@ a {
   text-wrap: balance;
 }
 
-.reason,
-.odds,
-.gloss {
-  grid-column: 2;
-}
-
 .reason {
+  margin-top: var(--space-4);
+  max-width: var(--measure);
   text-wrap: pretty;
 }
 
-/* A witness: a short passage from one of the three texts, set small, cited exactly. */
-.gloss {
-  margin-top: var(--space-3);
-  padding-left: var(--space-5);
-  font-size: var(--size-gloss);
-  line-height: var(--lead-gloss);
+/* Figures: a stroke is one attempt; its height is the chance that one has worked by then. */
+.fig {
+  margin-top: var(--space-8);
 }
 
-.verse {
+.bands {
+  display: grid;
+  row-gap: var(--space-5);
+}
+
+.band,
+.band-title,
+.plot,
+.ticks {
   display: block;
-  padding-left: var(--space-5);
-  text-indent: calc(-1 * var(--space-5));
 }
 
-.gloss figcaption,
-.odds figcaption {
-  margin-top: var(--space-2);
+.band-title {
+  margin-bottom: var(--space-2);
   font-size: var(--size-cite);
   line-height: var(--lead-cite);
   color: var(--ink-soft);
 }
 
-/* The figure: 44 attempts, each one more time getting up. */
-.odds {
-  margin-top: var(--space-8);
-}
-
 .plot {
   position: relative;
-  height: var(--plot-height);
-  margin-bottom: var(--space-16);
+  height: var(--band-height);
   border-top: var(--hairline-width) dotted var(--ink-soft);
   border-bottom: var(--hairline-width) solid var(--ink);
 }
 
-.bars {
+.fig.tall .plot {
+  height: var(--plot-height);
+}
+
+.strokes {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -287,97 +324,116 @@ a {
   overflow: visible;
 }
 
-.bars line {
+.strokes line {
   stroke: var(--mark);
   stroke-width: var(--bar-width);
 }
 
-.bars line.key {
-  stroke: var(--red);
+.dense .strokes line {
+  stroke-width: var(--bar-width-dense);
 }
 
-.certain {
-  position: absolute;
-  left: 0;
-  bottom: 100%;
-  padding-bottom: var(--space-1);
-  font-size: var(--size-cite);
-  line-height: var(--lead-cite);
-  color: var(--ink-soft);
+.strokes line.key {
+  stroke: var(--red);
+  stroke-width: var(--bar-width);
+}
+
+.ticks {
+  position: relative;
+  height: calc(2 * var(--lead-cite) + var(--space-2));
 }
 
 .tick {
   position: absolute;
-  top: 100%;
+  top: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding-top: var(--space-2);
   font-size: var(--size-cite);
   line-height: var(--lead-cite);
   color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+.tick.mid {
+  align-items: center;
   transform: translateX(-50%);
+}
+
+.tick.start {
+  align-items: flex-start;
+}
+
+.tick.end {
+  align-items: flex-end;
 }
 
 .pct {
   color: var(--red);
 }
 
-/* Bar i sits at the centre of the i-th of 44 equal slots. */
-.at-1 {
-  left: calc(0.5 / 44 * 100%);
-  align-items: flex-start;
-  transform: none;
+.fig figcaption {
+  margin-top: var(--space-2);
+  max-width: var(--measure);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+  text-wrap: pretty;
 }
 
-.at-7 {
-  left: calc(6.5 / 44 * 100%);
+/* A witness: one short passage from each of the three texts, cited exactly. On phones the
+   verse runs on with slashes, so no line of it breaks onto a word of its own. */
+.gloss {
+  margin-top: var(--space-8);
+  padding-left: var(--space-5);
+  max-width: var(--measure);
+  font-size: var(--size-gloss);
+  line-height: var(--lead-gloss);
 }
 
-.at-22 {
-  left: calc(21.5 / 44 * 100%);
+.gloss blockquote p {
+  text-wrap: pretty;
 }
 
-.at-44 {
-  left: auto;
-  right: 0;
-  align-items: flex-end;
-  transform: none;
+.slash {
+  color: var(--ink-soft);
 }
 
-/* The close: where the argument lands. */
+.gloss figcaption {
+  margin-top: var(--space-2);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+  text-wrap: balance;
+}
+
+/* The close: what ReisierX does, then line 6, the reader's, at the size of the creed. */
 .close {
-  display: grid;
-  grid-template-columns: var(--num) minmax(0, var(--measure-close));
-  row-gap: var(--space-8);
   padding-top: var(--space-32);
 }
 
-.close-text,
-.address {
-  grid-column: 2;
-}
-
-.close-text {
+.practice {
+  padding-left: var(--num);
+  max-width: calc(var(--num) + var(--measure-practice));
   font-family: var(--font-display);
   font-size: var(--size-line);
   line-height: var(--lead-line);
   font-weight: var(--weight-display);
   letter-spacing: var(--track-display);
-  text-wrap: pretty;
+  text-wrap: balance;
+}
+
+.line.six {
+  margin-top: var(--space-12);
+}
+
+.six .text {
+  white-space: pre-line;
 }
 
 .address {
-  font-family: var(--font-display);
-  font-size: min(calc((var(--content) - var(--num)) / var(--address-em)), var(--size-address));
-  line-height: var(--lead-address);
-  font-weight: var(--weight-display);
-  letter-spacing: var(--track-display);
-}
-
-.address a {
+  display: block;
   text-decoration-color: var(--red);
   overflow-wrap: anywhere;
 }
@@ -387,7 +443,6 @@ a {
   font-size: var(--size-cite);
   line-height: var(--lead-cite);
   color: var(--ink-soft);
-  text-wrap: balance;
 }
 
 /* The 404 page, in the same voice. */
@@ -409,14 +464,32 @@ a {
   text-wrap: balance;
 }
 
-/* Tablet: the address moves to the masthead. */
+/* From 640 px: the creed on one line each, its optical size pinned so line 2 sets the
+   page's measure; the address moves to the masthead. */
 @media (min-width: 640px) {
+  .page {
+    --hero-w: calc(var(--avail) / var(--creed-em-wide));
+    --hero-h: calc((100svh - var(--first-chrome)) / var(--creed-tall-wide));
+    --hero: min(var(--hero-w), max(var(--creed-min-wide), min(var(--hero-h), var(--creed-max-wide))));
+    --creed-height: calc(var(--creed-tall-wide) * var(--hero));
+    width: calc(2 * var(--pad) + var(--num) + var(--line2-em) * var(--hero));
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  /* Line 2 ends on the page's edge in Source Serif 4; the fallback faces are a few per cent
+     wider, so the creed may run into the margin by that much instead of wrapping. */
+  .lines {
+    margin-right: calc((var(--line2-em) - var(--creed-em-wide)) * var(--hero));
+  }
+
   .masthead {
     font-size: var(--size-meta);
     line-height: var(--lead-meta);
   }
 
-  .write-top {
+  .write-top,
+  .cue {
     display: inline;
   }
 
@@ -424,14 +497,40 @@ a {
     display: none;
   }
 
-  .lines {
-    font-size: min(calc((var(--content) - var(--num)) / var(--creed-em-narrow)), var(--creed-max-medium));
+  .lines,
+  .six {
+    font-variation-settings: "opsz" var(--creed-opsz);
+  }
+
+  .line .text,
+  .six .text {
+    white-space: normal;
+  }
+
+  .line + .line {
+    margin-top: 0;
+  }
+
+  .line.premise {
+    margin-bottom: var(--creed-gap);
   }
 
   .first-foot {
     flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
     font-size: var(--size-meta);
     line-height: var(--lead-meta);
+  }
+
+  .verse {
+    display: block;
+    padding-left: var(--space-5);
+    text-indent: calc(-1 * var(--space-5));
+  }
+
+  .slash {
+    display: none;
   }
 
   .gloss {
@@ -440,16 +539,11 @@ a {
     line-height: var(--lead-gloss-wide);
   }
 
-  .plot {
+  .fig.tall .plot {
     height: var(--plot-height-wide);
-  }
-
-  .address {
-    font-size: min(calc((var(--content) - var(--num)) / var(--address-em)), var(--size-address-wide));
   }
 }
 
-/* Laptop: each line of the creed on one line; the witnesses move into the margin. */
 @media (min-width: 1024px) {
   body {
     font-size: var(--size-body-wide);
@@ -463,35 +557,34 @@ a {
     line-height: var(--lead-meta-wide);
   }
 
-  .lines {
-    font-size: min(calc((var(--content) - var(--num)) / var(--creed-em-wide)), var(--creed-max-wide));
+  .kicker {
+    font-size: var(--size-meta-wide);
+    line-height: var(--lead-meta-wide);
   }
 
-  .line .text {
-    white-space: normal;
-  }
-
-  .note {
-    grid-template-columns: var(--num) minmax(0, var(--measure)) minmax(var(--space-8), var(--space-16)) minmax(0, var(--gloss-width));
-    align-items: start;
-  }
-
-  .note-line {
-    grid-column: 2 / -1;
+  .claim,
+  .practice {
     font-size: var(--size-line-wide);
     line-height: var(--lead-line-wide);
   }
+}
 
-  .gloss {
+/* Laptop: the reasoning on the left, its figure on the right, both to the page's edge. */
+@media (min-width: 1280px) {
+  .proof {
+    grid-template-columns: var(--num) minmax(0, 7fr) var(--gutter) minmax(0, 8fr);
+  }
+
+  .proof > .fig {
     grid-column: 4;
-    grid-row: 2 / span 2;
+    grid-row: 1 / span 4;
+    align-self: start;
     margin-top: 0;
-    padding-left: 0;
   }
 
-  .close-text {
-    font-size: var(--size-line-wide);
-    line-height: var(--lead-line-wide);
+  .claim {
+    font-size: var(--size-claim-wide);
+    line-height: var(--lead-claim-wide);
   }
 }
 
@@ -517,7 +610,7 @@ a {
     min-height: 0;
   }
 
-  .note {
+  .proof {
     break-inside: avoid;
   }
 }

@@ -125,23 +125,31 @@
   --lead-line: 2rem;
   --size-line-wide: 2rem;
   --lead-line-wide: 2.5rem;
-  --size-address: 2rem;
-  --size-address-wide: 4rem;
-  --address-em: 9.2;
+  --size-claim-wide: 2.25rem;
+  --lead-claim-wide: 2.75rem;
   --lead-display: 1.1;
-  --lead-address: 1.15;
   --track-display: -0.01em;
   --track-text: 0em;
 
-  /* The creed: widest designed piece, in em, with 5% slack over the widest fallback.
-     Narrow: "The job is to get up," at optical size 32. Wide: the full second line. */
+  /* The creed. Narrow screens: designed breaks, sized from the widest piece ("The job is
+     to get up," at optical size 32) with 5% slack over the widest fallback. From 640 px:
+     one line each, optical size pinned at 60, where line 2 measures 14.051 em. The page's
+     right edge is set where line 2 ends; 14.9 em leaves 6% for the widest fallback. */
   --creed-em-narrow: 8.85;
-  --creed-em-wide: 15.5;
+  --creed-em-wide: 14.9;
+  --line2-em: 14.051;
+  --creed-opsz: 60;
   --creed-max-narrow: 2.75rem;
-  --creed-max-medium: 4.5rem;
   --creed-max-wide: 5rem;
   --creed-gap: 0.35em;
-  --turnover: 0.45em;
+  /* The creed block in em of its own size: 9 lines and 4 stanza gaps on phones, 5 lines
+     and the premise gap from 640 px. Used to size it to the screen height as well. */
+  --creed-tall-narrow: 11.25;
+  --creed-tall-wide: 5.85;
+  --creed-min-narrow: 1.875rem;
+  --creed-min-wide: 2.5rem;
+  --stanza-gap: 0.25em;
+  --premise-gap-narrow: 0.6em;
 
   /* Space, on a 4 px grid */
   --space-1: 0.25rem;
@@ -162,19 +170,28 @@
   /* Page geometry: side padding and the hanging number column */
   --pad: 1.25rem;
   --num: 1.75rem;
-  --measure: 33rem;
-  --measure-close: 34rem;
-  --gloss-width: 24rem;
-  --page-max: 90rem;
-  /* The page's text box: container units where supported, the viewport otherwise. */
-  --content: calc(min(100vw, var(--page-max)) - 2 * var(--pad));
+  --measure: 31rem;
+  --measure-origin: 30rem;
+  --measure-practice: 46rem;
+  --gutter: 4rem;
+  /* The width the page can use: the body's box where container units exist, else the
+     viewport. The body is the query container. */
+  --viewport: 100vw;
   --masthead: 4.5rem;
   --masthead-top: 1.5rem;
+  /* Lines reserved for the provenance under the creed, so its wrap can never move it. */
+  --origin-lines: 6;
+  --size-origin: var(--size-cite);
+  --lead-origin: var(--lead-cite);
+  --foot-height: 2.75rem;
 
-  /* Figure: the odds of getting up */
+  /* Figures: a stroke is one attempt */
   --plot-height: 10rem;
   --plot-height-wide: 12rem;
+  --band-height: 3.5rem;
+  --band-height-wide: 4.5rem;
   --bar-width: 2px;
+  --bar-width-dense: 1px;
   --hairline-width: 1px;
 
   /* Links and focus */
@@ -193,7 +210,7 @@
 
 @supports (width: 1cqw) {
   :root {
-    --content: 100cqw;
+    --viewport: 100cqw;
   }
 }
 
@@ -216,6 +233,11 @@
   :root {
     --pad: 2rem;
     --num: 2.5rem;
+    --origin-lines: 4;
+    --band-height: var(--band-height-wide);
+    --foot-height: 3rem;
+    --size-origin: var(--size-meta);
+    --lead-origin: var(--lead-meta);
   }
 }
 
@@ -225,7 +247,9 @@
     --num: 3.5rem;
     --masthead: 5.5rem;
     --masthead-top: 2rem;
-    --measure: 36rem;
+    --measure: 33rem;
+    --size-origin: var(--size-meta-wide);
+    --lead-origin: var(--lead-meta-wide);
   }
 }
 
@@ -243,8 +267,8 @@
     --mark: CanvasText;
     --hairline: CanvasText;
     --lead-display: 1.4;
-    --lead-address: 1.4;
     --lead-line: 2.375rem;
     --lead-line-wide: 2.75rem;
+    --lead-claim-wide: 3.25rem;
   }
 }
