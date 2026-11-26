@@ -48,3 +48,19 @@ Difficult ground is where attrition can be won, because that is where others sto
 - Fallback faces are matched per platform (Georgia, Liberation Serif, Noto Serif), separately
   for display and text sizes: `size-adjust` matches average width, and the ascent and
   descent overrides put every baseline where Source Serif 4 puts it.
+- In forced colours the display leading opens up, so the plates the system paints behind
+  each line never cover the descenders above.
+
+## Checks on this build
+- Build: the four arithmetic assertions pass (7, 22, 44 and 90 attempts).
+- axe: 0 violations at 390x844 and 1440x900, light and dark. html-validate: 0 errors.
+- Links: 14 of 14 resolve. Console errors: 0. Keyboard: every stop in screen order, each
+  with a visible ring; targets at least 24 px.
+- Lighthouse, mobile and desktop: 100 in all four categories; LCP 0.9 s on mobile; CLS 0;
+  152 KiB in total.
+- Late-font layout shift (web font held 2.5 s): 0 in every band, in a sweep of 160 widths
+  from 320 to 1920 px at up to five window heights each, with three fallback sets (Georgia
+  and Arial; Noto Serif and Roboto; Liberation). Longest line 66 characters, 71 with the
+  web font blocked. No sideways scroll anywhere, at 200% zoom, or with WCAG text spacing.
+- Forced colours, print (four A4 pages) and older browsers without container units checked.
+- Privacy scan: 0 hits. Suite scanner (informational): pass.
