@@ -1,0 +1,522 @@
+/*
+ * ReisierX. One page: the creed, the argument, the address.
+ * Every value is a name from tokens.css. Phone first.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--size-body);
+  line-height: var(--lead-body);
+  font-weight: var(--weight-text);
+  letter-spacing: var(--track-text);
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+p,
+ol,
+figure,
+blockquote {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+ol {
+  list-style: none;
+}
+
+::selection {
+  background: var(--red);
+  color: var(--paper);
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--underline);
+  text-underline-offset: var(--underline-offset);
+  text-decoration-color: var(--ink-soft);
+  transition: text-decoration-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+
+a:hover {
+  text-decoration-color: var(--red);
+}
+
+:focus-visible {
+  outline: var(--focus-width) solid var(--red);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--focus-radius);
+}
+
+.hidden {
+  position: absolute;
+  width: var(--hairline-width);
+  height: var(--hairline-width);
+  margin: calc(-1 * var(--hairline-width));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The page: one column of content with a hanging margin for the red numbers. */
+.page {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+  container-type: inline-size;
+}
+
+/* Masthead: what ReisierX is, and the address. Fixed height, so the creed never moves. */
+.masthead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  height: var(--masthead);
+  padding: var(--masthead-top) 0 0 var(--num);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+}
+
+.name {
+  font-weight: var(--weight-strong);
+}
+
+.write {
+  white-space: nowrap;
+}
+
+.write-top {
+  display: none;
+}
+
+/* The numbers: red, hanging, each a link to its argument and back. */
+.n {
+  justify-self: start;
+  position: relative;
+  min-width: var(--target-min);
+  font-family: var(--font-text);
+  font-size: var(--size-meta);
+  line-height: var(--lead-meta);
+  font-weight: var(--weight-text);
+  letter-spacing: var(--track-text);
+  font-variant-numeric: tabular-nums;
+  color: var(--red);
+  text-decoration-color: transparent;
+}
+
+.n::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--hit-slop));
+}
+
+.n:hover {
+  text-decoration-color: var(--red);
+}
+
+/* The creed. Exactly one screen with the masthead. Designed breaks below 1024 px,
+   sized from the widest piece so no font can rewrap it. */
+.creed {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--masthead));
+  min-height: calc(100svh - var(--masthead));
+}
+
+.lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: var(--space-6) var(--space-16);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  line-height: var(--lead-display);
+  font-size: min(calc((100cqw - var(--num)) / var(--creed-em-narrow)), var(--creed-max-narrow));
+}
+
+.line {
+  display: grid;
+  grid-template-columns: var(--num) minmax(0, 1fr);
+  align-items: baseline;
+}
+
+.line.premise {
+  margin-bottom: var(--creed-gap);
+}
+
+/* Each line is one text node. Below 1024 px its newline is the designed break and the
+   turnover line hangs in; above, the newline is an ordinary space. */
+.line .text {
+  white-space: pre-line;
+  padding-left: var(--turnover);
+  text-indent: calc(-1 * var(--turnover));
+}
+
+.first-foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: 0 0 var(--space-6) var(--num);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+}
+
+.first-foot a {
+  color: var(--ink);
+}
+
+.cue a {
+  text-decoration-color: transparent;
+}
+
+.cue a:hover {
+  text-decoration-color: var(--red);
+}
+
+/* The argument: five notes, each the line, the reason, and a witness. */
+.argument {
+  padding-top: var(--space-24);
+}
+
+.note {
+  display: grid;
+  grid-template-columns: var(--num) minmax(0, var(--measure));
+  row-gap: var(--space-5);
+  scroll-margin-top: var(--space-8);
+}
+
+.note + .note {
+  margin-top: var(--space-24);
+}
+
+.note-line {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: var(--num) minmax(0, 1fr);
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-size: var(--size-line);
+  line-height: var(--lead-line);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  text-wrap: balance;
+}
+
+.reason,
+.odds,
+.gloss {
+  grid-column: 2;
+}
+
+.reason {
+  text-wrap: pretty;
+}
+
+/* A witness: a short passage from one of the three texts, set small, cited exactly. */
+.gloss {
+  margin-top: var(--space-3);
+  padding-left: var(--space-5);
+  font-size: var(--size-gloss);
+  line-height: var(--lead-gloss);
+}
+
+.verse {
+  display: block;
+  padding-left: var(--space-5);
+  text-indent: calc(-1 * var(--space-5));
+}
+
+.gloss figcaption,
+.odds figcaption {
+  margin-top: var(--space-2);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+}
+
+/* The figure: 44 attempts, each one more time getting up. */
+.odds {
+  margin-top: var(--space-8);
+}
+
+.plot {
+  position: relative;
+  height: var(--plot-height);
+  margin-bottom: var(--space-16);
+  border-top: var(--hairline-width) dotted var(--ink-soft);
+  border-bottom: var(--hairline-width) solid var(--ink);
+}
+
+.bars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.bars line {
+  stroke: var(--mark);
+  stroke-width: var(--bar-width);
+}
+
+.bars line.key {
+  stroke: var(--red);
+}
+
+.certain {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  padding-bottom: var(--space-1);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+}
+
+.tick {
+  position: absolute;
+  top: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: var(--space-2);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.pct {
+  color: var(--red);
+}
+
+/* Bar i sits at the centre of the i-th of 44 equal slots. */
+.at-1 {
+  left: calc(0.5 / 44 * 100%);
+  align-items: flex-start;
+  transform: none;
+}
+
+.at-7 {
+  left: calc(6.5 / 44 * 100%);
+}
+
+.at-22 {
+  left: calc(21.5 / 44 * 100%);
+}
+
+.at-44 {
+  left: auto;
+  right: 0;
+  align-items: flex-end;
+  transform: none;
+}
+
+/* The close: where the argument lands. */
+.close {
+  display: grid;
+  grid-template-columns: var(--num) minmax(0, var(--measure-close));
+  row-gap: var(--space-8);
+  padding-top: var(--space-32);
+}
+
+.close-text,
+.address {
+  grid-column: 2;
+}
+
+.close-text {
+  font-family: var(--font-display);
+  font-size: var(--size-line);
+  line-height: var(--lead-line);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  text-wrap: pretty;
+}
+
+.address {
+  font-family: var(--font-display);
+  font-size: min(calc((100cqw - var(--num)) / var(--address-em)), var(--size-address));
+  line-height: var(--lead-address);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+}
+
+.address a {
+  text-decoration-color: var(--red);
+  overflow-wrap: anywhere;
+}
+
+.colophon {
+  padding: var(--space-24) 0 var(--space-10) var(--num);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+  text-wrap: balance;
+}
+
+/* The 404 page, in the same voice. */
+.lost {
+  display: grid;
+  align-content: center;
+  gap: var(--space-6);
+  min-height: calc(100vh - var(--masthead));
+  min-height: calc(100svh - var(--masthead));
+  padding: 0 0 var(--space-16) var(--num);
+}
+
+.lost-title {
+  font-family: var(--font-display);
+  font-size: var(--size-line-wide);
+  line-height: var(--lead-line-wide);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  text-wrap: balance;
+}
+
+/* Tablet: the address moves to the masthead. */
+@media (min-width: 640px) {
+  .masthead {
+    font-size: var(--size-meta);
+    line-height: var(--lead-meta);
+  }
+
+  .write-top {
+    display: inline;
+  }
+
+  .write-foot {
+    display: none;
+  }
+
+  .lines {
+    font-size: min(calc((100cqw - var(--num)) / var(--creed-em-narrow)), var(--creed-max-medium));
+  }
+
+  .first-foot {
+    flex-direction: row;
+    font-size: var(--size-meta);
+    line-height: var(--lead-meta);
+  }
+
+  .gloss {
+    padding-left: var(--space-8);
+    font-size: var(--size-gloss-wide);
+    line-height: var(--lead-gloss-wide);
+  }
+
+  .plot {
+    height: var(--plot-height-wide);
+  }
+
+  .address {
+    font-size: min(calc((100cqw - var(--num)) / var(--address-em)), var(--size-address-wide));
+  }
+}
+
+/* Laptop: each line of the creed on one line; the witnesses move into the margin. */
+@media (min-width: 1024px) {
+  body {
+    font-size: var(--size-body-wide);
+    line-height: var(--lead-body-wide);
+  }
+
+  .masthead,
+  .first-foot,
+  .n {
+    font-size: var(--size-meta-wide);
+    line-height: var(--lead-meta-wide);
+  }
+
+  .lines {
+    font-size: min(calc((100cqw - var(--num)) / var(--creed-em-wide)), var(--creed-max-wide));
+  }
+
+  .line .text {
+    white-space: normal;
+  }
+
+  .note {
+    grid-template-columns: var(--num) minmax(0, var(--measure)) minmax(var(--space-8), var(--space-16)) minmax(0, var(--gloss-width));
+    align-items: start;
+  }
+
+  .note-line {
+    grid-column: 1 / 3;
+    font-size: var(--size-line-wide);
+    line-height: var(--lead-line-wide);
+  }
+
+  .gloss {
+    grid-column: 4;
+    grid-row: 2 / span 2;
+    margin-top: 0;
+    padding-left: 0;
+  }
+
+  .close-text {
+    font-size: var(--size-line-wide);
+    line-height: var(--lead-line-wide);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@media print {
+  .masthead,
+  .first-foot,
+  .colophon {
+    display: none;
+  }
+
+  .creed {
+    min-height: 0;
+  }
+
+  .note {
+    break-inside: avoid;
+  }
+}
