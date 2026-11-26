@@ -227,10 +227,16 @@
   }
 }
 
+/* High contrast: system colours, and leading opened up so the text plates the system
+   paints behind each line never cover the descenders of the line above. */
 @media (forced-colors: active) {
   :root {
     --red: LinkText;
     --mark: CanvasText;
     --hairline: CanvasText;
+    --lead-display: 1.4;
+    --lead-address: 1.4;
+    --lead-line: 2.375rem;
+    --lead-line-wide: 2.75rem;
   }
 }
