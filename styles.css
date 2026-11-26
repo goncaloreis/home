@@ -129,7 +129,8 @@ a:hover {
   font-size: var(--text-lg);
   line-height: var(--leading-lg);
   color: var(--foreground);
-  /* Reserve the fallback wrap (5 lines) so a late Inter swap cannot shrink the first screen. */
+  /* Reserve the fallback wrap so a late Inter swap cannot shrink the first
+     screen: 6 lines below 360px, 5 lines to 767px, 4 lines from 768px. */
   min-height: calc(var(--leading-lg) + var(--leading-lg) + var(--leading-lg) + var(--leading-lg) + var(--leading-lg));
 }
 
@@ -237,24 +238,8 @@ a:hover {
   max-width: var(--container-lg);
 }
 
-.lab-list a,
-.lab-more a {
-  color: var(--foreground);
-}
-
-.lab-more {
-  font-size: var(--text-base);
-  line-height: var(--leading-base);
-}
-
-.lab-more a {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--control-height-touch);
-}
-
 .artefact {
-  margin: 0;
+  margin: var(--space-2) 0 0;
   max-width: 100%;
   font-family: var(--font-mono);
   font-size: var(--text-sm);
@@ -268,9 +253,7 @@ a:hover {
   overflow-wrap: anywhere;
 }
 
-/* Jump targets: keyboard ring on the section label, not the full block */
-
-.session:focus-visible .section-label,
+/* Jump target: keyboard ring on the section label, not the full block */
 .contact:focus-visible .section-label {
   outline: var(--focus-ring-width) solid var(--ring);
   outline-offset: var(--focus-ring-offset);
@@ -325,10 +308,8 @@ a:hover {
   color: var(--muted-foreground);
 }
 
-/* Shared chrome: footer.
-   Visual treatment matches the design-standard branch (PR #3): stacked,
-   muted sans lines, motto in the serif at text-base. Copy and the extra
-   Questions / Check the work lines stay; the IA (wordmark header) stays. */
+/* Shared chrome: footer. Stacked muted sans lines, then the seal:
+   the motto in the serif at text-base with "Check the work" under it. */
 .site-footer {
   border-top: var(--border-width) solid var(--border);
 }
@@ -371,6 +352,13 @@ a:hover {
   color: var(--muted-foreground);
 }
 
+/* Small phones: the fallback lead wraps to a sixth line */
+@media (max-width: 359px) {
+  .hero-lead {
+    min-height: calc(var(--leading-lg) + var(--leading-lg) + var(--leading-lg) + var(--leading-lg) + var(--leading-lg) + var(--leading-lg));
+  }
+}
+
 /* Laptop and up */
 @media (min-width: 768px) {
   .wrap {
@@ -391,7 +379,7 @@ a:hover {
   .hero-lead {
     font-size: var(--text-xl);
     line-height: var(--leading-xl);
-    min-height: auto;
+    min-height: calc(var(--leading-xl) + var(--leading-xl) + var(--leading-xl) + var(--leading-xl));
   }
 
   .block .wrap {
