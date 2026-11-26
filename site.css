@@ -60,8 +60,13 @@ a {
   transition: text-decoration-color var(--duration) var(--ease), color var(--duration) var(--ease);
 }
 
-a:hover {
-  text-decoration-color: var(--red);
+/* Hover only where there is a real pointer, so a tap never leaves a mark behind. */
+@media (hover: hover) {
+  a:hover,
+  .n:hover,
+  .cue a:hover {
+    text-decoration-color: var(--red);
+  }
 }
 
 :focus-visible {
@@ -135,10 +140,6 @@ a:hover {
   inset: calc(-1 * var(--hit-slop));
 }
 
-.n:hover {
-  text-decoration-color: var(--red);
-}
-
 /* The creed. Exactly one screen with the masthead. Designed breaks below 1024 px,
    sized from the widest piece so no font can rewrap it. */
 .creed {
@@ -196,10 +197,6 @@ a:hover {
 
 .cue a {
   text-decoration-color: transparent;
-}
-
-.cue a:hover {
-  text-decoration-color: var(--red);
 }
 
 /* The argument: five notes, each the line, the reason, and a witness. */
