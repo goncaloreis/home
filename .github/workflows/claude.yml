@@ -16,7 +16,7 @@ on:
 
 jobs:
   claude:
-    # Non-standard: the token is Gonçalo's personal Claude subscription, so only trusted repo owners/members/
+    # Non-standard: the token is the owner's personal Claude subscription, so only trusted repo owners/members/
     # collaborators (or goncaloreis) can spend it, on top of the action's own write-access check.
     if: |
       (

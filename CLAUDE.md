@@ -52,11 +52,11 @@ The commit author above is the exception, and is fixed.
   work.
 - **Claude** (you): spec and review. You specify and review; you never push
   code or open PRs.
-- **Gonçalo**: the gate (answers questions and approves the plan) and the
+- **The owner**: the gate (answers questions and approves the plan) and the
   taste check before merge.
 
 ## The method
-This project applies Gonçalo's shared **Consulting Claude** method in
+This project applies the owner's shared **Consulting Claude** method in
 [goncaloreis/suite](https://github.com/goncaloreis/suite); this file only
 adds what is specific to the project and does not restate the method. You are
 the consultant, not the builder, and you may question the framing of a
