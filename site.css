@@ -509,9 +509,7 @@ a {
 }
 
 @media print {
-  .masthead,
-  .first-foot,
-  .colophon {
+  .cue {
     display: none;
   }
 
