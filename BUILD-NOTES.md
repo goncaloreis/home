@@ -40,8 +40,8 @@ The page shows no data, so S2's data states do not apply. Control and content st
 
 Both fallback faces come from `tokens.css`: Georgia for the serif and Arial for the sans, both metric-adjusted. A late web font must not move the first screen:
 
-- **Headline:** capped at `--container-xs` below 768 px, so it sets as three lines on every phone in either font.
-- **Lead:** `min-height` reserves the fallback's line count. That is 6 lines of `--leading-lg` below 360 px, 5 lines to 767 px, and 4 lines of `--leading-xl` from 768 px. Inter needs one line fewer in places, which leaves one blank line above "Get in touch".
+- **Headline:** capped at `--container-xs` below 768 px, so it sets as three lines on every phone in either font. From 768 to 1023 px `min-height` reserves two lines of `--leading-6xl`, because the fallback serif wraps to two lines at some of those widths where Source Serif 4 needs one.
+- **Lead:** `min-height` reserves the fallback's line count. That is 6 lines of `--leading-lg` below 640 px, 5 lines from 640 to 767 px, and 4 lines of `--leading-xl` from 768 px. Inter needs one line fewer in places, which leaves one blank line above "Get in touch".
 - **Line length:** body measures use `--container-lg` and `--container-md`, which are pixel widths. They do not use `ch`, which grows with the font.
 
 ## Self-audit evidence (this revision)

@@ -353,7 +353,7 @@ a:hover {
 }
 
 /* Small phones: the fallback lead wraps to a sixth line */
-@media (max-width: 359px) {
+@media (width < 640px) {
   .hero-lead {
     min-height: calc(var(--leading-lg) + var(--leading-lg) + var(--leading-lg) + var(--leading-lg) + var(--leading-lg) + var(--leading-lg));
   }
@@ -374,6 +374,7 @@ a:hover {
     line-height: var(--leading-6xl);
     letter-spacing: var(--tracking-serif-6xl);
     max-width: var(--measure-editorial);
+    min-height: calc(var(--leading-6xl) + var(--leading-6xl));
   }
 
   .hero-lead {
@@ -401,6 +402,12 @@ a:hover {
 
 }
 
+
+@media (min-width: 1024px) {
+  .hero h1 {
+    min-height: auto;
+  }
+}
 
 @media (min-width: 1280px) {
   .hero h1 {
