@@ -12,7 +12,8 @@ The first screen is the owner's own sentence, set as five numbered lines:
 4. to cut no corners;
 5. to go for the difficult.
 
-Under it, one sentence says where the lines come from: co-founding a venture-backed fashion
+Under it, a band of 44 strokes stands up once as the page opens (44 attempts at one in ten:
+99%), and one sentence says where the five lines were learned: co-founding a venture-backed fashion
 company in Singapore, leading European go-to-market for a Silicon Valley software company,
 and running a Lisbon venture firm's investments for five years.
 
@@ -24,22 +25,26 @@ by then.
 2. Every attempt moves the odds: at one in ten, 7 attempts are better than even, 44 are 99%.
 3. A copied attempt moves nothing: worked out again each time, 22 attempts reach 90%;
    repeated, they stay at 10%.
-4. A cut corner doubles the work: one in twenty needs 90 attempts where one in ten needs 44.
-5. Hard ground empties first: after five attempts two in three arrive on easy ground, one in
-   six on hard; whoever keeps going for ninety arrives 95% of the time.
+4. A cut corner doubles the work: to reach nine in ten, one in twenty needs 45 attempts where
+   one in ten needs 22.
+5. Hard ground empties first: after five attempts two in three arrive on easy ground (one in
+   five), fewer than one in four on hard (one in twenty); keep going for 45 and 90% arrive.
 
 One witness per author stands with the line it fits: Kipling's 'If—' (1910) with line 1,
 Roosevelt's Sorbonne speech (1910) with line 2, Henley's 'Invictus' (1875) with line 5.
-The page closes on line 6, the reader's, at the size of the creed: "If that is how you work,
-write to hello@reisierx.com".
+Each figure's strokes stand up, attempt by attempt, as it comes into view (`rise.js`; only
+figures wholly below the screen at the first scroll are laid down; reduced motion or no
+script shows them drawn). The page closes, at the size of the creed, on "If that is how you
+work, write to hello@reisierx.com".
 
 ## Medium and files
-- Static HTML, no JavaScript, no requests to other origins, no cookies.
+- Static HTML with one small script (`rise.js`, motion only), no requests to other origins,
+  no cookies.
 - `index.html`, `404.html`: the pages. `site.css`: the rules. `tokens.css`: this site's own
   tokens (colour, type, space) and font faces; the only file with raw values.
 - `build.mjs` (run by Vercel) copies the site into `site/`, draws the five figures from their
   formulas, places their labels, and fails the build if any number in the copy disagrees with
-  the arithmetic (eight assertions).
+  the arithmetic (nine assertions).
 - `og.png`, `favicon.png`, `apple-touch-icon.png` were rendered once from the page's own
   type and colours, and are committed.
 - No price and no paid session on the page; the build reads no price variable.

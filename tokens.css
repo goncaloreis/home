@@ -146,7 +146,7 @@
      and the premise gap from 640 px. Used to size it to the screen height as well. */
   --creed-tall-narrow: 11.25;
   --creed-tall-wide: 5.85;
-  --creed-min-narrow: 1.875rem;
+  --creed-min-narrow: 1.75rem;
   --creed-min-wide: 2.5rem;
   --stanza-gap: 0.25em;
   --premise-gap-narrow: 0.6em;
@@ -183,7 +183,9 @@
   --origin-lines: 6;
   --size-origin: var(--size-cite);
   --lead-origin: var(--lead-cite);
-  --foot-height: 2.75rem;
+  --foot-height: 4.5rem;
+  /* The band under the creed on the first screen: line 2 at work. */
+  --hero-band: 2.5rem;
 
   /* Figures: a stroke is one attempt */
   --plot-height: 10rem;
@@ -205,6 +207,10 @@
 
   /* Motion: colour changes only */
   --duration: 120ms;
+  /* A stroke standing up, and the interval between one attempt and the next. */
+  --rise-duration: 360ms;
+  --rise-step: 14ms;
+  --rise-delay: 150ms;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -233,9 +239,10 @@
   :root {
     --pad: 2rem;
     --num: 2.5rem;
-    --origin-lines: 4;
+    --origin-lines: 5;
     --band-height: var(--band-height-wide);
     --foot-height: 3rem;
+    --hero-band: 3rem;
     --size-origin: var(--size-meta);
     --lead-origin: var(--lead-meta);
   }

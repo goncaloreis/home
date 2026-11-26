@@ -21,10 +21,11 @@ const claims = [
   ["1: keeping going for thirty gets there nineteen times in twenty", odds(1 / 10, 30) >= 0.95],
   ["2: seven attempts are better than even", attemptsFor(1 / 10, 0.5) === 7],
   ["2: forty-four attempts are all but certain (99 in 100)", attemptsFor(1 / 10, 0.99) === 44],
-  ["4: at one in twenty, the same certainty takes ninety", attemptsFor(1 / 20, 0.99) === 90],
+  ["4: at one in ten, nine in ten takes twenty-two attempts", attemptsFor(1 / 10, 0.9) === 22],
+  ["4: at one in twenty, the same nine in ten takes forty-five", attemptsFor(1 / 20, 0.9) === 45],
   ["5: five attempts on easy ground (one in five) are enough for two in three", Math.abs(odds(1 / 5, 5) - 2 / 3) < 0.03],
-  ["5: five attempts on difficult ground (one in thirty) are enough for about one in six", Math.abs(odds(1 / 30, 5) - 1 / 6) < 0.02],
-  ["5: whoever keeps going (ninety attempts) nearly always arrives", odds(1 / 30, 90) >= 0.95],
+  ["5: five attempts on difficult ground (one in twenty) are enough for fewer than one in four", odds(1 / 20, 5) < 0.25 && odds(1 / 20, 5) > 0.2],
+  ["5: whoever keeps going (forty-five attempts) arrives nine times in ten", odds(1 / 20, 45) >= 0.9],
 ];
 for (const [claim, holds] of claims) {
   if (!holds) {
@@ -57,26 +58,46 @@ const figures = {
     ],
   },
   corners: {
-    slots: 90,
+    slots: 45,
     bands: [
-      { title: "Done properly: one in ten", p: 1 / 10, n: 44, marks: [44] },
-      { title: "Corners cut: one in twenty", p: 1 / 20, n: 90, marks: [90] },
+      { title: "Done properly: one in ten", p: 1 / 10, n: 22, marks: [22] },
+      { title: "Corners cut: one in twenty", p: 1 / 20, n: 45, marks: [45] },
     ],
   },
   ground: {
-    slots: 90,
+    slots: 45,
     bands: [
-      { title: "Easy ground: one in five", p: 1 / 5, n: 90, marks: [5] },
-      { title: "Difficult ground: one in thirty", p: 1 / 30, n: 90, marks: [5, 90] },
+      { title: "Easy ground: one in five", p: 1 / 5, n: 45, marks: [5] },
+      { title: "Difficult ground: one in twenty", p: 1 / 20, n: 45, marks: [5, 45] },
     ],
+  },
+  // The first screen: line 2 at work, under the five lines.
+  hero: {
+    slots: 44,
+    hero: true,
+    bands: [{ title: "Forty-four attempts at one in ten each", p: 1 / 10, n: 44, marks: [44] }],
   },
 };
 
 const chance = (band, n) => (band.copies ? band.p : odds(band.p, n));
 const css = [];
 
+function heroFigure(id, f) {
+  const b = f.bands[0];
+  const lines = Array.from({ length: b.n }, (_, k) => {
+    const n = k + 1;
+    const top = (100 * (1 - chance(b, n))).toFixed(2);
+    const key = b.marks.includes(n) ? ' class="key"' : "";
+    return `<line${key} x1="${n - 0.5}" x2="${n - 0.5}" y1="100" y2="${top}" pathLength="1" vector-effect="non-scaling-stroke" shape-rendering="crispEdges"/>`;
+  }).join("");
+  const last = b.marks[b.marks.length - 1];
+  const summary = `${b.title}: the chance that one has worked rises to ${pct(chance(b, last))}%.`;
+  return `<figure class="fig fig-${id} hero-fig"><div class="bands" role="img" aria-label="${summary}"><span class="plot"><svg class="strokes" viewBox="0 0 ${f.slots} 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">${lines}</svg></span><span class="hero-label">${last} attempts at one in ten: <span class="pct">${pct(chance(b, last))}%</span></span></div></figure>`;
+}
+
 function figure(id) {
   const f = figures[id];
+  if (f.hero) return heroFigure(id, f);
   const summary = f.bands
     .map((b) => `${b.title}. ${b.marks.map((m, i) => `${pct(chance(b, m))}% after ${m}${i === 0 ? " attempts" : ""}`).join(", ")}.`)
     .join(" ");
@@ -86,7 +107,7 @@ function figure(id) {
       const x = n - 0.5;
       const top = (100 * (1 - chance(b, n))).toFixed(2);
       const key = b.marks.includes(n) ? ' class="key"' : "";
-      return `<line${key} x1="${x}" x2="${x}" y1="100" y2="${top}" vector-effect="non-scaling-stroke" shape-rendering="crispEdges"/>`;
+      return `<line${key} x1="${x}" x2="${x}" y1="100" y2="${top}" pathLength="1" vector-effect="non-scaling-stroke" shape-rendering="crispEdges"/>`;
     }).join("");
     const ticks = b.marks.map((m, mi) => {
       const x = ((m - 0.5) / f.slots) * 100;
@@ -123,7 +144,7 @@ function page(file) {
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 
-for (const f of ["tokens.css", "robots.txt", "sitemap.xml", "og.png", "favicon.png", "apple-touch-icon.png"]) {
+for (const f of ["tokens.css", "rise.js", "robots.txt", "sitemap.xml", "og.png", "favicon.png", "apple-touch-icon.png"]) {
   cpSync(f, `${OUT}/${f}`);
 }
 cpSync("fonts", `${OUT}/fonts`, { recursive: true });
@@ -131,6 +152,7 @@ const index = page("index.html");
 writeFileSync(`${OUT}/index.html`, index);
 writeFileSync(`${OUT}/404.html`, page("404.html"));
 // Figure label positions are computed with the strokes, so they are written with them.
-writeFileSync(`${OUT}/site.css`, `${readFileSync("site.css", "utf8")}\n/* Figure labels, placed at their strokes by build.mjs. */\n${css.join("\n")}\n`);
+const order = Array.from({ length: Math.max(...Object.values(figures).map((f) => f.slots)) }, (_, k) => `.strokes line:nth-child(${k + 1}) { --i: ${k}; }`);
+writeFileSync(`${OUT}/site.css`, `${readFileSync("site.css", "utf8")}\n/* Figure labels, placed at their strokes by build.mjs. */\n${css.join("\n")}\n/* The order in which strokes stand up. */\n${order.join("\n")}\n`);
 
 console.log(`built ${OUT}/ (${claims.length} arithmetic checks passed, ${Object.keys(figures).length} figures)`);

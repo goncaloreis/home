@@ -96,7 +96,8 @@ a {
    end there too. */
 .page {
   /* Everything on the first screen that is not the creed, at its reserved size. */
-  --first-chrome: calc(var(--masthead) + var(--foot-height) + var(--space-8) + var(--origin-lines) * var(--lead-origin) + 2 * var(--space-6));
+  --hero-fig: calc(var(--space-6) + var(--hero-band) + var(--space-2) + var(--lead-cite));
+  --first-chrome: calc(var(--masthead) + var(--foot-height) + var(--hero-fig) + var(--space-8) + var(--origin-lines) * var(--lead-origin) + 2 * var(--space-6));
   --avail: calc(var(--viewport) - 2 * var(--pad) - var(--num));
   /* The creed's size: as wide as the widest piece allows, as tall as the screen allows,
      never below a floor that still fits the width. */
@@ -127,8 +128,7 @@ a {
   white-space: nowrap;
 }
 
-.write-top,
-.cue {
+.write-top {
   display: none;
 }
 
@@ -152,10 +152,6 @@ a {
   content: "";
   position: absolute;
   inset: calc(-1 * var(--hit-slop));
-}
-
-.n-still {
-  text-decoration: none;
 }
 
 /* The creed: exactly one screen with the masthead. */
@@ -329,13 +325,65 @@ a {
   stroke-width: var(--bar-width);
 }
 
-.dense .strokes line {
-  stroke-width: var(--bar-width-dense);
-}
-
 .strokes line.key {
   stroke: var(--red);
   stroke-width: var(--bar-width);
+}
+
+/* Strokes stand up from their base: on the first screen once as the page opens, and in
+   each figure as it comes into view (rise.js). With reduced motion they are simply drawn. */
+.strokes line {
+  stroke-dasharray: 1;
+}
+
+@keyframes rise {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-fig .strokes line {
+    animation: rise var(--rise-duration) var(--ease) both;
+    animation-delay: calc(var(--rise-delay) + var(--i) * var(--rise-step));
+  }
+
+  .fig.down .strokes line {
+    stroke-dashoffset: 1;
+  }
+
+  .fig.up .strokes line {
+    animation: rise var(--rise-duration) var(--ease) both;
+    animation-delay: calc(var(--i) * var(--rise-step));
+  }
+}
+
+/* The first screen's band: forty-four attempts under the five lines. */
+.hero-fig {
+  margin-top: var(--space-6);
+  padding-left: var(--num);
+}
+
+.hero-fig .bands {
+  row-gap: 0;
+}
+
+.hero-fig .plot {
+  height: var(--hero-band);
+}
+
+.hero-label {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+  text-align: right;
+  white-space: nowrap;
 }
 
 .ticks {
@@ -429,6 +477,7 @@ a {
 }
 
 .six .text {
+  grid-column: 2;
   white-space: pre-line;
 }
 
@@ -488,8 +537,7 @@ a {
     line-height: var(--lead-meta);
   }
 
-  .write-top,
-  .cue {
+  .write-top {
     display: inline;
   }
 
