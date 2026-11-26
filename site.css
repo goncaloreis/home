@@ -1,0 +1,613 @@
+/*
+ * ReisierX. One page: the creed, the five lines worked out, and line 6.
+ * Every value is a name from tokens.css. Phone first.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--size-body);
+  line-height: var(--lead-body);
+  font-weight: var(--weight-text);
+  letter-spacing: var(--track-text);
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  text-rendering: optimizeLegibility;
+  /* The query container for --viewport: the page's widths are measured from here. */
+  container-type: inline-size;
+}
+
+h1,
+h2,
+h3,
+p,
+ol,
+figure,
+blockquote {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+ol {
+  list-style: none;
+}
+
+::selection {
+  background: var(--red);
+  color: var(--paper);
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--underline);
+  text-underline-offset: var(--underline-offset);
+  text-decoration-color: var(--ink-soft);
+  transition: text-decoration-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+
+/* Hover only where there is a real pointer, so a tap never leaves a mark behind. */
+@media (hover: hover) {
+  a:hover {
+    text-decoration-color: var(--red);
+  }
+
+  .n:hover {
+    text-decoration-thickness: var(--focus-width);
+  }
+}
+
+:focus-visible {
+  outline: var(--focus-width) solid var(--red);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--focus-radius);
+}
+
+.hidden {
+  position: absolute;
+  width: var(--hairline-width);
+  height: var(--hairline-width);
+  margin: calc(-1 * var(--hairline-width));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The page. On phones it is the screen less its padding. From 640 px its width is set by
+   the creed: the right edge is where line 2 ends, and the address, the figures and the cue
+   end there too. */
+.page {
+  /* Everything on the first screen that is not the creed, at its reserved size. */
+  --first-chrome: calc(var(--masthead) + var(--foot-height) + var(--space-8) + var(--origin-lines) * var(--lead-origin) + 2 * var(--space-6));
+  --avail: calc(var(--viewport) - 2 * var(--pad) - var(--num));
+  /* The creed's size: as wide as the widest piece allows, as tall as the screen allows,
+     never below a floor that still fits the width. */
+  --hero-w: calc(var(--avail) / var(--creed-em-narrow));
+  --hero-h: calc((100svh - var(--first-chrome)) / var(--creed-tall-narrow));
+  --hero: min(var(--hero-w), max(var(--creed-min-narrow), min(var(--hero-h), var(--creed-max-narrow))));
+  --creed-height: calc(var(--creed-tall-narrow) * var(--hero));
+  padding-inline: var(--pad);
+}
+
+/* Masthead: what ReisierX is, and the address. Fixed height, so the creed never moves. */
+.masthead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  height: var(--masthead);
+  padding: var(--masthead-top) 0 0 var(--num);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+}
+
+.name {
+  font-weight: var(--weight-strong);
+}
+
+.write {
+  white-space: nowrap;
+}
+
+.write-top,
+.cue {
+  display: none;
+}
+
+/* The numbers: red, hanging in the margin. Those that link are underlined at rest. */
+.n {
+  justify-self: start;
+  position: relative;
+  min-width: var(--target-min);
+  font-family: var(--font-text);
+  font-size: var(--size-meta);
+  line-height: var(--lead-meta);
+  font-weight: var(--weight-text);
+  letter-spacing: var(--track-text);
+  font-variation-settings: normal;
+  font-variant-numeric: tabular-nums;
+  color: var(--red);
+  text-decoration-color: var(--red);
+}
+
+.n::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--hit-slop));
+}
+
+/* The creed: exactly one screen with the masthead. */
+.creed {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--masthead));
+  min-height: calc(100svh - var(--masthead));
+}
+
+/* The creed and its provenance sit centred in the space left by the masthead and the cue,
+   computed from reserved sizes rather than measured ones, so a late font moves nothing. */
+.first {
+  flex: none;
+  padding-top: max(var(--space-6), calc((100svh - var(--first-chrome) - var(--creed-height)) / 2 + var(--space-6)));
+  padding-bottom: var(--space-6);
+}
+
+.lines,
+.six {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  line-height: var(--lead-display);
+  font-size: var(--hero);
+}
+
+.line {
+  display: grid;
+  grid-template-columns: var(--num) minmax(0, 1fr);
+  align-items: baseline;
+}
+
+/* Phones: each line breaks where it was designed to, flush left, a stanza apart. */
+.line .text {
+  white-space: pre-line;
+}
+
+.line + .line {
+  margin-top: var(--stanza-gap);
+}
+
+.line.premise {
+  margin-bottom: var(--premise-gap-narrow);
+}
+
+/* Where the five lines come from: facts a reader can check. Its lines are reserved,
+   so however it wraps, nothing above it moves. */
+.origin {
+  margin-top: var(--space-8);
+  padding-left: var(--num);
+  max-width: calc(var(--num) + var(--measure-origin));
+  font-size: var(--size-origin);
+  line-height: var(--lead-origin);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.first-foot {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: var(--space-2);
+  height: var(--foot-height);
+  margin-top: auto;
+  padding: 0 0 var(--space-6) var(--num);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+}
+
+/* The five lines, worked out: the line it answers, the claim, the reason, the figure. */
+.argument {
+  padding-top: var(--space-24);
+}
+
+.proof {
+  display: grid;
+  grid-template-columns: var(--num) minmax(0, 1fr);
+  align-items: baseline;
+  scroll-margin-top: var(--space-8);
+}
+
+.proof + .proof {
+  margin-top: var(--space-24);
+}
+
+.proof > .n {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.kicker,
+.claim,
+.reason,
+.fig,
+.gloss {
+  grid-column: 2;
+}
+
+.kicker {
+  grid-row: 1;
+  font-size: var(--size-meta);
+  line-height: var(--lead-meta);
+  color: var(--ink-soft);
+}
+
+.claim {
+  margin-top: var(--space-2);
+  max-width: var(--measure);
+  font-family: var(--font-display);
+  font-size: var(--size-line);
+  line-height: var(--lead-line);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  text-wrap: balance;
+}
+
+.reason {
+  margin-top: var(--space-4);
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+/* Figures: a stroke is one attempt; its height is the chance that one has worked by then. */
+.fig {
+  margin-top: var(--space-8);
+}
+
+.bands {
+  display: grid;
+  row-gap: var(--space-5);
+}
+
+.band,
+.band-title,
+.plot,
+.ticks {
+  display: block;
+}
+
+.band-title {
+  margin-bottom: var(--space-2);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+}
+
+.plot {
+  position: relative;
+  height: var(--band-height);
+  border-top: var(--hairline-width) dotted var(--ink-soft);
+  border-bottom: var(--hairline-width) solid var(--ink);
+}
+
+.fig.tall .plot {
+  height: var(--plot-height);
+}
+
+.strokes {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.strokes line {
+  stroke: var(--mark);
+  stroke-width: var(--bar-width);
+}
+
+.dense .strokes line {
+  stroke-width: var(--bar-width-dense);
+}
+
+.strokes line.key {
+  stroke: var(--red);
+  stroke-width: var(--bar-width);
+}
+
+.ticks {
+  position: relative;
+  height: calc(2 * var(--lead-cite) + var(--space-2));
+}
+
+.tick {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--space-2);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.tick.mid {
+  align-items: center;
+  transform: translateX(-50%);
+}
+
+.tick.start {
+  align-items: flex-start;
+}
+
+.tick.end {
+  align-items: flex-end;
+}
+
+.pct {
+  color: var(--red);
+}
+
+.fig figcaption {
+  margin-top: var(--space-2);
+  max-width: var(--measure);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* A witness: one short passage from each of the three texts, cited exactly. On phones the
+   verse runs on with slashes, so no line of it breaks onto a word of its own. */
+.gloss {
+  margin-top: var(--space-8);
+  padding-left: var(--space-5);
+  max-width: var(--measure);
+  font-size: var(--size-gloss);
+  line-height: var(--lead-gloss);
+}
+
+.gloss blockquote p {
+  text-wrap: pretty;
+}
+
+.slash {
+  color: var(--ink-soft);
+}
+
+.gloss figcaption {
+  margin-top: var(--space-2);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+  text-wrap: balance;
+}
+
+/* The close: what ReisierX does, then line 6, the reader's, at the size of the creed. */
+.close {
+  padding-top: var(--space-32);
+}
+
+.practice {
+  padding-left: var(--num);
+  max-width: calc(var(--num) + var(--measure-practice));
+  font-family: var(--font-display);
+  font-size: var(--size-line);
+  line-height: var(--lead-line);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  text-wrap: balance;
+}
+
+.line.six {
+  margin-top: var(--space-12);
+}
+
+.six .text {
+  grid-column: 2;
+  white-space: pre-line;
+}
+
+.address {
+  display: block;
+  text-decoration-color: var(--red);
+  overflow-wrap: anywhere;
+}
+
+.colophon {
+  padding: var(--space-24) 0 var(--space-10) var(--num);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+}
+
+/* The 404 page, in the same voice. */
+.lost {
+  display: grid;
+  align-content: center;
+  gap: var(--space-6);
+  min-height: calc(100vh - var(--masthead));
+  min-height: calc(100svh - var(--masthead));
+  padding: 0 0 var(--space-16) var(--num);
+}
+
+.lost-title {
+  font-family: var(--font-display);
+  font-size: var(--size-line-wide);
+  line-height: var(--lead-line-wide);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  text-wrap: balance;
+}
+
+/* From 640 px: the creed on one line each, its optical size pinned so line 2 sets the
+   page's measure; the address moves to the masthead. */
+@media (min-width: 640px) {
+  .page {
+    --hero-w: calc(var(--avail) / var(--creed-em-wide));
+    --hero-h: calc((100svh - var(--first-chrome)) / var(--creed-tall-wide));
+    --hero: min(var(--hero-w), max(var(--creed-min-wide), min(var(--hero-h), var(--creed-max-wide))));
+    --creed-height: calc(var(--creed-tall-wide) * var(--hero));
+    width: calc(2 * var(--pad) + var(--num) + var(--line2-em) * var(--hero));
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  /* Line 2 ends on the page's edge in Source Serif 4; the fallback faces are a few per cent
+     wider, so the creed may run into the margin by that much instead of wrapping. */
+  .lines {
+    margin-right: calc((var(--line2-em) - var(--creed-em-wide)) * var(--hero));
+  }
+
+  .masthead {
+    font-size: var(--size-meta);
+    line-height: var(--lead-meta);
+  }
+
+  .write-top,
+  .cue {
+    display: inline;
+  }
+
+  .write-foot {
+    display: none;
+  }
+
+  .lines,
+  .six {
+    font-variation-settings: "opsz" var(--creed-opsz);
+  }
+
+  .line .text,
+  .six .text {
+    white-space: normal;
+  }
+
+  .line + .line {
+    margin-top: 0;
+  }
+
+  .line.premise {
+    margin-bottom: var(--creed-gap);
+  }
+
+  .first-foot {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    font-size: var(--size-meta);
+    line-height: var(--lead-meta);
+  }
+
+  .verse {
+    display: block;
+    padding-left: var(--space-5);
+    text-indent: calc(-1 * var(--space-5));
+  }
+
+  .slash {
+    display: none;
+  }
+
+  .gloss {
+    padding-left: var(--space-8);
+    font-size: var(--size-gloss-wide);
+    line-height: var(--lead-gloss-wide);
+  }
+
+  .fig.tall .plot {
+    height: var(--plot-height-wide);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    font-size: var(--size-body-wide);
+    line-height: var(--lead-body-wide);
+  }
+
+  .masthead,
+  .first-foot,
+  .n {
+    font-size: var(--size-meta-wide);
+    line-height: var(--lead-meta-wide);
+  }
+
+  .kicker {
+    font-size: var(--size-meta-wide);
+    line-height: var(--lead-meta-wide);
+  }
+
+  .claim,
+  .practice {
+    font-size: var(--size-line-wide);
+    line-height: var(--lead-line-wide);
+  }
+}
+
+/* Laptop: the reasoning on the left, its figure on the right, both to the page's edge. */
+@media (min-width: 1280px) {
+  .proof {
+    grid-template-columns: var(--num) minmax(0, 7fr) var(--gutter) minmax(0, 8fr);
+  }
+
+  .proof > .fig {
+    grid-column: 4;
+    grid-row: 1 / span 4;
+    align-self: start;
+    margin-top: 0;
+  }
+
+  .claim {
+    font-size: var(--size-claim-wide);
+    line-height: var(--lead-claim-wide);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@media print {
+  .cue {
+    display: none;
+  }
+
+  .creed {
+    min-height: 0;
+  }
+
+  .proof {
+    break-inside: avoid;
+  }
+}
