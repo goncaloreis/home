@@ -46,23 +46,28 @@ Both fallback faces come from `tokens.css`: Georgia for the serif and Arial for 
 
 ## Self-audit evidence (this revision)
 
-Taken from a local build with the price unset, served from `site/` and checked with headless Chromium (Playwright) on macOS. The fallbacks were the real Georgia and Arial.
+The page files were measured at `1d644ab`; the only change after it is this notes file. The raw results are in the [evidence](../../tree/01b99da2718332e53d055647af1fe21f46e7d14d) (evidence-only branch `company-page-evidence`, not a site, not for merge).
+
+Taken from a local build with the price unset, served from `site/` and checked with headless Chromium (Playwright) on macOS.
 
 | Check | Result |
 |---|---|
 | axe (WCAG 2.0 to 2.2 A and AA, best practice) | 0 violations at 390 x 844 and 1440 x 900, in light and dark |
 | Links | Every link resolves: two in-page anchors, `/`, and two mailto links. No external links. |
-| Late fonts (held 2.5 s), Georgia and Arial fallbacks | CLS 0 at 360, 375, 390, 393, 402, 412, 430, 600, 768, 1024 and 1440 px. CLS 0.0024 at 320 px, from a list edge at the fold. |
-| Late fonts, unadjusted generic fallbacks (Android-like stand-ins: Georgia unadjusted at 95 to 110%, and Times) | CLS 0.0003 to 0.0025, except 0.0098 to 0.0102 at 402 to 430 px with the narrow Times stand-in. The remaining shift is a 3 to 9 px glyph offset from unadjusted ascent, which only `tokens.css` can fix (see the open item below). |
-| Longest line, every 16 px from 320 to 1920 px | 71 characters with the web fonts (lab text, 544 to 767 px); 66 from 768 px up. With blocked fonts: 71 (Georgia and Arial), 75 (Times stand-in). No sideways scroll at any width. |
-| Headline at 390 px | 3 lines, no word broken, 320 px wide inside a 342 px container |
-| Keyboard | 5 stops in screen order (skip link, wordmark, "Get in touch", two email links), each with the 2 px token ring, in light and dark |
-| First viewport | Headline, lead and "Get in touch" in view at 390 x 844 (action bottom 536 px), at 320 x 568 (564 px) and at 1440 x 900 (460 px). No price. |
+| Late-font sweep | 149 widths for each of two fallback sets: the real Georgia and Arial, and an Android-like set with Noto Serif and Roboto (an emulation, not a device). Every 16 px from 320 to 1920 px, plus 360, 375, 390, 393, 402, 412, 430, 744, 834 and 1366 px, plus every 4 px from 800 to 1000 px. No width over target. |
+| Late-font CLS, max | 0.0024 at 320 px (Georgia and Arial). Android-like set: 0.0015. |
+| Late-font CLS, tablet 768 to 1023 px | 0.0015 at 800 to 820 px (Georgia and Arial) and 800 to 852 px (Android-like); 0 at every other tablet width |
+| Late-font CLS, phones 320 to 430 px | 0, except 0.0024 at 320 px (Georgia and Arial) |
+| Longest line | With web fonts: 71 characters (544 to 752 px), 66 from 768 px up. With fonts blocked: 71 (Georgia and Arial); 75 (Android-like, 560 to 752 px), 72 from 768 px up. No sideways scroll at any width. |
+| Headline at 390 px | 3 lines in the 320 px headline box |
+| Keyboard | 5 stops in screen order (skip link, wordmark, "Get in touch", two email links), each with the 2 px token ring |
+| First viewport | Headline, lead and "Get in touch" in view at 390 x 844 (action bottom 564 px), at 320 x 568 (564 px) and at 1440 x 900 (460 px). No price. |
+| Suite scanner (suite `1b5f7cd`) | 0 violations, 623 token parity checks |
 | Privacy scan | 0 hits |
 
 ## Open item for Tech
 
-`tokens.css` gives the serif fallback a single `size-adjust` (103.5%) for both Georgia and Liberation Serif, and has no matched fallback for Android. A separate Georgia face and an Android face would remove the residual glyph offset. That change belongs in the token file, so it needs the standard's owner.
+`tokens.css` gives the serif fallback a single `size-adjust` (103.5%) for both Georgia and Liberation Serif, and has no Android face. The measured residual is small (late-font CLS at most 0.0024, and 0.0015 between 800 and 852 px), but whether a separate Georgia face and an Android face would remove it is untested. That change belongs in the token file, so it needs the standard's owner.
 
 ## Header and footer
 
