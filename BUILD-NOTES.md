@@ -12,8 +12,9 @@ The first screen is the owner's own sentence, set as five numbered lines:
 4. to cut no corners;
 5. to go for the difficult.
 
-Under it, a band of 44 strokes stands up once as the page opens (44 attempts at one in ten:
-99%), and one sentence says where the five lines were learned: co-founding a venture-backed fashion
+Under it, a band of 44 strokes carries the legend for every figure (a stroke is one attempt,
+its height the chance so far, the dotted line certainty; at one in ten, 44 attempts reach 99%),
+and one sentence says where the five lines were learned: co-founding a venture-backed fashion
 company in Singapore, leading European go-to-market for a Silicon Valley software company,
 and running a Lisbon venture firm's investments for five years.
 
@@ -32,14 +33,12 @@ by then.
 
 One witness per author stands with the line it fits: Kipling's 'If—' (1910) with line 1,
 Roosevelt's Sorbonne speech (1910) with line 2, Henley's 'Invictus' (1875) with line 5.
-Each figure's strokes stand up, attempt by attempt, as it comes into view (`rise.js`; only
-figures wholly below the screen at the first scroll are laid down; reduced motion or no
-script shows them drawn). The page closes, at the size of the creed, on "If that is how you
+Every figure has a closed "Every attempt, in numbers" table with each value. Numerals beside
+the sections read "1↑" and return to the top, marking the line. The page closes, at the size of the creed, on "If that is how you
 work, write to hello@reisierx.com".
 
 ## Medium and files
-- Static HTML with one small script (`rise.js`, motion only), no requests to other origins,
-  no cookies.
+- Static HTML, no script, no animation, no requests to other origins, no cookies.
 - `index.html`, `404.html`: the pages. `site.css`: the rules. `tokens.css`: this site's own
   tokens (colour, type, space) and font faces; the only file with raw values.
 - `build.mjs` (run by Vercel) copies the site into `site/`, draws the five figures from their

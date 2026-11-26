@@ -39,7 +39,6 @@ for (const [claim, holds] of claims) {
 const figures = {
   stay: {
     slots: 30,
-    legend: "Each stroke is one attempt. Its height is the chance that at least one attempt has worked by then; the dotted line is certainty.",
     bands: [
       { title: "Twice as able, stops after three", p: 1 / 5, n: 3, marks: [3] },
       { title: "Half as able, keeps going", p: 1 / 10, n: 30, marks: [30] },
@@ -88,11 +87,11 @@ function heroFigure(id, f) {
     const n = k + 1;
     const top = (100 * (1 - chance(b, n))).toFixed(2);
     const key = b.marks.includes(n) ? ' class="key"' : "";
-    return `<line${key} x1="${n - 0.5}" x2="${n - 0.5}" y1="100" y2="${top}" pathLength="1" vector-effect="non-scaling-stroke" shape-rendering="crispEdges"/>`;
+    return `<line${key} x1="${n - 0.5}" x2="${n - 0.5}" y1="100" y2="${top}" vector-effect="non-scaling-stroke" shape-rendering="crispEdges"/>`;
   }).join("");
   const last = b.marks[b.marks.length - 1];
   const summary = `${b.title}: the chance that one has worked rises to ${pct(chance(b, last))}%.`;
-  return `<figure class="fig fig-${id} hero-fig"><div class="bands" role="img" aria-label="${summary}"><span class="plot"><svg class="strokes" viewBox="0 0 ${f.slots} 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">${lines}</svg></span><span class="hero-label">${last} attempts at one in ten: <span class="pct">${pct(chance(b, last))}%</span></span></div></figure>`;
+  return `<figure class="fig fig-${id} hero-fig"><div class="bands" role="img" aria-label="${summary}"><span class="plot"><svg class="strokes" viewBox="0 0 ${f.slots} 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">${lines}</svg></span></div><figcaption class="hero-label">Each stroke is one attempt; its height is the chance that one has worked by then, and the dotted line is certainty. At one in ten, ${last} attempts reach ${pct(chance(b, last))}%.</figcaption></figure>`;
 }
 
 function figure(id) {
@@ -107,7 +106,7 @@ function figure(id) {
       const x = n - 0.5;
       const top = (100 * (1 - chance(b, n))).toFixed(2);
       const key = b.marks.includes(n) ? ' class="key"' : "";
-      return `<line${key} x1="${x}" x2="${x}" y1="100" y2="${top}" pathLength="1" vector-effect="non-scaling-stroke" shape-rendering="crispEdges"/>`;
+      return `<line${key} x1="${x}" x2="${x}" y1="100" y2="${top}" vector-effect="non-scaling-stroke" shape-rendering="crispEdges"/>`;
     }).join("");
     const ticks = b.marks.map((m, mi) => {
       const x = ((m - 0.5) / f.slots) * 100;
@@ -121,8 +120,12 @@ function figure(id) {
   }).join("");
   const dense = f.slots > 60 ? " dense" : "";
   const tall = f.tall ? " tall" : "";
-  const legend = f.legend ? `<figcaption>${f.legend}</figcaption>` : "";
-  return `<figure class="fig fig-${id}${dense}${tall}"><div class="bands" role="img" aria-label="${summary}">${bands}</div>${legend}</figure>`;
+  const rows = Array.from({ length: Math.max(...f.bands.map((b) => b.n)) }, (_, k) => {
+    const n = k + 1;
+    return `<tr><th scope="row">${n}</th>${f.bands.map((b) => `<td>${n <= b.n ? `${pct(chance(b, n))}%` : ""}</td>`).join("")}</tr>`;
+  }).join("");
+  const table = `<details class="values"><summary>Every attempt, in numbers</summary><table><thead><tr><th scope="col">Attempt</th>${f.bands.map((b) => `<th scope="col">${b.title}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></details>`;
+  return `<figure class="fig fig-${id}${dense}${tall}"><div class="bands" role="img" aria-label="${summary}">${bands}</div>${table}</figure>`;
 }
 
 function page(file) {
@@ -144,7 +147,7 @@ function page(file) {
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 
-for (const f of ["tokens.css", "rise.js", "robots.txt", "sitemap.xml", "og.png", "favicon.png", "apple-touch-icon.png"]) {
+for (const f of ["tokens.css", "robots.txt", "sitemap.xml", "og.png", "favicon.png", "apple-touch-icon.png"]) {
   cpSync(f, `${OUT}/${f}`);
 }
 cpSync("fonts", `${OUT}/fonts`, { recursive: true });
@@ -152,7 +155,6 @@ const index = page("index.html");
 writeFileSync(`${OUT}/index.html`, index);
 writeFileSync(`${OUT}/404.html`, page("404.html"));
 // Figure label positions are computed with the strokes, so they are written with them.
-const order = Array.from({ length: Math.max(...Object.values(figures).map((f) => f.slots)) }, (_, k) => `.strokes line:nth-child(${k + 1}) { --i: ${k}; }`);
-writeFileSync(`${OUT}/site.css`, `${readFileSync("site.css", "utf8")}\n/* Figure labels, placed at their strokes by build.mjs. */\n${css.join("\n")}\n/* The order in which strokes stand up. */\n${order.join("\n")}\n`);
+writeFileSync(`${OUT}/site.css`, `${readFileSync("site.css", "utf8")}\n/* Figure labels, placed at their strokes by build.mjs. */\n${css.join("\n")}\n`);
 
 console.log(`built ${OUT}/ (${claims.length} arithmetic checks passed, ${Object.keys(figures).length} figures)`);

@@ -96,7 +96,7 @@ a {
    end there too. */
 .page {
   /* Everything on the first screen that is not the creed, at its reserved size. */
-  --hero-fig: calc(var(--space-6) + var(--hero-band) + var(--space-2) + var(--lead-cite));
+  --hero-fig: calc(var(--space-6) + var(--hero-band) + var(--space-2) + var(--hero-legend-lines) * var(--lead-cite));
   --first-chrome: calc(var(--masthead) + var(--foot-height) + var(--hero-fig) + var(--space-8) + var(--origin-lines) * var(--lead-origin) + 2 * var(--space-6));
   --avail: calc(var(--viewport) - 2 * var(--pad) - var(--num));
   /* The creed's size: as wide as the widest piece allows, as tall as the screen allows,
@@ -330,38 +330,6 @@ a {
   stroke-width: var(--bar-width);
 }
 
-/* Strokes stand up from their base: on the first screen once as the page opens, and in
-   each figure as it comes into view (rise.js). With reduced motion they are simply drawn. */
-.strokes line {
-  stroke-dasharray: 1;
-}
-
-@keyframes rise {
-  from {
-    stroke-dashoffset: 1;
-  }
-
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .hero-fig .strokes line {
-    animation: rise var(--rise-duration) var(--ease) both;
-    animation-delay: calc(var(--rise-delay) + var(--i) * var(--rise-step));
-  }
-
-  .fig.down .strokes line {
-    stroke-dashoffset: 1;
-  }
-
-  .fig.up .strokes line {
-    animation: rise var(--rise-duration) var(--ease) both;
-    animation-delay: calc(var(--i) * var(--rise-step));
-  }
-}
-
 /* The first screen's band: forty-four attempts under the five lines. */
 .hero-fig {
   margin-top: var(--space-6);
@@ -376,14 +344,68 @@ a {
   height: var(--hero-band);
 }
 
+/* The legend comes with the first figure the page shows. Its lines are reserved. */
 .hero-label {
   display: block;
+  min-height: calc(var(--hero-legend-lines) * var(--lead-cite));
+  margin-top: var(--space-2);
+  max-width: var(--measure);
+  font-size: var(--size-cite);
+  line-height: var(--lead-cite);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* Every value behind a figure, for anyone who wants to check it. */
+.values {
   margin-top: var(--space-2);
   font-size: var(--size-cite);
   line-height: var(--lead-cite);
   color: var(--ink-soft);
+}
+
+.values summary {
+  cursor: pointer;
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--underline);
+  text-underline-offset: var(--underline-offset);
+  text-decoration-color: var(--ink-soft);
+}
+
+.values table {
+  margin-top: var(--space-3);
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.values th,
+.values td {
+  padding: var(--space-1) var(--space-4) var(--space-1) 0;
+  border-bottom: var(--hairline-width) solid var(--hairline);
+  font-weight: var(--weight-text);
   text-align: right;
-  white-space: nowrap;
+}
+
+.values thead th {
+  color: var(--ink-soft);
+  vertical-align: bottom;
+}
+
+/* The back numerals say where they go; the line they return to is marked, and the jump
+   lands at the very top so the masthead and address are in view. */
+.up {
+  margin-left: var(--space-1);
+}
+
+.line {
+  scroll-margin-top: 100vh;
+}
+
+.line:target > .n {
+  background: var(--red);
+  color: var(--paper);
+  text-decoration: none;
 }
 
 .ticks {
@@ -628,6 +650,27 @@ a {
     grid-row: 1 / span 4;
     align-self: start;
     margin-top: 0;
+  }
+
+  /* The even lines turn the page the other way, figure first. */
+  #why-2,
+  #why-4 {
+    grid-template-columns: var(--num) minmax(0, 8fr) var(--gutter) minmax(0, 7fr);
+  }
+
+  #why-2 > .fig,
+  #why-4 > .fig {
+    grid-column: 2;
+  }
+
+  #why-2 > .kicker,
+  #why-2 > .claim,
+  #why-2 > .reason,
+  #why-2 > .gloss,
+  #why-4 > .kicker,
+  #why-4 > .claim,
+  #why-4 > .reason {
+    grid-column: 4;
   }
 
   .claim {

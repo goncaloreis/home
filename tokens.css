@@ -147,7 +147,7 @@
   --creed-tall-narrow: 11.25;
   --creed-tall-wide: 5.85;
   --creed-min-narrow: 1.75rem;
-  --creed-min-wide: 2.5rem;
+  --creed-min-wide: 2.125rem;
   --stanza-gap: 0.25em;
   --premise-gap-narrow: 0.6em;
 
@@ -186,6 +186,7 @@
   --foot-height: 4.5rem;
   /* The band under the creed on the first screen: line 2 at work. */
   --hero-band: 2.5rem;
+  --hero-legend-lines: 4;
 
   /* Figures: a stroke is one attempt */
   --plot-height: 10rem;
@@ -207,10 +208,6 @@
 
   /* Motion: colour changes only */
   --duration: 120ms;
-  /* A stroke standing up, and the interval between one attempt and the next. */
-  --rise-duration: 360ms;
-  --rise-step: 14ms;
-  --rise-delay: 150ms;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -243,6 +240,7 @@
     --band-height: var(--band-height-wide);
     --foot-height: 3rem;
     --hero-band: 3rem;
+    --hero-legend-lines: 2;
     --size-origin: var(--size-meta);
     --lead-origin: var(--lead-meta);
   }
