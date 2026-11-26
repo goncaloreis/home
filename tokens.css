@@ -166,6 +166,8 @@
   --measure-close: 34rem;
   --gloss-width: 24rem;
   --page-max: 90rem;
+  /* The page's text box: container units where supported, the viewport otherwise. */
+  --content: calc(min(100vw, var(--page-max)) - 2 * var(--pad));
   --masthead: 4.5rem;
   --masthead-top: 1.5rem;
 
@@ -187,6 +189,12 @@
   /* Motion: colour changes only */
   --duration: 120ms;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@supports (width: 1cqw) {
+  :root {
+    --content: 100cqw;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

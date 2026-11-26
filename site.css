@@ -159,7 +159,7 @@ a {
   font-weight: var(--weight-display);
   letter-spacing: var(--track-display);
   line-height: var(--lead-display);
-  font-size: min(calc((100cqw - var(--num)) / var(--creed-em-narrow)), var(--creed-max-narrow));
+  font-size: min(calc((var(--content) - var(--num)) / var(--creed-em-narrow)), var(--creed-max-narrow));
 }
 
 .line {
@@ -365,7 +365,7 @@ a {
 
 .address {
   font-family: var(--font-display);
-  font-size: min(calc((100cqw - var(--num)) / var(--address-em)), var(--size-address));
+  font-size: min(calc((var(--content) - var(--num)) / var(--address-em)), var(--size-address));
   line-height: var(--lead-address);
   font-weight: var(--weight-display);
   letter-spacing: var(--track-display);
@@ -419,7 +419,7 @@ a {
   }
 
   .lines {
-    font-size: min(calc((100cqw - var(--num)) / var(--creed-em-narrow)), var(--creed-max-medium));
+    font-size: min(calc((var(--content) - var(--num)) / var(--creed-em-narrow)), var(--creed-max-medium));
   }
 
   .first-foot {
@@ -439,7 +439,7 @@ a {
   }
 
   .address {
-    font-size: min(calc((100cqw - var(--num)) / var(--address-em)), var(--size-address-wide));
+    font-size: min(calc((var(--content) - var(--num)) / var(--address-em)), var(--size-address-wide));
   }
 }
 
@@ -458,7 +458,7 @@ a {
   }
 
   .lines {
-    font-size: min(calc((100cqw - var(--num)) / var(--creed-em-wide)), var(--creed-max-wide));
+    font-size: min(calc((var(--content) - var(--num)) / var(--creed-em-wide)), var(--creed-max-wide));
   }
 
   .line .text {
