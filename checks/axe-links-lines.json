@@ -1,0 +1,65 @@
+{
+  "axe": {
+    "phone-light": [],
+    "phone-dark": [],
+    "laptop-light": [],
+    "laptop-dark": []
+  },
+  "links": [
+    {
+      "href": "#main",
+      "status": "anchor-ok"
+    },
+    {
+      "href": "/",
+      "status": 200
+    },
+    {
+      "href": "#contact",
+      "status": "anchor-ok"
+    },
+    {
+      "href": "mailto:hello@reisierx.com",
+      "status": "mailto"
+    },
+    {
+      "href": "mailto:hello@reisierx.com",
+      "status": "mailto"
+    }
+  ],
+  "consoleErrors": [],
+  "cls": {
+    "360": 0,
+    "390": 0,
+    "412": 0,
+    "600": 0,
+    "768": 0,
+    "1440": 0
+  },
+  "maxLine": {
+    "390": {
+      "chars": 50,
+      "sel": "p.terms"
+    },
+    "600": {
+      "chars": 71,
+      "sel": "li"
+    },
+    "680": {
+      "chars": 71,
+      "sel": "li"
+    },
+    "767": {
+      "chars": 71,
+      "sel": "li"
+    },
+    "1024": {
+      "chars": 66,
+      "sel": "p.terms"
+    },
+    "1440": {
+      "chars": 66,
+      "sel": "p.terms"
+    }
+  }
+}

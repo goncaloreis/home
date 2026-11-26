@@ -1,0 +1,13 @@
+{
+ "commit": "1d644ab138ac357a0cb4de03b43ee3fe03b4d679",
+ "widthsTested": 149,
+ "sets": [
+  "georgia-arial",
+  "android"
+ ],
+ "maxCls": 0.0024,
+ "widthsOverTarget": [],
+ "maxLineWebFonts": 71,
+ "maxLineBlocked": 75,
+ "anySidewaysScroll": false
+}

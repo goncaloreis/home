@@ -1,0 +1,11 @@
+set,width,late_font_cls,longest_line_web_fonts,longest_line_fonts_blocked,sideways_scroll_web_fonts,sideways_scroll_fonts_blocked
+android,320,0,42,44,false,false
+android,390,0,50,56,false,false
+android,834,0.0605,66,72,false,false
+android,900,0.0383,66,72,false,false
+android,1440,0,66,72,false,false
+georgia-arial,320,0.0024,42,42,false,false
+georgia-arial,390,0,50,50,false,false
+georgia-arial,834,0.0387,66,66,false,false
+georgia-arial,900,0.0383,66,66,false,false
+georgia-arial,1440,0,66,66,false,false
