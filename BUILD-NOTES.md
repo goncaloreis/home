@@ -70,3 +70,15 @@ write to hello@reisierx.com".
   overrides put every baseline where Source Serif 4 puts it.
 - In forced colours the display leading opens up, so the plates the system paints behind each
   line never cover the descenders above.
+
+## Checks on this build
+- Build: the eight arithmetic assertions pass; five figures drawn from their formulas.
+- axe: 0 violations at 390x844 and 1440x900, light and dark. html-validate: 0 errors.
+- Links: 14 of 14 resolve. Console errors: 0. Keyboard: every stop in screen order, each with
+  a visible ring; targets at least 24 px.
+- Lighthouse, mobile and desktop: 100 in all four categories; LCP 1.2 s on mobile; CLS 0.
+- Late-font layout shift (web font held 2.5 s): at most 0.0001 in a sweep of 160 widths from
+  320 to 1920 px at up to five window heights each, with three fallback sets (Georgia and
+  Arial; Noto Serif and Roboto; Liberation). Longest line 69 characters, 74 with the web font
+  blocked. No sideways scroll anywhere, at 200% zoom, or with WCAG text spacing.
+- Forced colours and print checked. Privacy scan: 0 hits. Suite scanner (informational): pass.
