@@ -1,11 +1,15 @@
 /*
- * ReisierX. One page: three facts no one chooses, what follows from them two at a time,
- * where all three lead, and the call. Every value is a name from tokens.css. Phone first.
+ * ReisierX. One page: a line that says what the company does and why to book it, then
+ * the reasoning behind it in the open: three facts no one chooses, what follows from them
+ * two at a time, what all three say about a business that stalls, and the call. Every
+ * value is a name from tokens.css. Phone first.
  *
- * Sizes follow the weight of the argument: the facts are premises, set at reading size;
- * the answers drawn from them are large, and the conclusion largest. All the text runs
- * down one edge. From 640 px each mark hangs in the margin beside the first line of its
- * entry, so the margin, read alone, shows single facts becoming pairs and then all three.
+ * The serif sets everything the page says. The device's sans sets what is used to find
+ * the way and to act: the section labels, the two links to the call and the note under
+ * the booking button. On every size each mark hangs in the margin beside the first line
+ * of its entry, so the text keeps one edge and the margin, read alone, shows single facts
+ * becoming pairs and then all three. From 1024 px the section labels stand in a rail to
+ * the left of the text.
  */
 
 *,
@@ -73,6 +77,10 @@ a {
     text-decoration-color: var(--red);
   }
 
+  a.brand:hover {
+    text-decoration-line: underline;
+  }
+
   .to-call:hover,
   .book:hover {
     border-color: var(--ink);
@@ -81,56 +89,38 @@ a {
   }
 }
 
-/* Focus: a red ring standing off the element. Every control that gets one has room
-   around it, so the ring never touches a letter. */
+/* Focus: a red ring standing off the element, drawn at once (an outline has no
+   transition). Every control that gets one has room around it, so the ring never
+   touches a letter. */
 :focus-visible {
   outline: var(--focus-width) solid var(--red);
   outline-offset: var(--focus-offset);
 }
 
-/* A link inside running text is filled instead, as selected text is, because a ring
-   there would cross the words around it. The clear outline is drawn in forced colours,
-   where the fill is not. */
-.join a:focus-visible,
-.who a:focus-visible {
-  outline-color: transparent;
-  outline-offset: 0;
-  background: var(--red);
-  color: var(--on-red);
+/* A link inside a line of text gets the same ring, drawn closer, with its underline
+   cleared; the footer's lines are spaced so the ring clears the lines above and below. */
+.join a:focus-visible {
+  outline-offset: var(--focus-offset-inline);
   text-decoration-color: transparent;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-
-/* Words for screen readers only. */
-.hidden {
-  position: absolute;
-  width: var(--hairline-width);
-  height: var(--hairline-width);
-  margin: calc(-1 * var(--hairline-width));
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
 }
 
 .page {
   position: relative;
-  max-width: calc(var(--page-max) + 2 * var(--pad));
+  max-width: calc(var(--page-max) + var(--pad-start) + var(--pad-end));
   margin-inline: auto;
-  padding-inline: var(--pad);
+  padding-inline: var(--pad-start) var(--pad-end);
 }
 
-/* The first stop for a keyboard: straight to the argument. Shown only while focused,
+/* The first stop for a keyboard: straight to the content. Shown only while focused,
    and then in the flow above the masthead, so it covers nothing and its ring has room. */
 .skip {
   display: block;
   width: fit-content;
   margin-top: var(--space-3);
   padding: var(--space-2) var(--space-3);
-  font-size: var(--size-meta);
-  line-height: var(--lead-meta);
+  font-family: var(--font-ui);
+  font-size: var(--size-ui);
+  line-height: var(--lead-ui);
 }
 
 .skip:not(:focus) {
@@ -144,39 +134,71 @@ a {
   white-space: nowrap;
 }
 
-/* Masthead: what ReisierX is, and the way to the call. On phones the name takes a line
-   of its own; from 640 px the masthead is one line. */
+/* Masthead: the name, and the way to the call with its terms. Where the two do not fit
+   on one line, the way to the call drops below the name. */
 .masthead {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-3) var(--space-4);
   padding-top: var(--masthead-top);
-  font-size: var(--size-meta);
-  line-height: var(--lead-meta);
 }
 
-.name {
-  display: block;
-  width: fit-content;
+.brand {
+  font-size: var(--size-brand);
+  line-height: var(--lead-brand);
   font-weight: var(--weight-strong);
+  text-decoration-line: none;
 }
 
 /* The way to the call, framed so it reads as the action it leads to. */
 .to-call {
-  position: relative;
   flex: none;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-4);
   border: var(--hairline-width) solid var(--ink);
   border-radius: var(--radius);
+  font-family: var(--font-ui);
+  font-size: var(--size-ui);
+  line-height: var(--lead-ui);
+  font-weight: var(--weight-ui);
+  letter-spacing: var(--track-ui);
   text-decoration: none;
   white-space: nowrap;
 }
 
-/* Section labels: a hairline, then the word. */
-.label {
-  padding-top: var(--space-3);
+.tagline,
+.turn,
+.answer-title,
+.where-title,
+.call-lead,
+.lost-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+}
+
+/* The opening line: what the company does and why to book it, the largest line on the
+   page and the first thing read. */
+.tagline {
+  margin-top: var(--space-hero);
+  max-width: var(--measure-hero);
+  font-size: var(--size-hero);
+  line-height: var(--lead-hero);
+  letter-spacing: var(--track-hero);
+  text-wrap: balance;
+}
+
+/* Each part of the argument opens on a hairline. On phones its label stands above it;
+   from 1024 px the label moves into the rail. */
+.part {
+  padding-top: var(--part-top);
   border-top: var(--hairline-width) solid var(--faint);
+}
+
+.label {
+  margin-bottom: var(--space-6);
+  font-family: var(--font-ui);
   font-size: var(--size-label);
   line-height: var(--lead-label);
   font-weight: var(--weight-label);
@@ -205,14 +227,36 @@ a {
   stroke: var(--mark-ring);
 }
 
-.turn,
-.answer-title,
-.where-title,
-.call-lead,
-.lost-title {
-  font-family: var(--font-display);
-  font-weight: var(--weight-display);
-  letter-spacing: var(--track-display);
+/* Every mark hangs in the margin, a gap away from the text and centred on the first line
+   of its entry, so all the text starts on one edge. Its font size is the entry's, so a
+   leading given in em resolves as it does for the line. */
+.fact,
+.answer,
+.therefore {
+  position: relative;
+}
+
+.fact > .mark,
+.answer > .mark,
+.therefore > .mark {
+  position: absolute;
+  inset-inline-end: calc(100% + var(--mark-gap));
+}
+
+.fact > .mark {
+  top: calc((var(--lead-fact) - var(--mark-height)) / 2);
+  font-size: var(--size-fact);
+}
+
+.answer > .mark {
+  top: calc((var(--lead-answer) - var(--mark-height)) / 2);
+  font-size: var(--size-answer);
+}
+
+.therefore > .mark {
+  width: var(--mark-where);
+  top: calc((var(--lead-where) - var(--mark-where-height)) / 2);
+  font-size: var(--size-where);
 }
 
 /* Given: the three facts, each run on into what it means. They are premises, so they
@@ -224,21 +268,6 @@ a {
 .facts {
   display: grid;
   row-gap: var(--space-facts);
-  margin-top: var(--space-6);
-}
-
-.fact {
-  display: grid;
-  grid-template-columns: var(--mark) minmax(0, 1fr);
-  column-gap: var(--mark-gap);
-  align-items: start;
-}
-
-/* Each mark is centred on the first line of its entry. Its font size is the entry's, so
-   a leading given in em resolves as it does for the line. */
-.fact > .mark {
-  margin-top: calc((var(--lead-fact) - var(--mark-height)) / 2);
-  font-size: var(--size-fact);
 }
 
 .premise {
@@ -262,7 +291,6 @@ a {
 }
 
 .turn {
-  margin-top: var(--space-6);
   max-width: var(--measure-turn);
   font-size: var(--size-turn);
   line-height: var(--lead-turn);
@@ -288,27 +316,12 @@ a {
   text-wrap: pretty;
 }
 
-/* On phones the mark of an answer, and of the conclusion, stands above it. */
-.answer > .mark,
-.therefore > .mark {
-  margin-bottom: var(--space-3);
-}
-
-.answer > .mark {
-  font-size: var(--size-answer);
-}
-
-/* Where all three lead: one bar in ink under the whole argument, then the conclusion,
-   the only line with all three points filled. */
+/* The conclusion: one bar in ink under the whole argument, then the only line with all
+   three points filled. */
 .where {
   margin-top: var(--space-section);
   padding-top: var(--space-8);
   border-top: var(--bar-width) solid var(--ink);
-}
-
-.therefore > .mark {
-  width: var(--mark-where);
-  font-size: var(--size-where);
 }
 
 .where-title {
@@ -318,15 +331,14 @@ a {
   text-wrap: balance;
 }
 
-/* The call: what it is and that it is paid, what to write, and only then the one
-   booking link, the only filled block on the page. */
+/* The call: what it is and that it is paid, what it costs and how long it lasts, what to
+   write, and only then the one booking link, the only filled block on the page. */
 .call {
   margin-top: var(--space-section);
   scroll-margin-top: var(--space-6);
 }
 
 .call-lead {
-  margin-top: var(--space-6);
   max-width: var(--measure-call);
   font-size: var(--size-call);
   line-height: var(--lead-call);
@@ -334,6 +346,7 @@ a {
 }
 
 .offer,
+.terms,
 .brief {
   max-width: var(--measure);
   text-wrap: pretty;
@@ -343,6 +356,7 @@ a {
   margin-top: var(--space-4);
 }
 
+.terms,
 .brief {
   margin-top: var(--space-3);
 }
@@ -356,21 +370,25 @@ a {
 
 /* The transparent border is drawn in forced colours, where the fill is not. */
 .book {
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-4) var(--space-8);
   border: var(--hairline-width) solid transparent;
   border-radius: var(--radius);
-  background: var(--red);
-  color: var(--on-red);
+  background: var(--act);
+  color: var(--on-act);
+  font-family: var(--font-ui);
   font-size: var(--size-book);
   line-height: var(--lead-book);
+  font-weight: var(--weight-ui);
+  letter-spacing: var(--track-ui);
   text-align: center;
   text-decoration: none;
 }
 
 /* Shown by the build only while the booking link is an email. */
 .via {
-  font-size: var(--size-note);
-  line-height: var(--lead-note);
+  font-family: var(--font-ui);
+  font-size: var(--size-ui);
+  line-height: var(--lead-ui);
   color: var(--ink-soft);
 }
 
@@ -405,42 +423,44 @@ a {
   text-wrap: balance;
 }
 
-/* From 640 px every mark hangs in the margin, right-aligned a gap away from the text and
-   centred on its first line, so all the text starts on one edge. */
+.lost-note {
+  max-width: var(--measure);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
 @media (min-width: 640px) {
-  .name {
-    display: inline;
-  }
-
-  .fact,
-  .answer,
-  .therefore {
-    position: relative;
-    display: block;
-  }
-
-  .fact > .mark,
-  .answer > .mark,
-  .therefore > .mark {
-    position: absolute;
-    inset-inline-end: calc(100% + var(--mark-gap));
-    margin: 0;
-  }
-
-  .fact > .mark {
-    top: calc((var(--lead-fact) - var(--mark-height)) / 2);
-  }
-
-  .answer > .mark {
-    top: calc((var(--lead-answer) - var(--mark-height)) / 2);
-  }
-
-  .therefore > .mark {
-    top: calc((var(--lead-where) - var(--mark-where-height)) / 2);
-  }
-
   .book-line {
     justify-items: start;
+  }
+}
+
+/* From 1024 px each part is two columns: its label in the rail, set on the baseline of
+   the part's first line, and the text beside it. The marks hang in the gutter between,
+   and the footer keeps the same columns. A fact and its meaning would run past the
+   column's edge by a few words, so each takes a line of its own instead. */
+@media (min-width: 1024px) {
+  .part,
+  .colophon {
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    column-gap: var(--gutter);
+    align-items: baseline;
+  }
+
+  .label {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
+  }
+
+  .part > :not(.label),
+  .colophon > .join {
+    grid-column: 2;
+  }
+
+  .premise > * {
+    display: block;
   }
 }
 
@@ -469,6 +489,7 @@ a {
 
   .book {
     padding: 0;
+    border: 0;
     background: none;
     color: var(--ink);
     text-align: start;

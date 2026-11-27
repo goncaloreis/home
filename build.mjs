@@ -3,9 +3,10 @@
 // It copies the pages, styles and fonts; draws the mark into the pages and into the
 // images (og.png, favicon.png, apple-touch-icon.png); and refuses to build if the site
 // breaks one of its own rules: the shape of the argument, one booking link that says the
-// call is paid, a way past the masthead for keyboards, no price, nothing loaded from
-// another origin, no script, and colours that keep their contrast on the paper in both
-// colour schemes. Nothing is written unless every check passes.
+// call is paid, the call's length and fee stated once wherever the call is offered and the
+// same in every place, a way past the masthead for keyboards, nothing loaded from another
+// origin, no script, and colours that keep their contrast in both colour schemes. Nothing
+// is written unless every check passes.
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { deflateSync } from "node:zlib";
 
@@ -53,17 +54,27 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-// Ink is held to 7:1. Soft ink and red also set text, so they are held to 4.5:1; the
-// booking button sets paper on red, the same pair. Unlit draws the open rings of the mark,
-// a graphic that carries meaning; 3:1 is the floor for that, but a thin ring reads fainter
-// than its colour, so it is held to 4:1.
+// Ink is held to 7:1. Soft ink and red also set text, so they are held to 4.5:1. Unlit
+// draws the open rings of the mark, a graphic that carries meaning; 3:1 is the floor for
+// that, but a thin ring reads fainter than its colour, so it is held to 4:1. The booking
+// button sets on-act on act: its words are held to 4.5:1 on the fill, and the fill, the
+// shape of a control, to 3:1 on the paper.
 const NEEDS = { ink: 7, "ink-soft": 4.5, red: 4.5, unlit: 4 };
+const PAIRS = [
+  ["on-act", "act", 4.5],
+  ["act", "paper", 3],
+];
 const ratios = { light: [], dark: [] };
 for (const [scheme, palette] of [["light", light], ["dark", dark]]) {
   for (const [name, least] of Object.entries(NEEDS)) {
     const ratio = palette[name] && palette.paper ? contrast(palette[name], palette.paper) : 0;
     check(ratio >= least, `in the ${scheme} scheme, ${name} on paper is at least ${least}:1 (it is ${ratio.toFixed(2)}:1)`);
     ratios[scheme].push(`${name} ${ratio.toFixed(1)}:1`);
+  }
+  for (const [fore, back, least] of PAIRS) {
+    const ratio = palette[fore] && palette[back] ? contrast(palette[fore], palette[back]) : 0;
+    check(ratio >= least, `in the ${scheme} scheme, ${fore} on ${back} is at least ${least}:1 (it is ${ratio.toFixed(2)}:1)`);
+    ratios[scheme].push(`${fore} on ${back} ${ratio.toFixed(1)}:1`);
   }
 }
 
@@ -136,24 +147,72 @@ const index = pages["index.html"];
 check(bookingTags.length === 1 && [...index.matchAll(/\bdata-book\b/g)].length === 1, "index.html has exactly one booking link (data-book)");
 check(/^(mailto:|https:\/\/)/.test(bookingHref), "the booking link is a mailto: or https: address");
 check(index.includes('href="#call"'), "the masthead leads to the call");
-// The link's visible words say the call is paid, whatever the href becomes. Words kept
-// for screen readers only do not count.
-const bookingWords = (source.match(/<a\b[^>]*\bdata-book\b[^>]*>([\s\S]*?)<\/a>/)?.[1] ?? "")
-  .replace(/<span class="hidden">[\s\S]*?<\/span>/g, " ")
-  .replace(/<[^>]+>/g, " ");
+// The link's visible words say the call is paid, whatever the href becomes. The site has no
+// class that hides words from sight, so every word inside the link is seen.
+const bookingWords = (source.match(/<a\b[^>]*\bdata-book\b[^>]*>([\s\S]*?)<\/a>/)?.[1] ?? "").replace(/<[^>]+>/g, " ");
 check(/\bpaid\b/i.test(bookingWords), "the booking link says the call is paid");
 
-// A price could hide behind an entity or a word, so those are read first.
+// The call's terms, its length and its fee, are the owner's to set. Every place that offers
+// the call states them plainly and once: the description a search shows, the one a shared
+// link shows, the masthead's way to the call, and the call itself, before its booking link.
+// They are the same in every place and appear nowhere else on the page, in its text or its
+// attributes. The build holds no figure of its own: it reads them from the pages, so a new
+// fee or length is a change to the pages alone. A fee could hide behind an entity, so
+// entities are read first.
 const SYMBOLS = { euro: "€", pound: "£", dollar: "$", yen: "¥", cent: "¢", nbsp: " " };
 const decode = (html) =>
   html
     .replace(/&([a-z]+);/gi, (whole, name) => SYMBOLS[name.toLowerCase()] ?? whole)
     .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
     .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)));
-const PRICE = /[$€£¥¢]\s*\d|\d\s*[$€£¥¢]|\b(?:EUR|USD|GBP|CHF)\b|\d\s*(?:euros?|dollars?|pounds?|francs?)\b/i;
-// Nor a fee given as a bare number, nor a length for the call: both are the owner's to set.
-const FIGURE =
-  /\b(?:fee|price|cost|rate)s?\b[^.<]{0,40}\d|\d\s*-?\s*(?:min(?:ute)?s?|hours?|hrs?)\b|\b(?:half an|an|one|two|three) hours?\b/i;
+const AMOUNT = String.raw`\d+(?:[.,]\d+)*`;
+const FEE = new RegExp(
+  String.raw`[$€£¥¢]\s*${AMOUNT}|${AMOUNT}\s*(?:[$€£¥¢]|(?:EUR|USD|GBP|CHF|euros?|dollars?|pounds?|francs?)\b)|\b(?:EUR|USD|GBP|CHF)\s*${AMOUNT}`,
+  "gi",
+);
+// A fee could also be given as a bare number beside a word for it; once every fee with its
+// currency is set aside, no such number may remain.
+const BARE_FEE = /\b(?:fees?|prices?|priced|costs?|costing|rates?|charges?|charged)\b[^.<]{0,40}?\d/i;
+const CURRENCY = { "€": "EUR", euro: "EUR", euros: "EUR", $: "USD", dollar: "USD", dollars: "USD", "£": "GBP", pound: "GBP", pounds: "GBP", "¥": "JPY", "¢": "US cents", franc: "CHF", francs: "CHF" };
+// So "€250", "250 €" and "EUR 250" are one fee: the currency's code, then the whole amount.
+const feeOf = ([text]) => {
+  const amount = text.match(/\d+(?:[.,]\d+)*/)[0].replace(/[.,](?=\d{3}(?!\d))/g, "");
+  const unit = text.replace(/[\d.,\s]/g, "");
+  return `${CURRENCY[unit.toLowerCase()] ?? unit.toUpperCase()} ${amount}`;
+};
+// A length in figures or words, in hours or minutes, read as minutes so that "one hour",
+// "an hour" and "sixty minutes" agree, and "an hour and a half" does not.
+const WORDS = {
+  "half an": 0.5, half: 0.5, an: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, ten: 10, fifteen: 15,
+  twenty: 20, thirty: 30, "forty-five": 45, forty: 40, fifty: 50, sixty: 60, ninety: 90,
+};
+const LENGTH = new RegExp(
+  String.raw`\b(${Object.keys(WORDS).join("|")}|\d+(?:[.,]\d+)?)[\s-]*(hours?|hrs?|minutes?|mins?)\b(\s+and\s+a\s+half)?`,
+  "gi",
+);
+const minutesOf = ([, amount, unit, andHalf]) =>
+  ((WORDS[amount.toLowerCase()] ?? Number(amount.replace(",", "."))) + (andHalf ? 0.5 : 0)) * (/^h/i.test(unit) ? 60 : 1);
+const found = (pattern, html) => [...decode(html ?? "").matchAll(pattern)];
+
+const metaContent = (html, key) =>
+  html.match(new RegExp(`<meta\\s+(?:name|property)="${key}"\\s+content="([^"]*)"`))?.[1];
+const wayToCall = (html) => html.match(/<a\b[^>]*\bclass="to-call"[^>]*>([\s\S]*?)<\/a>/)?.[1];
+const beforeBooking = (html) => {
+  const opens = html.indexOf('id="call"');
+  const from = opens < 0 ? -1 : html.indexOf(">", opens) + 1;
+  const to = html.search(/<a\b[^>]*\bdata-book\b/);
+  return from > 0 && to > from ? html.slice(from, to) : undefined;
+};
+const PLACES = {
+  "index.html": [
+    ["the description a search shows", (html) => metaContent(html, "description")],
+    ["the description a shared link shows", (html) => metaContent(html, "og:description")],
+    ["the masthead's way to the call", wayToCall],
+    ["the call, before its booking link", beforeBooking],
+  ],
+  "404.html": [["the masthead's way to the call", wayToCall]],
+};
+const terms = { fee: new Set(), minutes: new Set() };
 
 // Only the site's own files may be loaded: no scheme, and not protocol-relative.
 const own = (url) => !/^[a-z][a-z0-9+.-]*:/i.test(url.trim()) && !url.trim().startsWith("//");
@@ -161,8 +220,22 @@ const cssUrls = (css) =>
   [...css.matchAll(/url\(\s*["']?([^"')\s]+)|@import\s+["']([^"']+)/gi)].map((m) => m[1] ?? m[2]);
 
 for (const [name, html] of Object.entries(pages)) {
-  check(!PRICE.test(decode(html)), `${name} shows no price`);
-  check(!FIGURE.test(decode(html)), `${name} gives no fee figure and no length for the call`);
+  const places = PLACES[name] ?? [];
+  for (const [place, find] of places) {
+    const part = find(html);
+    const fees = found(FEE, part);
+    const lengths = found(LENGTH, part);
+    check(
+      part !== undefined && fees.length === 1 && lengths.length === 1,
+      `${name} states the call's fee once and its length once in ${place} ` +
+        `(it states the fee ${fees.length} times and the length ${lengths.length} times)`,
+    );
+    fees.forEach((match) => terms.fee.add(feeOf(match)));
+    lengths.forEach((match) => terms.minutes.add(minutesOf(match)));
+  }
+  check(found(FEE, html).length === places.length, `${name} states a fee nowhere but where the call is offered`);
+  check(found(LENGTH, html).length === places.length, `${name} states the call's length nowhere but where the call is offered`);
+  check(!BARE_FEE.test(decode(html).replace(FEE, " ")), `${name} gives no fee as a bare number`);
   // A keyboard reaches the content without passing the masthead: the first link on the
   // page skips to the main element.
   const firstLink = html.slice(html.indexOf("<body")).match(/<a\b[^>]*>/)?.[0] ?? "";
@@ -192,6 +265,11 @@ for (const [name, html] of Object.entries(pages)) {
   check(scripts.every((tag) => /\btype\s*=\s*["']?application\/ld\+json/i.test(tag)), `${name} runs no script`);
   check(handlers === 0 && scriptLinks === 0, `${name} has no inline handlers and no javascript: links`);
 }
+check(
+  terms.fee.size === 1 && terms.minutes.size === 1,
+  `every place states the same fee and the same length for the call (fees: ${[...terms.fee].join(", ") || "none"}; ` +
+    `lengths in minutes: ${[...terms.minutes].join(", ") || "none"})`,
+);
 for (const name of ["tokens.css", "site.css"]) {
   check(cssUrls(readFileSync(name, "utf8")).every(own), `${name} loads nothing from another origin`);
 }
@@ -301,5 +379,6 @@ for (const [name, image] of Object.entries(images)) {
 console.log(
   `built ${OUT}/: ${Object.keys(pages).length} pages, ${marks.length} marks, ${Object.keys(images).length} images; ` +
     `booking by ${bookingHref.split(":")[0]}; ` +
-    `contrast on paper, light: ${ratios.light.join(", ")}; dark: ${ratios.dark.join(", ")}`,
+    `the call stated in ${Object.values(PLACES).flat().length} places as ${[...terms.minutes][0]} minutes for ${[...terms.fee][0]}; ` +
+    `contrast, light: ${ratios.light.join(", ")}; dark: ${ratios.dark.join(", ")}`,
 );

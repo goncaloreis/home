@@ -1,11 +1,12 @@
 # CLAUDE.md
 
 ## What this is
-The public company site for ReisierX, served at reisierx.com. One static page
-that reasons in the open: three facts no one chooses, three answers that each
-follow from two of them, where all three lead, and the call. It is plain HTML
-and CSS. The current build, its medium and its checks are recorded in
-[`BUILD-NOTES.md`](BUILD-NOTES.md).
+The public company site for ReisierX, served at reisierx.com. One static page:
+a line that says what the company does and why to book it, then the reasoning
+behind it in the open (three facts no one chooses, three answers that each
+follow from two of them, and what all three say about a business that stalls),
+and the call. It is plain HTML and CSS. The current build, its medium and its
+checks are recorded in [`BUILD-NOTES.md`](BUILD-NOTES.md).
 
 ## Who it's for
 People with a hard problem in building a business who want it worked through
@@ -37,9 +38,13 @@ when the font arrives.
   address under the link only while it is a `mailto:`. The booking service is
   the owner's call. The build fails unless there is exactly one booking link
   and its words say the call is paid.
-- No price in the code, on the page, or in git history until the owner sets
-  one; the build reads no price variable. Any payment setup and any spend need
-  the owner's yes first.
+- The call's length and fee are the owner's to set, and the owner has set
+  them. Each place that offers the call states both, plainly and once, before
+  the action: the search and share descriptions, the masthead's way to the
+  call, and the call itself before its booking link. They agree everywhere and
+  appear nowhere else. The build holds no figure of its own: it reads them from
+  the pages and fails if a place misses one, states one twice, or disagrees
+  with another. Any payment setup and any spend need the owner's yes first.
 - No personal name anywhere on the site, and no named clients or firms.
 - Commits use the author `Gonçalo Reis <28686327+goncaloreis@users.noreply.github.com>`.
 - Medium and files are as in BUILD-NOTES.md: `index.html`, `404.html`,
@@ -52,7 +57,9 @@ Never put a personal name, real figures, private data, credentials or tokens
 in the page, in issues, PRs, comments, prompts, logs, fixtures or
 screenshots. Refer to people by role. Do not quote, transcribe or allude to
 any private name, real personal or financial figure, or secret.
-The commit author above is the exception, and is fixed.
+The commit author above is one exception, and is fixed. The call's length and
+fee are the other: the owner set them to be public, and they are written on
+the pages only, in the places the hard rules name, not in notes or commits.
 
 ## Roles
 - **Tech**: builder; one milestone per PR. The builder never grades its own
