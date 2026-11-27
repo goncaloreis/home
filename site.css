@@ -55,13 +55,19 @@ a {
   text-decoration-thickness: var(--underline);
   text-underline-offset: var(--underline-offset);
   text-decoration-color: var(--ink-soft);
-  transition: text-decoration-color var(--duration) var(--ease);
+  transition: text-decoration-color var(--duration) var(--ease), color var(--duration) var(--ease);
 }
 
-/* Hover only where there is a real pointer, so a tap never leaves a mark behind. */
+/* Hover only where there is a real pointer, so a tap never leaves a mark behind. The two
+   links to the call are underlined in red already, so their words turn red instead. */
 @media (hover: hover) {
   a:hover {
     text-decoration-color: var(--red);
+  }
+
+  .to-call:hover,
+  .book:hover {
+    color: var(--red);
   }
 }
 
@@ -69,6 +75,19 @@ a {
   outline: var(--focus-width) solid var(--red);
   outline-offset: var(--focus-offset);
   border-radius: var(--focus-radius);
+}
+
+/* Words for screen readers only. */
+.hidden {
+  position: absolute;
+  width: var(--hairline-width);
+  height: var(--hairline-width);
+  margin: calc(-1 * var(--hairline-width));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .page {
@@ -96,6 +115,7 @@ a {
 
 /* The padding makes the target taller without moving the line. */
 .to-call {
+  position: relative;
   display: inline-block;
   padding-block: var(--space-1);
   margin-block: calc(-1 * var(--space-1));
@@ -114,8 +134,9 @@ a {
   color: var(--ink-soft);
 }
 
-/* The mark: the sign for therefore, one point for each fact. The lit points are the
-   facts the line beside them rests on. */
+/* The mark: three points, one for each fact. A filled red point is a fact the line beside
+   it rests on; an open ring is a fact it does not use. All three filled is the sign for
+   therefore, and only the conclusion carries it. */
 .mark {
   display: block;
   width: var(--mark);
@@ -131,7 +152,6 @@ a {
 .mark .off {
   fill: var(--mark-off);
   stroke: var(--mark-ring);
-  stroke-width: var(--mark-ring-width);
 }
 
 .fact-title,
@@ -156,7 +176,8 @@ a {
 }
 
 .fact,
-.answer {
+.answer,
+.where {
   display: grid;
   align-content: start;
   row-gap: var(--space-3);
@@ -174,14 +195,17 @@ a {
   text-wrap: pretty;
 }
 
-/* What follows: the turn from what is given to what is chosen, then one answer for each
-   pair of facts. */
+/* What follows: why facts can lead anywhere at all, then one answer for each pair of
+   facts. */
 .follows {
   margin-top: var(--space-section);
 }
 
-.turn {
+.intro {
   margin-top: var(--space-8);
+}
+
+.turn {
   max-width: var(--measure-turn);
   font-size: var(--size-turn);
   line-height: var(--lead-turn);
@@ -215,9 +239,8 @@ a {
 }
 
 /* Where all three lead: one bar in ink under the whole argument, then the conclusion,
-   with all three points lit. */
+   the only line with all three points filled. */
 .where {
-  display: grid;
   row-gap: var(--space-4);
   margin-top: var(--space-section);
   padding-top: var(--space-8);
@@ -241,8 +264,11 @@ a {
   scroll-margin-top: var(--space-6);
 }
 
-.offer {
+.call-body {
   margin-top: var(--space-6);
+}
+
+.offer {
   max-width: var(--measure);
   text-wrap: pretty;
 }
@@ -256,6 +282,15 @@ a {
   line-height: var(--lead-book);
   text-decoration-color: var(--red);
   text-decoration-thickness: var(--underline-book);
+}
+
+/* Shown by the build only while the booking link is an email. */
+.via {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--size-note);
+  line-height: var(--lead-note);
+  color: var(--ink-soft);
 }
 
 .join {
@@ -280,7 +315,6 @@ a {
   align-content: center;
   gap: var(--space-6);
   min-height: calc(var(--screen) - var(--space-24));
-  min-height: calc(var(--screen-small) - var(--space-24));
   padding-bottom: var(--space-16);
 }
 
@@ -299,31 +333,73 @@ a {
   }
 }
 
-/* Wide screens: the facts side by side, and under them the answers side by side, each
-   row aligned across its three columns so every mark, title and text starts on the same
-   line as its neighbours. The conclusion spans all three. */
+/* Wide screens: statements on the left, their reasons on the right, first lines on one
+   baseline. Read down the left column alone and it is the whole argument: the facts, why
+   they lead anywhere, the answers, the conclusion, and the link to book. */
 @media (min-width: 1024px) {
-  .facts,
-  .answers {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    row-gap: var(--space-3);
-  }
-
   .fact,
-  .answer {
-    grid-row: span 3;
-    grid-template-rows: subgrid;
+  .answer,
+  .where,
+  .intro,
+  .call-body {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--gutter);
+    align-items: baseline;
+  }
+
+  .facts {
+    row-gap: var(--space-10);
+  }
+
+  .fact > .mark,
+  .answer > .mark,
+  .where > .mark {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .fact-title,
+  .answer-title,
+  .where-title {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .gloss,
+  .reason {
+    grid-row: 2;
+    grid-column: 2;
+  }
+
+  .turn {
+    grid-column: 1;
+  }
+
+  .note {
+    grid-column: 2;
+    margin-top: 0;
+  }
+
+  .book-line {
+    grid-row: 1;
+    grid-column: 1;
+    margin-top: 0;
+  }
+
+  .offer {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .join {
+    grid-row: 2;
+    grid-column: 2;
+    margin-top: var(--space-6);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

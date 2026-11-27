@@ -32,8 +32,9 @@ when the font arrives.
   no animation.
 - The main action is booking a paid call, through exactly one link: the
   element marked `data-book` in `index.html`. For now it is a `mailto:`;
-  moving to a booking page means changing that one `href`, and the words
-  around it do not depend on how the call is booked. The booking service is
+  moving to a booking page means changing that one `href`. The words around
+  it do not depend on how the call is booked, and the build prints the email
+  address under the link only while it is a `mailto:`. The booking service is
   the owner's call. The build fails unless there is exactly one booking link.
 - No price in the code, on the page, or in git history until the owner sets
   one; the build reads no price variable. Any payment setup and any spend need

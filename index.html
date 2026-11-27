@@ -6,6 +6,7 @@
   <title>ReisierX</title>
   <meta name="description" content="ReisierX builds businesses, hands on. Three facts no one chooses, what follows from them, and a paid call on the problem that will not move.">
   <link rel="canonical" href="https://reisierx.com/">
+  <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="{{paper}}" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="{{paper-dark}}" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
@@ -38,7 +39,7 @@
   <div class="page">
     <header class="masthead">
       <h1 class="who"><span class="name">ReisierX</span> builds businesses, hands&nbsp;on.</h1>
-      <a class="to-call" href="#call">Book a call</a>
+      <a class="to-call" href="#call">Book a call<span class="hidden">: the details</span></a>
     </header>
 
     <main>
@@ -48,7 +49,7 @@
           <li class="fact">
             <!--mark:1-->
             <h3 class="fact-title">Nothing is owed.</h3>
-            <p class="gloss">Effort and talent give no claim on a result. Chance has a hand in every outcome and keeps no&nbsp;accounts.</p>
+            <p class="gloss">Effort and talent give no claim on a result. Chance enters every outcome and ignores what went into&nbsp;it.</p>
           </li>
           <li class="fact">
             <!--mark:2-->
@@ -65,23 +66,25 @@
 
       <section class="follows" aria-labelledby="follows-title">
         <h2 class="label" id="follows-title">What follows</h2>
-        <p class="turn">None of this is chosen. What we do about it&nbsp;is.</p>
-        <p class="note">Each answer rests on two of the facts; the marks show&nbsp;which.</p>
+        <div class="intro">
+          <p class="turn">Facts tell no one what to do. They rule things&nbsp;out.</p>
+          <p class="note">Each answer below is what is left once two of them are taken seriously; its mark shows&nbsp;which.</p>
+        </div>
         <ul class="answers" role="list">
           <li class="answer">
             <!--mark:12-->
             <h3 class="answer-title">Read every result as evidence, never as a&nbsp;verdict.</h3>
-            <p class="reason">Nothing is owed, so no single result settles anything: chance had a hand in it. No one knows enough to say beforehand what will work, so every piece of work is a test. We look at each result for what it shows, good or bad, and do the work properly every time, because a careless test cannot be read at&nbsp;all.</p>
+            <p class="reason">Nothing is owed, so a single result rarely settles anything: chance had a hand in it. And since no one knows enough to say beforehand what will work, every piece of work is a test. We run each one cleanly, because a careless test proves nothing either way, and we change the approach when the evidence says&nbsp;so.</p>
           </li>
           <li class="answer">
             <!--mark:23-->
-            <h3 class="answer-title">Borrow no conclusions, and act before you are&nbsp;sure.</h3>
-            <p class="reason">No one knows enough, so an answer taken on authority is a guess in someone else’s name. Time runs out, so waiting to be sure is a decision too, and rarely the cheaper one. We take each question back to what can be checked, decide on that, and correct course as we&nbsp;learn.</p>
+            <h3 class="answer-title">Check what you can, and act on the&nbsp;rest.</h3>
+            <p class="reason">Since no one knows enough, an answer taken on authority is a guess in someone else’s name, so where it can be checked, we check it. Where it cannot, we act anyway: time runs out, and waiting for certainty usually costs more than acting without&nbsp;it.</p>
           </li>
           <li class="answer">
             <!--mark:13-->
-            <h3 class="answer-title">Never stake the means to go&nbsp;again.</h3>
-            <p class="reason">Nothing is owed, so any one effort can fail however well it is made; a long run of them seldom fails entirely, and a long run is open only to those who last. Time runs out, so the efforts are numbered, and losing the means to continue loses every one that was left. We pace the work, hold something in reserve, and keep&nbsp;going.</p>
+            <h3 class="answer-title">Never stake what you need to&nbsp;continue.</h3>
+            <p class="reason">Any one effort can fail however well it is made, because nothing is owed; what counts is how many good efforts you get to make. Time runs out, so those are numbered, and losing the means to continue loses every one that was left. We size each commitment so that losing it leaves enough for the&nbsp;next.</p>
           </li>
         </ul>
       </section>
@@ -89,18 +92,21 @@
       <section class="where" aria-labelledby="where-title">
         <!--mark:123-->
         <h2 class="where-title" id="where-title">We work where all three bite at&nbsp;once.</h2>
-        <p class="reason">A problem is hard when its outcome is least certain, its answer least known and its road longest. Those are the problems most people leave early, which is why they stay open, and they are where the answers above count for&nbsp;most.</p>
+        <p class="reason">A problem is hard when its outcome is least certain, its answer least known and its road longest. There the answers above count for most, and most people stop early, so such problems tend to stay open. We choose&nbsp;them.</p>
       </section>
 
       <section class="call" id="call" aria-labelledby="call-title">
         <h2 class="label" id="call-title">The call</h2>
-        <p class="offer">One call, on one problem that will not move. We take it back to the facts, work out what follows, and tell you what we would do and why. The call is&nbsp;paid.</p>
-        <!-- The one booking link on the site. It opens an email for now. To move to a
-             booking page, change this href and nothing else; the words around it do not
-             depend on how the call is booked. The build fails unless there is exactly one
-             link marked data-book. -->
-        <p class="book-line"><a class="book" data-book href="mailto:hello@reisierx.com?subject=Booking%20a%20call&amp;body=The%20problem%2C%20in%20a%20few%20lines%3A%0D%0A%0D%0A">Book a call</a></p>
-        <p class="join">If you would rather work on problems like these with us than bring us one, write to <a href="mailto:hello@reisierx.com">hello@reisierx.com</a>.</p>
+        <div class="call-body">
+          <p class="offer">One call, on one problem that will not move, in a business you are building or backing. We take it back to the facts, work out what follows, and tell you what we would do and why. The call is paid, and the fee is confirmed before it is&nbsp;booked.</p>
+          <!-- The one booking link on the site. It opens an email for now. To move to a
+               booking page, change this href and nothing else: the words around it do not
+               depend on how the call is booked, and the build adds the email address under
+               the link only while the link is a mailto. The build fails unless there is
+               exactly one link marked data-book. -->
+          <p class="book-line"><a class="book" data-book href="mailto:hello@reisierx.com?subject=Booking%20a%20call&amp;body=The%20problem%2C%20in%20a%20few%20lines%3A%0D%0A%0D%0A">Book a call</a><!--booking-via--></p>
+          <p class="join">If you would rather work on problems like these with us than bring us one, write to <a href="mailto:hello@reisierx.com">hello@reisierx.com</a>.</p>
+        </div>
       </section>
     </main>
 

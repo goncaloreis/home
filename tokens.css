@@ -93,19 +93,21 @@
   color-scheme: light dark;
 
   /* Colour: paper, ink and one red. The build checks ink (at least 7:1), soft ink and
-     red (at least 4.5:1) against the paper. Faint is only for hairlines and for the
-     points of the mark that are not lit. */
+     red (at least 4.5:1) and unlit (at least 3:1) against the paper. Faint is only for
+     hairlines. Unlit draws the points of the mark that are not lit, as open rings, so
+     every mark shows its whole triangle and a single red point reads as a position. */
   --paper: #F7F5F0;
   --ink: #141210;
   --ink-soft: #5B564F;
   --red: #B3261E;
   --faint: #D9D3C9;
+  --unlit: #8E877D;
 
-  /* The mark: lit points in red, the others faint. Forced colours redraws it below. */
+  /* The mark: lit points filled in red, the others open rings. The ring's width and
+     radius are geometry, set by build.mjs with the points. */
   --mark-on: var(--red);
-  --mark-off: var(--faint);
-  --mark-ring: transparent;
-  --mark-ring-width: 1.25px;
+  --mark-off: none;
+  --mark-ring: var(--unlit);
   --mark: 1.375rem;
   --mark-where: 2rem;
 
@@ -159,8 +161,7 @@
   --masthead-top: 1.25rem;
   --space-given: 2.5rem;
   --space-section: 5rem;
-  --screen: 100vh;
-  --screen-small: 100svh;
+  --screen: 100svh;
 
   /* Lines */
   --hairline-width: 1px;
@@ -179,13 +180,16 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@media (prefers-color-scheme: dark) {
+/* The dark version is for screens only, so a page printed from a dark device is still
+   dark ink on light paper. */
+@media screen and (prefers-color-scheme: dark) {
   :root {
     --paper: #121110;
     --ink: #EDE9E2;
     --ink-soft: #A8A298;
     --red: #F2735F;
     --faint: #3B3732;
+    --unlit: #7A7369;
     --weight-text: 380;
     --weight-display: 370;
     --weight-strong: 560;
@@ -236,6 +240,12 @@
     --lead-where: 3.875rem;
     --size-book: 3rem;
     --lead-book: 3.5rem;
+  }
+}
+
+@media print {
+  :root {
+    color-scheme: light;
   }
 }
 

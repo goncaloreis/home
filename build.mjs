@@ -3,8 +3,8 @@
 // It copies the pages, styles and fonts; draws the mark into the pages and into the
 // images (og.png, favicon.png, apple-touch-icon.png); and refuses to build if the site
 // breaks one of its own rules: the shape of the argument, one booking link, no price,
-// nothing loaded from another origin, no script, and text that keeps its contrast on the
-// paper in both colour schemes. Nothing is written unless every check passes.
+// nothing loaded from another origin, no script, and colours that keep their contrast on
+// the paper in both colour schemes. Nothing is written unless every check passes.
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { deflateSync } from "node:zlib";
 
@@ -14,21 +14,23 @@ const check = (holds, rule) => {
   if (!holds) failures.push(rule);
 };
 
-// The mark is ∴, the sign for "therefore". Each point stands for one fact: nothing is
-// owed (top), no one knows enough (bottom left), time runs out (bottom right). A point in
-// red is a fact the line beside it rests on, so the whole sign, all three lit, marks the
-// conclusion. The points sit on an equilateral triangle.
-const MARK = { width: 24, height: 22, r: 3.25, points: [[12, 4.5], [4.5, 17.5], [19.5, 17.5]] };
+// The mark: three points on an equilateral triangle, one for each fact. Nothing is owed
+// is the top point, no one knows enough the bottom left, time runs out the bottom right.
+// A filled red point is a fact the line beside it rests on; an open ring is a fact it does
+// not use. A ring's radius is cut by half its width, so its outer edge matches a filled
+// point. All three filled is ∴, the sign for "therefore", and marks the conclusion.
+const MARK = { width: 24, height: 22, r: 3.25, ring: 1.3, points: [[12, 4.5], [4.5, 17.5], [19.5, 17.5]] };
 
 // ---- Colour, read from tokens.css ----------------------------------------------------
 
 const tokens = readFileSync("tokens.css", "utf8");
-const darkAt = tokens.indexOf("@media (prefers-color-scheme: dark)");
+const DARK = "@media screen and (prefers-color-scheme: dark)";
+const darkAt = tokens.indexOf(DARK);
 check(darkAt > 0, "tokens.css has a dark palette");
 const colours = (css) =>
   Object.fromEntries([...css.matchAll(/--([a-z-]+):\s*(#[0-9a-f]{6})\s*;/gi)].map((m) => [m[1], m[2]]));
 const light = colours(tokens.slice(0, darkAt));
-const dark = colours(tokens.slice(darkAt, tokens.indexOf("@media", darkAt + 1)));
+const dark = colours(tokens.slice(darkAt, tokens.indexOf("@media", darkAt + DARK.length)));
 
 const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
 const toLinear = (v) => {
@@ -48,8 +50,9 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-// Ink is held to 7:1. Soft ink and red also set text, so they are held to 4.5:1.
-const NEEDS = { ink: 7, "ink-soft": 4.5, red: 4.5 };
+// Ink is held to 7:1. Soft ink and red also set text, so they are held to 4.5:1. Unlit
+// draws the open rings of the mark, a graphic that carries meaning, so 3:1.
+const NEEDS = { ink: 7, "ink-soft": 4.5, red: 4.5, unlit: 3 };
 const ratios = { light: [], dark: [] };
 for (const [scheme, palette] of [["light", light], ["dark", dark]]) {
   for (const [name, least] of Object.entries(NEEDS)) {
@@ -82,11 +85,20 @@ check(
   "the marks cover each fact once, each pair of facts once, and all three once",
 );
 
+// The one booking link, read from the source so the page can say how it is booked.
+const bookingTags = [...source.matchAll(/<a\b[^>]*\bdata-book\b[^>]*>/g)].map((m) => m[0]);
+const bookingHref = (bookingTags[0]?.match(/\bhref="([^"]*)"/)?.[1] ?? "").replace(/&amp;/g, "&");
+const bookingAddress = bookingHref.startsWith("mailto:") ? bookingHref.slice(7).split("?")[0] : "";
+
 function mark(lit) {
   const dots = MARK.points
-    .map(([cx, cy], i) => `<circle class="${lit.includes(i + 1) ? "on" : "off"}" cx="${cx}" cy="${cy}" r="${MARK.r}"/>`)
+    .map(([cx, cy], i) =>
+      lit.includes(i + 1)
+        ? `<circle class="on" cx="${cx}" cy="${cy}" r="${MARK.r}"/>`
+        : `<circle class="off" cx="${cx}" cy="${cy}" r="${MARK.r - MARK.ring / 2}" stroke-width="${MARK.ring}"/>`,
+    )
     .join("");
-  // A single lit point stands beside its own fact and adds nothing to the words. Two or
+  // A single filled point stands beside its own fact and adds nothing to the words. Two or
   // three say what a line rests on, so screen readers are told which.
   let a11y = 'aria-hidden="true"';
   if (lit.length === MARK.points.length) a11y = 'role="img" aria-label="Rests on all three facts."';
@@ -94,13 +106,20 @@ function mark(lit) {
   return `<svg class="mark" viewBox="0 0 ${MARK.width} ${MARK.height}" width="${MARK.width}" height="${MARK.height}" ${a11y} focusable="false">${dots}</svg>`;
 }
 
+// A comment runs from <!-- to the first --> after it, and no further.
+const COMMENT = "<!--(?:(?!-->)[\\s\\S])*-->";
+
 function page(file) {
   let html = readFileSync(file, "utf8");
   html = html.replace(/<!--mark:([1-3]+)-->/g, (_, digits) => mark([...digits].map(Number)));
+  check(!/<!--\s*mark/i.test(html), `${file} has no mark the build could not read`);
+  // While booking is by email, the address is printed under the link, for anyone whose
+  // mail program does not open. A booking page needs no such line.
+  html = html.replace(/<!--booking-via-->/g, bookingAddress ? `<span class="via">By email, to ${bookingAddress}</span>` : "");
   // Notes in the source are for whoever edits it; they are not shipped.
-  html = html.replace(/^[ \t]*<!--[\s\S]*?-->[ \t]*\r?\n/gm, "").replace(/<!--[\s\S]*?-->/g, "");
+  html = html.replace(new RegExp(`^[ \\t]*${COMMENT}[ \\t]*\\r?\\n`, "gm"), "").replace(new RegExp(COMMENT, "g"), "");
   html = html.replace(/\{\{paper\}\}/g, light.paper ?? "").replace(/\{\{paper-dark\}\}/g, dark.paper ?? "");
-  check(!/\{\{|<!--/.test(html), `${file} has every placeholder filled`);
+  check(!/\{\{|<!--/.test(html), `${file} has every placeholder filled and every comment closed`);
   return html;
 }
 
@@ -109,33 +128,50 @@ const index = pages["index.html"];
 
 // The main action is booking a paid call, through exactly one link, so that moving from
 // email to a booking page is a change to one href.
-const booking = [...index.matchAll(/<a\b[^>]*\bdata-book\b[^>]*>/g)].map((m) => m[0]);
-check(booking.length === 1, "index.html has exactly one booking link (data-book)");
-const bookingHref = booking[0]?.match(/\bhref="([^"]*)"/)?.[1] ?? "";
+check(bookingTags.length === 1 && [...index.matchAll(/\bdata-book\b/g)].length === 1, "index.html has exactly one booking link (data-book)");
 check(/^(mailto:|https:\/\/)/.test(bookingHref), "the booking link is a mailto: or https: address");
 check(index.includes('href="#call"'), "the masthead leads to the call");
 
+// A price could hide behind an entity or a word, so those are read first.
+const SYMBOLS = { euro: "€", pound: "£", dollar: "$", yen: "¥", cent: "¢", nbsp: " " };
+const decode = (html) =>
+  html
+    .replace(/&([a-z]+);/gi, (whole, name) => SYMBOLS[name.toLowerCase()] ?? whole)
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)));
+const PRICE = /[$€£¥¢]\s*\d|\d\s*[$€£¥¢]|\b(?:EUR|USD|GBP|CHF)\b|\d\s*(?:euros?|dollars?|pounds?|francs?)\b/i;
+
+// Only the site's own files may be loaded: no scheme, and not protocol-relative.
+const own = (url) => !/^[a-z][a-z0-9+.-]*:/i.test(url.trim()) && !url.trim().startsWith("//");
+const cssUrls = (css) =>
+  [...css.matchAll(/url\(\s*["']?([^"')\s]+)|@import\s+["']([^"']+)/gi)].map((m) => m[1] ?? m[2]);
+
 for (const [name, html] of Object.entries(pages)) {
-  // No price anywhere until the owner sets one.
-  check(!/[$€£¥]\s?\d|\d\s?[$€£¥]|\b(?:EUR|USD|GBP|CHF)\b/i.test(html), `${name} shows no price`);
-  // Nothing loaded from another origin: stylesheets, fonts, icons and any src are the
-  // site's own. (The canonical link names the site's address and loads nothing.)
-  const loads = [
-    ...[...html.matchAll(/<link\b[^>]*>/g)]
-      .map((m) => m[0])
-      .filter((tag) => !/\brel="canonical"/.test(tag))
-      .map((tag) => tag.match(/\bhref="([^"]*)"/)?.[1] ?? ""),
-    ...[...html.matchAll(/\bsrc(?:set)?="([^"]*)"/g)].map((m) => m[1]),
-  ];
-  check(loads.every((url) => /^\/(?!\/)/.test(url)), `${name} loads nothing from another origin`);
-  // No script runs: the only script element is the structured data, which is not run.
-  const scripts = [...html.matchAll(/<script\b[^>]*>/g)].map((m) => m[0]);
-  check(scripts.every((tag) => /\btype="application\/ld\+json"/.test(tag)), `${name} runs no script`);
-  check(!/<[^>]*\son[a-z]+\s*=/i.test(html), `${name} has no inline event handlers`);
+  check(!PRICE.test(decode(html)), `${name} shows no price`);
+  const loads = [];
+  let handlers = 0;
+  let scriptLinks = 0;
+  for (const [, tagName, attrs] of html.matchAll(/<([a-z][a-z0-9-]*)\b([^>]*)>/gi)) {
+    const tag = tagName.toLowerCase();
+    for (const [, attrName, dq, sq, bare] of attrs.matchAll(/([^\s=/>"']+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/g)) {
+      const attr = attrName.toLowerCase();
+      const value = dq ?? sq ?? bare ?? "";
+      if (attr.startsWith("on")) handlers += 1;
+      if (/^\s*javascript:/i.test(value)) scriptLinks += 1;
+      if (["src", "poster", "data"].includes(attr)) loads.push(value);
+      if (attr === "srcset") loads.push(...value.split(",").map((part) => part.trim().split(/\s+/)[0]));
+      if (attr === "style") loads.push(...cssUrls(value));
+      if (attr === "href" && tag === "link" && !/\brel\s*=\s*["']?canonical\b/i.test(attrs)) loads.push(value);
+    }
+  }
+  // The canonical link names the site's address and loads nothing, so it is left out above.
+  check(loads.every(own), `${name} loads nothing from another origin`);
+  const scripts = [...html.matchAll(/<script\b[^>]*>/gi)].map((m) => m[0]);
+  check(scripts.every((tag) => /\btype\s*=\s*["']?application\/ld\+json/i.test(tag)), `${name} runs no script`);
+  check(handlers === 0 && scriptLinks === 0, `${name} has no inline handlers and no javascript: links`);
 }
 for (const name of ["tokens.css", "site.css"]) {
-  const urls = [...readFileSync(name, "utf8").matchAll(/url\(\s*["']?([^"')\s]+)/g)].map((m) => m[1]);
-  check(urls.every((url) => /^\.?\/(?!\/)/.test(url)), `${name} loads nothing from another origin`);
+  check(cssUrls(readFileSync(name, "utf8")).every(own), `${name} loads nothing from another origin`);
 }
 
 if (failures.length) {
@@ -144,8 +180,8 @@ if (failures.length) {
 }
 
 // ---- The images ----------------------------------------------------------------------
-// The mark again, at pixel level: sixteen samples per pixel, blended in linear light, on
-// the paper or on nothing. A PNG needs only zlib and a checksum.
+// The full mark again, at pixel level: sixteen samples per pixel, blended in linear
+// light, on the paper or on nothing. A PNG needs only zlib and a checksum.
 
 function draw({ width, height, scale, background }) {
   const left = (width - MARK.width * scale) / 2;
