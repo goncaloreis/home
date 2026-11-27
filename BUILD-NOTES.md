@@ -102,6 +102,13 @@ does not read as a second, unpaid way to get the call; hiring stays implied.
   `apple-touch-icon.png` from the same points and the palette with its own PNG encoder
   (zlib and a checksum). The images are written to the repository root, where they are
   committed, and to `site/`; every build rewrites them, byte for byte the same.
+- Every page it writes ends its head with `<meta name="build-sha" content="...">`, the
+  commit the build came from, added after the source comments are stripped, so it is never
+  taken for one. Nothing on the page shows it. On Vercel the commit comes from
+  `VERCEL_GIT_COMMIT_SHA` (or `GITHUB_SHA` in a workflow); elsewhere it is read from the
+  repository's own files, worktrees included. A local build carries the commit checked out,
+  not uncommitted edits. If no commit can be found the tag says `unknown` and the build
+  goes on, so a deploy never stops for want of it.
 - The build writes nothing unless all of these hold: the marks cover each fact once, each
   pair of facts once and all three once, and no mark is malformed; there is exactly one
   booking link, it is a `mailto:` or `https:` address, and its visible words say the call

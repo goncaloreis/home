@@ -5,9 +5,11 @@
 // breaks one of its own rules: the shape of the argument, one booking link that says the
 // call is paid, the call's length and fee stated once wherever the call is offered and the
 // same in every place, a way past the masthead for keyboards, nothing loaded from another
-// origin, no script, and colours that keep their contrast in both colour schemes. Nothing
-// is written unless every check passes.
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+// origin, no script, and colours that keep their contrast in both colour schemes. Every page
+// is also stamped with the commit it was built from. Nothing is written unless every check
+// passes.
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { deflateSync } from "node:zlib";
 
 const OUT = "site";
@@ -78,6 +80,34 @@ for (const [scheme, palette] of [["light", light], ["dark", dark]]) {
   }
 }
 
+// ---- The commit ----------------------------------------------------------------------
+// Every page carries the commit it was built from, in a meta tag in its head that nothing
+// shows, so a served page can be traced to its source. Vercel gives the build the commit;
+// anywhere else it is read from the repository, a worktree included. A build that can find
+// neither says "unknown" rather than fail, so a deploy never stops for want of it.
+
+function commitSha() {
+  const given = (process.env.VERCEL_GIT_COMMIT_SHA || process.env.GITHUB_SHA || "").trim();
+  if (given) return given;
+  try {
+    let git = ".git";
+    if (statSync(git).isFile()) git = resolve(readFileSync(git, "utf8").match(/^gitdir:\s*(.+)$/m)[1].trim());
+    const common = existsSync(`${git}/commondir`) ? resolve(git, readFileSync(`${git}/commondir`, "utf8").trim()) : git;
+    const head = readFileSync(`${git}/HEAD`, "utf8").trim();
+    const ref = head.match(/^ref:\s*(\S+)$/)?.[1];
+    if (!ref) return head;
+    for (const dir of [git, common]) {
+      if (existsSync(`${dir}/${ref}`)) return readFileSync(`${dir}/${ref}`, "utf8").trim();
+    }
+    const packed = existsSync(`${common}/packed-refs`) ? readFileSync(`${common}/packed-refs`, "utf8") : "";
+    return packed.split("\n").find((line) => line.endsWith(` ${ref}`))?.split(" ")[0] ?? "";
+  } catch {
+    return "";
+  }
+}
+const commit = commitSha();
+const SHA = /^[0-9a-f]{7,64}$/i.test(commit) ? commit.toLowerCase() : "unknown";
+
 // ---- The pages -----------------------------------------------------------------------
 
 const source = readFileSync("index.html", "utf8");
@@ -136,6 +166,9 @@ function page(file) {
   html = html.replace(new RegExp(`^[ \\t]*${COMMENT}[ \\t]*\\r?\\n`, "gm"), "").replace(new RegExp(COMMENT, "g"), "");
   html = html.replace(/\{\{paper\}\}/g, light.paper ?? "").replace(/\{\{paper-dark\}\}/g, dark.paper ?? "");
   check(!/\{\{|<!--/.test(html), `${file} has every placeholder filled and every comment closed`);
+  // The commit goes in last, after the comments are gone, as the final line of the head.
+  check(!/name="build-sha"/.test(html) && (html.match(/<\/head>/gi) ?? []).length === 1, `${file} has one head and no commit of its own`);
+  html = html.replace(/<\/head>/i, `  <meta name="build-sha" content="${SHA}">\n</head>`);
   return html;
 }
 
@@ -380,5 +413,6 @@ console.log(
   `built ${OUT}/: ${Object.keys(pages).length} pages, ${marks.length} marks, ${Object.keys(images).length} images; ` +
     `booking by ${bookingHref.split(":")[0]}; ` +
     `the call stated in ${Object.values(PLACES).flat().length} places as ${[...terms.minutes][0]} minutes for ${[...terms.fee][0]}; ` +
-    `contrast, light: ${ratios.light.join(", ")}; dark: ${ratios.dark.join(", ")}`,
+    `contrast, light: ${ratios.light.join(", ")}; dark: ${ratios.dark.join(", ")}; ` +
+    `built from commit ${SHA}`,
 );

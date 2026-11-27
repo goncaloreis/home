@@ -50,7 +50,9 @@ when the font arrives.
 - Medium and files are as in BUILD-NOTES.md: `index.html`, `404.html`,
   `site.css`, `tokens.css` (the only file with raw values), and `build.mjs`,
   which copies the site into `site/`, draws the mark into the pages and the
-  images, and fails the build if the page breaks one of its own rules.
+  images, stamps each served page with the commit it was built from (a
+  `build-sha` meta tag nothing shows), and fails the build if the page breaks
+  one of its own rules.
 
 ## Privacy line
 Never put a personal name, real figures, private data, credentials or tokens
