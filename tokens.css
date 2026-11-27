@@ -1,6 +1,7 @@
 /*
  * ReisierX: design tokens and type faces.
- * The only file with raw values. site.css uses these names and nothing else.
+ * The only file with raw values. site.css uses these names and nothing else; build.mjs
+ * reads the colours here to check their contrast and to draw the images.
  * Paper, ink and one red. One typeface: Source Serif 4 (SIL Open Font License).
  */
 
@@ -28,11 +29,11 @@
 }
 
 /*
- * Fallback faces, measured in Chromium against Source Serif 4 so that nothing moves
- * when the web font arrives. size-adjust matches the average advance width; the
- * overrides are 103.6% and 33.5% divided by size-adjust (Chromium scales overrides by
- * size-adjust), which puts every baseline exactly where Source Serif 4 puts it.
- * Display: the creed and large lines (optical size near 48). Text: reading sizes.
+ * Fallback faces, measured in Chromium against Source Serif 4 so that text set in them
+ * takes the same room before the web font arrives. size-adjust matches the average
+ * advance width; the overrides are 103.6% and 33.5% divided by size-adjust (Chromium
+ * scales overrides by size-adjust), which puts every baseline where Source Serif 4 puts
+ * it. Display: the facts, the answers and other large lines. Text: reading sizes.
  */
 @font-face {
   font-family: "Fallback Display Georgia";
@@ -91,14 +92,22 @@
 :root {
   color-scheme: light dark;
 
-  /* Colour: paper, ink, one red. Contrast on paper: ink 15.6:1, soft ink 7.2:1,
-     red 6.4:1, figure marks 3.4:1. */
-  --paper: #F3EFE8;
-  --ink: #1B1713;
-  --ink-soft: #554D44;
-  --red: #A1291C;
-  --mark: #8A8175;
-  --hairline: #D6CFC3;
+  /* Colour: paper, ink and one red. The build checks ink (at least 7:1), soft ink and
+     red (at least 4.5:1) against the paper. Faint is only for hairlines and for the
+     points of the mark that are not lit. */
+  --paper: #F7F5F0;
+  --ink: #141210;
+  --ink-soft: #5B564F;
+  --red: #B3261E;
+  --faint: #D9D3C9;
+
+  /* The mark: lit points in red, the others faint. Forced colours redraws it below. */
+  --mark-on: var(--red);
+  --mark-off: var(--faint);
+  --mark-ring: transparent;
+  --mark-ring-width: 1.25px;
+  --mark: 1.375rem;
+  --mark-where: 2rem;
 
   /* Type */
   --font-display: "Source Serif 4", "Fallback Display Georgia", "Fallback Display Liberation", "Fallback Display Noto", ui-serif, Georgia, serif;
@@ -106,123 +115,77 @@
   --weight-text: 400;
   --weight-display: 400;
   --weight-strong: 600;
+  --track-display: -0.012em;
+  --track-label: 0.09em;
 
-  --size-cite: 0.875rem;
-  --lead-cite: 1.25rem;
+  /* Sizes on phones; wider screens raise the large ones below. */
+  --size-label: 0.8125rem;
+  --lead-label: 1.25rem;
   --size-meta: 0.9375rem;
   --lead-meta: 1.375rem;
-  --size-meta-wide: 1.0625rem;
-  --lead-meta-wide: 1.5rem;
-  --size-gloss: 1rem;
-  --lead-gloss: 1.5rem;
-  --size-gloss-wide: 1.0625rem;
-  --lead-gloss-wide: 1.625rem;
+  --size-note: 1rem;
+  --lead-note: 1.5rem;
   --size-body: 1.125rem;
   --lead-body: 1.75rem;
-  --size-body-wide: 1.25rem;
-  --lead-body-wide: 1.9375rem;
-  --size-line: 1.625rem;
-  --lead-line: 2rem;
-  --size-line-wide: 2rem;
-  --lead-line-wide: 2.5rem;
-  --size-claim-wide: 2.25rem;
-  --lead-claim-wide: 2.75rem;
-  --lead-display: 1.1;
-  --track-display: -0.01em;
-  --track-text: 0em;
-
-  /* The creed. Narrow screens: designed breaks, sized from the widest piece ("The job is
-     to get up," at optical size 32) with 5% slack over the widest fallback. From 640 px:
-     one line each, optical size pinned at 60, where line 2 measures 14.051 em. The page's
-     right edge is set where line 2 ends; 14.9 em leaves 6% for the widest fallback. */
-  --creed-em-narrow: 8.85;
-  --creed-em-wide: 14.9;
-  --line2-em: 14.051;
-  --creed-opsz: 60;
-  --creed-max-narrow: 2.75rem;
-  --creed-max-wide: 5rem;
-  --creed-gap: 0.35em;
-  /* The creed block in em of its own size: 9 lines and 4 stanza gaps on phones, 5 lines
-     and the premise gap from 640 px. Used to size it to the screen height as well. */
-  --creed-tall-narrow: 11.25;
-  --creed-tall-wide: 5.85;
-  --creed-min-narrow: 1.875rem;
-  --creed-min-wide: 2.5rem;
-  --stanza-gap: 0.25em;
-  --premise-gap-narrow: 0.6em;
+  --size-turn: 1.375rem;
+  --lead-turn: 1.875rem;
+  --size-answer: 1.625rem;
+  --lead-answer: 2rem;
+  --size-fact: 2.125rem;
+  --lead-fact: 2.375rem;
+  --size-where: 2.125rem;
+  --lead-where: 2.5rem;
+  --size-book: 2rem;
+  --lead-book: 2.5rem;
 
   /* Space, on a 4 px grid */
   --space-1: 0.25rem;
-  --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
-  --space-5: 1.25rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
   --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
-  --space-20: 5rem;
   --space-24: 6rem;
-  --space-32: 8rem;
-  --space-40: 10rem;
 
-  /* Page geometry: side padding and the hanging number column */
+  /* Page geometry */
   --pad: 1.25rem;
-  --num: 1.75rem;
-  --measure: 31rem;
-  --measure-origin: 30rem;
-  --measure-practice: 46rem;
-  --gutter: 4rem;
-  /* The width the page can use: the body's box where container units exist, else the
-     viewport. The body is the query container. */
-  --viewport: 100vw;
-  --masthead: 4.5rem;
-  --masthead-top: 1.5rem;
-  /* Lines reserved for the provenance under the creed, so its wrap can never move it. */
-  --origin-lines: 6;
-  --size-origin: var(--size-cite);
-  --lead-origin: var(--lead-cite);
-  --foot-height: 2.75rem;
+  --page-max: 72rem;
+  --measure: 34rem;
+  --measure-turn: 40rem;
+  --measure-where: 15em;
+  --gutter: 2.5rem;
+  --masthead-top: 1.25rem;
+  --space-given: 2.5rem;
+  --space-section: 5rem;
+  --screen: 100vh;
+  --screen-small: 100svh;
 
-  /* Figures: a stroke is one attempt */
-  --plot-height: 10rem;
-  --plot-height-wide: 12rem;
-  --band-height: 3.5rem;
-  --band-height-wide: 4.5rem;
-  --bar-width: 2px;
-  --bar-width-dense: 1px;
+  /* Lines */
   --hairline-width: 1px;
+  --bar-width: 1px;
 
   /* Links and focus */
   --underline: 0.0625em;
+  --underline-book: 0.07em;
   --underline-offset: 0.2em;
   --focus-width: 2px;
   --focus-offset: 3px;
   --focus-radius: 2px;
-  --hit-slop: 0.75rem;
-  --target-min: 1.5rem;
 
   /* Motion: colour changes only */
   --duration: 120ms;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@supports (width: 1cqw) {
-  :root {
-    --viewport: 100cqw;
-  }
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Contrast on paper: ink 15:1, soft ink 7.3:1, red 6.4:1, figure marks 4.1:1. */
-    --paper: #15120F;
-    --ink: #ECE6DC;
-    --ink-soft: #A9A194;
-    --red: #EE7163;
-    --mark: #7D7568;
-    --hairline: #3A342D;
+    --paper: #121110;
+    --ink: #EDE9E2;
+    --ink-soft: #A8A298;
+    --red: #F2735F;
+    --faint: #3B3732;
     --weight-text: 380;
     --weight-display: 370;
     --weight-strong: 560;
@@ -232,43 +195,62 @@
 @media (min-width: 640px) {
   :root {
     --pad: 2rem;
-    --num: 2.5rem;
-    --origin-lines: 4;
-    --band-height: var(--band-height-wide);
-    --foot-height: 3rem;
-    --size-origin: var(--size-meta);
-    --lead-origin: var(--lead-meta);
+    --masthead-top: 1.75rem;
+    --mark: 1.5rem;
+    --mark-where: 2.25rem;
+    --size-turn: 1.625rem;
+    --lead-turn: 2.125rem;
+    --size-answer: 1.875rem;
+    --lead-answer: 2.25rem;
+    --size-fact: 2.75rem;
+    --lead-fact: 3rem;
+    --size-where: 2.75rem;
+    --lead-where: 3.125rem;
+    --size-book: 2.5rem;
+    --lead-book: 3rem;
+    --space-given: 4.5rem;
+    --space-section: 7rem;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
     --pad: 3rem;
-    --num: 3.5rem;
-    --masthead: 5.5rem;
     --masthead-top: 2rem;
-    --measure: 33rem;
-    --size-origin: var(--size-meta-wide);
-    --lead-origin: var(--lead-meta-wide);
+    --size-meta: 1.0625rem;
+    --lead-meta: 1.5rem;
+    --space-given: 6rem;
+    --space-section: 9rem;
   }
 }
 
 @media (min-width: 1280px) {
   :root {
     --pad: 4rem;
+    --gutter: 3rem;
+    --size-fact: 3.25rem;
+    --lead-fact: 3.5rem;
+    --size-answer: 2.125rem;
+    --lead-answer: 2.5rem;
+    --size-where: 3.5rem;
+    --lead-where: 3.875rem;
+    --size-book: 3rem;
+    --lead-book: 3.5rem;
   }
 }
 
-/* High contrast: system colours, and leading opened up so the text plates the system
-   paints behind each line never cover the descenders of the line above. */
+/* High contrast: system colours, the mark redrawn as filled and open points, and the
+   leading of large lines opened so the plates painted behind each line never cover the
+   descenders of the line above. */
 @media (forced-colors: active) {
   :root {
-    --red: LinkText;
-    --mark: CanvasText;
-    --hairline: CanvasText;
-    --lead-display: 1.4;
-    --lead-line: 2.375rem;
-    --lead-line-wide: 2.75rem;
-    --lead-claim-wide: 3.25rem;
+    --mark-on: CanvasText;
+    --mark-off: Canvas;
+    --mark-ring: CanvasText;
+    --lead-fact: 1.4em;
+    --lead-answer: 1.4em;
+    --lead-where: 1.4em;
+    --lead-turn: 1.4em;
+    --lead-book: 1.4em;
   }
 }

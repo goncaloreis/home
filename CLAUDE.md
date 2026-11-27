@@ -2,19 +2,19 @@
 
 ## What this is
 The public company site for ReisierX, served at reisierx.com. One static page
-that says what the company believes, in five numbered lines, and works each
-line out with a claim, a short proof and a figure. It is built in public, in
-plain HTML and CSS. The current build, its medium and its checks are recorded
-in [`BUILD-NOTES.md`](BUILD-NOTES.md).
+that reasons in the open: three facts no one chooses, three answers that each
+follow from two of them, where all three lead, and the call. It is plain HTML
+and CSS. The current build, its medium and its checks are recorded in
+[`BUILD-NOTES.md`](BUILD-NOTES.md).
 
 ## Who it's for
-People who work the same way. The page closes by inviting them to write to
-hello@reisierx.com. It is not a CV, catalogue, feed or personal homepage.
+People with a hard problem in building a business who want it worked through
+from the facts up, and who will pay for a call to do it. It is not a CV, a
+project list, a feed or a personal homepage. Hiring is only implied.
 
 ## The decisions it serves
-Whether a visitor recognises the company's way of working, and whether they
-write. The page should be clear, calm and finished; it should not sell a
-session or name a price.
+Whether a visitor trusts the reasoning quickly enough to book a call. The main
+action is booking a paid call. The page should be clear, calm and finished.
 
 ## Quality bar
 The suite design standard is a floor: privacy, accessibility, and nothing
@@ -27,24 +27,29 @@ desktop, with a designed dark version, keyboard focus, and no layout shift
 when the font arrives.
 
 ## Hard rules
-- Static HTML and CSS only. No JavaScript on the page, no requests to other
-  origins, no cookies, no animation, no script.
-- No price in the code, on the page, or in git history. No paid session. The
-  build reads no price variable.
+- Static HTML and CSS only. No JavaScript on the page (the structured data
+  block is data and does not run), no requests to other origins, no cookies,
+  no animation.
+- The main action is booking a paid call, through exactly one link: the
+  element marked `data-book` in `index.html`. For now it is a `mailto:`;
+  moving to a booking page means changing that one `href`, and the words
+  around it do not depend on how the call is booked. The booking service is
+  the owner's call. The build fails unless there is exactly one booking link.
+- No price in the code, on the page, or in git history until the owner sets
+  one; the build reads no price variable. Any payment setup and any spend need
+  the owner's yes first.
+- No personal name anywhere on the site, and no named clients or firms.
 - Commits use the author `Gonçalo Reis <28686327+goncaloreis@users.noreply.github.com>`.
 - Medium and files are as in BUILD-NOTES.md: `index.html`, `404.html`,
   `site.css`, `tokens.css` (the only file with raw values), and `build.mjs`,
-  which copies the site into `site/`, draws the five figures from their
-  formulas, and fails the build if any number in the copy disagrees with the
-  arithmetic.
+  which copies the site into `site/`, draws the mark into the pages and the
+  images, and fails the build if the page breaks one of its own rules.
 
 ## Privacy line
 Never put a personal name, real figures, private data, credentials or tokens
 in the page, in issues, PRs, comments, prompts, logs, fixtures or
-screenshots. Refer to people by role. Professional facts already published on
-the page (the company's public background line) may be used. The worked
-examples in the proofs are not real figures. Do not quote, transcribe or
-allude to any private name, real personal or financial figure, or secret.
+screenshots. Refer to people by role. Do not quote, transcribe or allude to
+any private name, real personal or financial figure, or secret.
 The commit author above is the exception, and is fixed.
 
 ## Roles
@@ -73,6 +78,8 @@ are available for research.
 Run from the repository root. There is no package.json test suite; the checks
 for a given build are listed in BUILD-NOTES.md.
 
-- `node build.mjs`: copies the site into `site/`, draws the figures, and runs
-  the arithmetic assertions. Vercel runs this (`vercel.json`: `buildCommand`
-  is `node build.mjs`, `outputDirectory` is `site`).
+- `node build.mjs`: copies the site into `site/`, draws the mark into the
+  pages and into `og.png`, `favicon.png` and `apple-touch-icon.png` (written
+  to the repository root, where they are committed, and to `site/`), and runs
+  the checks. Vercel runs this (`vercel.json`: `buildCommand` is
+  `node build.mjs`, `outputDirectory` is `site`).
