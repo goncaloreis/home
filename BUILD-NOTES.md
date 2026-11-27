@@ -48,8 +48,8 @@ The conclusion is the only line with all three points filled: a stalled business
 breaking one of these. From inside the business it is hard to see which, and more effort
 fixes none of them; naming it is most of the work. That is what the call is for.
 
-Nothing on the page is a CV, a client, a firm or a quotation. The only figures on it are the
-call's length and fee.
+Nothing on the page is a CV, a client, a firm or a quotation. The only figure on it is the
+call's length.
 
 ## The mark
 Three points on an equilateral triangle, one for each fact (top: every result is partly
@@ -72,19 +72,23 @@ with the subject "Booking a paid call" and a short form in the body (the busines
 problem in a few lines, what has been tried). It is drawn as a filled button in red, the
 only filled block on the page, and its words are "Book a paid call". Before it, in this
 order, the call section says what the call is and that it is paid ("One paid call, on one
-problem that will not move"), what it is for and what comes of it, how long it lasts and
-what it costs, and what to tell us. While the link is a `mailto:`, the build prints the
-address under it for anyone whose mail program does not open.
+problem that will not move"), what it is for and what comes of it, how long it lasts, and
+what to tell us. While the link is a `mailto:`, the build prints the address under it for
+anyone whose mail program does not open.
 
-The owner set the call's length and fee. Each place that offers the call states both,
-plainly and once, before the action: the search description and the share description,
-the masthead's way to the call on both pages, and the call section above its button. The
-masthead's link names the call with its length and fee and leads to the call section
-rather than opening an email, so the page keeps a single booking link, the visitor reads
-what the call is before writing, and the two links no longer share a label while doing
-different things. The words around the booking link do not depend on how the call is
-booked, so moving to a booking page is a change to that one `href`; the address line then
-disappears by itself. The figures live in the pages alone, not in these notes or the build.
+The owner set the call's length. Each place that offers the call states it, plainly and
+once, before the action: the search description and the share description, the masthead's
+way to the call on both pages, and the call section above its button. The masthead's link
+leads to the call section rather than opening an email, so the page keeps a single booking
+link and the visitor reads what the call is before writing. The words around the booking
+link do not depend on how the call is booked, so moving to a booking page is a change to
+that one `href`; the address line then disappears by itself. The length lives in the pages
+alone, not in these notes or the build.
+
+No page states a price. The owner decided (27 Nov 2026) to keep the fee off the site, so
+that changing it never means changing the pages. The page still says, in the call section,
+the descriptions and the booking link's own words, that the call is paid; the fee is given
+in reply to the email.
 
 The footer invites anyone who would rather join us on such problems, and is worded so it
 does not read as a second, unpaid way to get the call; hiring stays implied.
@@ -113,17 +117,17 @@ does not read as a second, unpaid way to get the call; hiring stays implied.
   pair of facts once and all three once, and no mark is malformed; there is exactly one
   booking link, it is a `mailto:` or `https:` address, and its visible words say the call
   is paid; the masthead leads to the call; each place that offers the call (above) states
-  its fee once and its length once; every place states the same fee and the same length,
-  compared as a currency and amount and as minutes, so different spellings of one fee or
-  one length agree; no fee or length appears anywhere else on a page, in its text or its
-  attributes, even spelt with entities or in words, and no fee is given as a bare number;
+  its length once; every place states the same length, compared as minutes, so different
+  spellings of one length agree; no length appears anywhere else on a page, in its text or
+  its attributes, even spelt with entities or in words; no page states a price, with a
+  currency in any spelling or as a bare number beside a word for one;
   each page's first link skips to its main element; nothing is loaded from another origin
   (link elements, `src`, `srcset`, `poster`, `data`, inline styles, CSS `url()` and
   `@import`); no script runs, there are no inline handlers and no `javascript:` links;
   every comment is closed; and, in both colour schemes, ink keeps 7:1 on the paper, soft
   ink and red 4.5:1, the rings of the mark 4:1, the booking button's words 4.5:1 on its
   fill, and the fill 3:1 on the paper. The build holds no figure of its own: it reads the
-  call's terms from the pages.
+  call's length from the pages.
 
 ## Type, colour and grid
 - Two faces. Source Serif 4 (SIL Open Font License, `fonts/`), variable weight and optical

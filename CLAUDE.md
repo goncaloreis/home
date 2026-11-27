@@ -38,13 +38,18 @@ when the font arrives.
   address under the link only while it is a `mailto:`. The booking service is
   the owner's call. The build fails unless there is exactly one booking link
   and its words say the call is paid.
-- The call's length and fee are the owner's to set, and the owner has set
-  them. Each place that offers the call states both, plainly and once, before
-  the action: the search and share descriptions, the masthead's way to the
-  call, and the call itself before its booking link. They agree everywhere and
-  appear nowhere else. The build holds no figure of its own: it reads them from
-  the pages and fails if a place misses one, states one twice, or disagrees
-  with another. Any payment setup and any spend need the owner's yes first.
+- The call's length is the owner's to set, and the owner has set it. Each
+  place that offers the call states it, plainly and once, before the action:
+  the search and share descriptions, the masthead's way to the call, and the
+  call itself before its booking link. It agrees everywhere and appears
+  nowhere else. The build holds no figure of its own: it reads the length from
+  the pages and fails if a place misses it, states it twice, or disagrees with
+  another.
+- No page states the call's price (the owner's decision, 27 Nov 2026: the fee
+  may change, and the pages should not have to change with it). The booking
+  link still says the call is paid. The build fails if any page gives a price,
+  in figures, with a currency, or as a bare number beside a word for it. Any
+  payment setup and any spend need the owner's yes first.
 - No personal name anywhere on the site, and no named clients or firms.
 - Commits use the author `Gonçalo Reis <28686327+goncaloreis@users.noreply.github.com>`.
 - Medium and files are as in BUILD-NOTES.md: `index.html`, `404.html`,
@@ -59,9 +64,10 @@ Never put a personal name, real figures, private data, credentials or tokens
 in the page, in issues, PRs, comments, prompts, logs, fixtures or
 screenshots. Refer to people by role. Do not quote, transcribe or allude to
 any private name, real personal or financial figure, or secret.
-The commit author above is one exception, and is fixed. The call's length and
-fee are the other: the owner set them to be public, and they are written on
-the pages only, in the places the hard rules name, not in notes or commits.
+The commit author above is one exception, and is fixed. The call's length is
+the other: the owner set it to be public, and it is written on the pages
+only, in the places the hard rules name, not in notes or commits. The call's
+price is not written anywhere in the repository.
 
 ## Roles
 - **Tech**: builder; one milestone per PR. The builder never grades its own

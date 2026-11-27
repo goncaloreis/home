@@ -3,8 +3,8 @@
 // It copies the pages, styles and fonts; draws the mark into the pages and into the
 // images (og.png, favicon.png, apple-touch-icon.png); and refuses to build if the site
 // breaks one of its own rules: the shape of the argument, one booking link that says the
-// call is paid, the call's length and fee stated once wherever the call is offered and the
-// same in every place, a way past the masthead for keyboards, nothing loaded from another
+// call is paid, the call's length stated once wherever the call is offered and the same in
+// every place, no price anywhere, a way past the masthead for keyboards, nothing loaded from another
 // origin, no script, and colours that keep their contrast in both colour schemes. Every page
 // is also stamped with the commit it was built from. Nothing is written unless every check
 // passes.
@@ -185,13 +185,15 @@ check(index.includes('href="#call"'), "the masthead leads to the call");
 const bookingWords = (source.match(/<a\b[^>]*\bdata-book\b[^>]*>([\s\S]*?)<\/a>/)?.[1] ?? "").replace(/<[^>]+>/g, " ");
 check(/\bpaid\b/i.test(bookingWords), "the booking link says the call is paid");
 
-// The call's terms, its length and its fee, are the owner's to set. Every place that offers
-// the call states them plainly and once: the description a search shows, the one a shared
-// link shows, the masthead's way to the call, and the call itself, before its booking link.
-// They are the same in every place and appear nowhere else on the page, in its text or its
-// attributes. The build holds no figure of its own: it reads them from the pages, so a new
-// fee or length is a change to the pages alone. A fee could hide behind an entity, so
-// entities are read first.
+// The call's length is the owner's to set. Every place that offers the call states it
+// plainly and once: the description a search shows, the one a shared link shows, the
+// masthead's way to the call, and the call itself, before its booking link. It is the same
+// in every place and appears nowhere else on the page, in its text or its attributes. The
+// build holds no figure of its own: it reads the length from the pages, so a new length is
+// a change to the pages alone.
+// No page states a price. The owner keeps the fee off the site, so that changing it never
+// means changing the pages; the booking link still says the call is paid. A price could
+// hide behind an entity, so entities are read first.
 const SYMBOLS = { euro: "€", pound: "£", dollar: "$", yen: "¥", cent: "¢", nbsp: " " };
 const decode = (html) =>
   html
@@ -203,16 +205,8 @@ const FEE = new RegExp(
   String.raw`[$€£¥¢]\s*${AMOUNT}|${AMOUNT}\s*(?:[$€£¥¢]|(?:EUR|USD|GBP|CHF|euros?|dollars?|pounds?|francs?)\b)|\b(?:EUR|USD|GBP|CHF)\s*${AMOUNT}`,
   "gi",
 );
-// A fee could also be given as a bare number beside a word for it; once every fee with its
-// currency is set aside, no such number may remain.
+// A price could also be given as a bare number beside a word for it.
 const BARE_FEE = /\b(?:fees?|prices?|priced|costs?|costing|rates?|charges?|charged)\b[^.<]{0,40}?\d/i;
-const CURRENCY = { "€": "EUR", euro: "EUR", euros: "EUR", $: "USD", dollar: "USD", dollars: "USD", "£": "GBP", pound: "GBP", pounds: "GBP", "¥": "JPY", "¢": "US cents", franc: "CHF", francs: "CHF" };
-// So "€250", "250 €" and "EUR 250" are one fee: the currency's code, then the whole amount.
-const feeOf = ([text]) => {
-  const amount = text.match(/\d+(?:[.,]\d+)*/)[0].replace(/[.,](?=\d{3}(?!\d))/g, "");
-  const unit = text.replace(/[\d.,\s]/g, "");
-  return `${CURRENCY[unit.toLowerCase()] ?? unit.toUpperCase()} ${amount}`;
-};
 // A length in figures or words, in hours or minutes, read as minutes so that "one hour",
 // "an hour" and "sixty minutes" agree, and "an hour and a half" does not.
 const WORDS = {
@@ -245,7 +239,7 @@ const PLACES = {
   ],
   "404.html": [["the masthead's way to the call", wayToCall]],
 };
-const terms = { fee: new Set(), minutes: new Set() };
+const lengths = new Set();
 
 // Only the site's own files may be loaded: no scheme, and not protocol-relative.
 const own = (url) => !/^[a-z][a-z0-9+.-]*:/i.test(url.trim()) && !url.trim().startsWith("//");
@@ -256,19 +250,15 @@ for (const [name, html] of Object.entries(pages)) {
   const places = PLACES[name] ?? [];
   for (const [place, find] of places) {
     const part = find(html);
-    const fees = found(FEE, part);
-    const lengths = found(LENGTH, part);
+    const stated = found(LENGTH, part);
     check(
-      part !== undefined && fees.length === 1 && lengths.length === 1,
-      `${name} states the call's fee once and its length once in ${place} ` +
-        `(it states the fee ${fees.length} times and the length ${lengths.length} times)`,
+      part !== undefined && stated.length === 1,
+      `${name} states the call's length once in ${place} (it states it ${stated.length} times)`,
     );
-    fees.forEach((match) => terms.fee.add(feeOf(match)));
-    lengths.forEach((match) => terms.minutes.add(minutesOf(match)));
+    stated.forEach((match) => lengths.add(minutesOf(match)));
   }
-  check(found(FEE, html).length === places.length, `${name} states a fee nowhere but where the call is offered`);
   check(found(LENGTH, html).length === places.length, `${name} states the call's length nowhere but where the call is offered`);
-  check(!BARE_FEE.test(decode(html).replace(FEE, " ")), `${name} gives no fee as a bare number`);
+  check(found(FEE, html).length === 0 && !BARE_FEE.test(decode(html)), `${name} states no price, in figures or as a bare number`);
   // A keyboard reaches the content without passing the masthead: the first link on the
   // page skips to the main element.
   const firstLink = html.slice(html.indexOf("<body")).match(/<a\b[^>]*>/)?.[0] ?? "";
@@ -299,9 +289,8 @@ for (const [name, html] of Object.entries(pages)) {
   check(handlers === 0 && scriptLinks === 0, `${name} has no inline handlers and no javascript: links`);
 }
 check(
-  terms.fee.size === 1 && terms.minutes.size === 1,
-  `every place states the same fee and the same length for the call (fees: ${[...terms.fee].join(", ") || "none"}; ` +
-    `lengths in minutes: ${[...terms.minutes].join(", ") || "none"})`,
+  lengths.size === 1,
+  `every place states the same length for the call (in minutes: ${[...lengths].join(", ") || "none"})`,
 );
 for (const name of ["tokens.css", "site.css"]) {
   check(cssUrls(readFileSync(name, "utf8")).every(own), `${name} loads nothing from another origin`);
@@ -412,7 +401,7 @@ for (const [name, image] of Object.entries(images)) {
 console.log(
   `built ${OUT}/: ${Object.keys(pages).length} pages, ${marks.length} marks, ${Object.keys(images).length} images; ` +
     `booking by ${bookingHref.split(":")[0]}; ` +
-    `the call stated in ${Object.values(PLACES).flat().length} places as ${[...terms.minutes][0]} minutes for ${[...terms.fee][0]}; ` +
+    `the call stated in ${Object.values(PLACES).flat().length} places as ${[...lengths][0]} minutes, with no price; ` +
     `contrast, light: ${ratios.light.join(", ")}; dark: ${ratios.dark.join(", ")}; ` +
     `built from commit ${SHA}`,
 );
