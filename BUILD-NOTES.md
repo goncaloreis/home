@@ -8,30 +8,30 @@ The page is a derivation, laid out as a page. It starts from what is given, not 
 the company concludes, and every answer shows what it rests on.
 
 Given, three facts:
-- Nothing is owed. Effort and talent give no claim on a result; chance enters every
-  outcome and ignores what went into it.
+- Every result is partly luck. Effort and talent shift the odds; they do not decide the
+  outcome.
 - No one knows enough. Knowledge is partial, scattered and provisional, ours included.
 - Time runs out. Every choice is paid for in it.
 
-Facts tell no one what to do; they rule things out. Each answer is what is left once two of
-them are taken seriously, and its paragraph names both:
-- Nothing is owed, and no one knows enough: read every result as evidence, never as a
-  verdict. Every piece of work is a test, so each is run cleanly (a careless test proves
-  nothing either way) and the approach changes when the evidence says so.
-- No one knows enough, and time runs out: check what you can, and act on the rest.
-- Nothing is owed, and time runs out: never stake what you need to continue.
+Facts set no aim, so the page states one: to build businesses that last. Held to that aim,
+each pair of facts rules out a great deal, and each answer is what one pair leaves; its
+paragraph names both facts:
+- Luck, and no one knowing enough: trust no single result. Every piece of work is a test,
+  so each is run cleanly (a careless test teaches nothing either way) and the approach
+  changes when the evidence says so.
+- No one knowing enough, and time running out: check what you can, and act on the rest.
+- Luck, and time running out: keep every loss survivable.
 
 A problem is hard where all three bite at once: outcome least certain, answer least known,
-road longest. The answers count for most there and most people stop early, so such
-problems tend to stay open; the company chooses them. The page ends on the call: one
-problem, taken back to the facts, and what we would do and why. The call is paid, and its
-fee is confirmed before it is booked; no price is shown.
+road longest. There the answers count for most, and that is where the company works. The
+page ends on the call: one problem, taken back to its facts, and what we would do and why.
+The call is paid, and the visitor knows the fee before booking; no price is shown.
 
 Nothing on the page is a CV, a client, a firm, a quotation or a figure.
 
 ## The mark
-Three points on an equilateral triangle, one for each fact (top: nothing is owed; bottom
-left: no one knows enough; bottom right: time runs out). A filled red point is a fact the
+Three points on an equilateral triangle, one for each fact (top: every result is partly
+luck; bottom left: no one knows enough; bottom right: time runs out). A filled red point is a fact the
 line beside it rests on; an open ring is a fact it does not use. Each fact fills its own
 point, each answer the two it rests on, and the conclusion all three, which makes ∴, the
 sign for "therefore": the only full one on the page. So the marks show the facts becoming
@@ -83,8 +83,8 @@ The build fails unless there is exactly one booking link.
   6.0:1, rings 3.3:1. Dark: ink 15.6:1, soft ink 7.4:1, red 6.6:1, rings 4.0:1.
 - Phones: one column, and a two-line masthead. From 640 px the masthead is one line. From
   1024 px every statement sits on the left and its reason on the right, first lines on one
-  baseline, so the left column read alone is the whole argument: the facts, why facts lead
-  anywhere, the answers, the conclusion, and the link to book. One bar in ink closes the
+  baseline, so the left column read alone is the whole argument: the facts, the aim, the
+  answers, the conclusion, and the link to book. One bar in ink closes the
   argument above the conclusion.
 - In forced colours the mark is redrawn in system colours as filled and open points, and
   large lines get more leading.
@@ -99,6 +99,9 @@ The build fails unless there is exactly one booking link.
   unlit points too faint, smooth scrolling against the no-motion rule, two links with the
   same name, a comment stripper that could over-reach, checks that could pass vacuously,
   a viewport fallback that never applied, and dark colours reaching print.
+- Two independent reads of the words against the brief led to the present wording: they
+  caught near echoes of the brief and of well-worn lines, two overclaims in the logic, a
+  missing aim between facts and answers, and an offer that did not say who it is for.
 - Not run in this environment, which has no browser: axe, html-validate, Lighthouse, a link
   check, a keyboard walk-through, the late-font layout-shift sweep, forced colours, print,
   and screenshots on phone and desktop. They should run before merge.

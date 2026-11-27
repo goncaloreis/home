@@ -14,8 +14,9 @@ const check = (holds, rule) => {
   if (!holds) failures.push(rule);
 };
 
-// The mark: three points on an equilateral triangle, one for each fact. Nothing is owed
-// is the top point, no one knows enough the bottom left, time runs out the bottom right.
+// The mark: three points on an equilateral triangle, one for each fact. Every result is
+// partly luck is the top point, no one knows enough the bottom left, time runs out the
+// bottom right.
 // A filled red point is a fact the line beside it rests on; an open ring is a fact it does
 // not use. A ring's radius is cut by half its width, so its outer edge matches a filled
 // point. All three filled is ∴, the sign for "therefore", and marks the conclusion.
