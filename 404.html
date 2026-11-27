@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Not here | ReisierX</title>
   <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="{{paper}}" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="{{paper-dark}}" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/favicon.png" type="image/png">
   <link rel="preload" href="/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/tokens.css">
@@ -12,13 +15,15 @@
 </head>
 <body>
   <div class="page">
+    <a class="skip" href="#main">Skip to the content</a>
     <header class="masthead">
-      <p class="who"><a class="name" href="/">ReisierX</a> builds businesses, hands&nbsp;on.</p>
-      <a class="write write-top" href="mailto:hello@reisierx.com">hello@reisierx.com</a>
+      <a class="brand" href="/"><!--mark-->ReisierX</a>
+      <a class="to-call" href="/#call">Book a one-hour call</a>
     </header>
-    <main class="lost">
-      <h1 class="lost-title">There is nothing at this address.</h1>
-      <p class="lost-text"><a href="/">Start again at the beginning</a></p>
+    <main class="lost" id="main">
+      <h1 class="lost-title">Nothing at this address.</h1>
+      <p class="lost-note">We build businesses, and will tell you what we would do in&nbsp;yours.</p>
+      <p><a href="/">Go to the start</a></p>
     </main>
   </div>
 </body>
