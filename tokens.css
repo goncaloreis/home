@@ -33,7 +33,7 @@
  * takes the same room before the web font arrives. size-adjust matches the average
  * advance width; the overrides are 103.6% and 33.5% divided by size-adjust (Chromium
  * scales overrides by size-adjust), which puts every baseline where Source Serif 4 puts
- * it. Display: the facts, the answers and other large lines. Text: reading sizes.
+ * it. Display: the answers, the conclusion and other large lines. Text: reading sizes.
  */
 @font-face {
   font-family: "Fallback Display Georgia";
@@ -93,23 +93,29 @@
   color-scheme: light dark;
 
   /* Colour: paper, ink and one red. The build checks ink (at least 7:1), soft ink and
-     red (at least 4.5:1) and unlit (at least 3:1) against the paper. Faint is only for
-     hairlines. Unlit draws the points of the mark that are not lit, as open rings, so
-     every mark shows its whole triangle and a single red point reads as a position. */
+     red (at least 4.5:1) and unlit (at least 4:1) against the paper. The booking button
+     sets paper on red, the same pair the other way round. Faint is only for hairlines.
+     Unlit draws the points of the mark that are not lit, as open rings, so every mark
+     shows its whole triangle and a single red point reads as a position. A thin ring
+     reads fainter than its colour, so it is held above the 3:1 floor for graphics. */
   --paper: #F7F5F0;
   --ink: #141210;
   --ink-soft: #5B564F;
   --red: #B3261E;
   --faint: #D9D3C9;
-  --unlit: #8E877D;
+  --unlit: #7A7369;
+  --on-red: var(--paper);
 
-  /* The mark: lit points filled in red, the others open rings. The ring's width and
-     radius are geometry, set by build.mjs with the points. */
+  /* The mark: lit points filled in red, the others open rings. The points, radius and
+     ring width are geometry, set by build.mjs, which draws the mark 24 wide and 22 high. */
   --mark-on: var(--red);
   --mark-off: none;
   --mark-ring: var(--unlit);
-  --mark: 1.375rem;
-  --mark-where: 2rem;
+  --mark: 1.25rem;
+  --mark-where: 1.75rem;
+  --mark-gap: 0.75rem;
+  --mark-height: calc(var(--mark) * 22 / 24);
+  --mark-where-height: calc(var(--mark-where) * 22 / 24);
 
   /* Type */
   --font-display: "Source Serif 4", "Fallback Display Georgia", "Fallback Display Liberation", "Fallback Display Noto", ui-serif, Georgia, serif;
@@ -117,10 +123,13 @@
   --weight-text: 400;
   --weight-display: 400;
   --weight-strong: 600;
+  --weight-label: 400;
   --track-display: -0.012em;
   --track-label: 0.09em;
 
-  /* Sizes on phones; wider screens raise the large ones below. */
+  /* Sizes on phones; wider screens raise them below. They follow the weight of the
+     argument: the facts are premises and sit at reading size, the aim a step above,
+     the answers well above that, and the conclusion largest. */
   --size-label: 0.8125rem;
   --lead-label: 1.25rem;
   --size-meta: 0.9375rem;
@@ -129,51 +138,58 @@
   --lead-note: 1.5rem;
   --size-body: 1.125rem;
   --lead-body: 1.75rem;
-  --size-turn: 1.375rem;
-  --lead-turn: 1.875rem;
-  --size-answer: 1.625rem;
-  --lead-answer: 2rem;
-  --size-fact: 2.125rem;
-  --lead-fact: 2.375rem;
-  --size-where: 2.125rem;
-  --lead-where: 2.5rem;
-  --size-book: 2rem;
-  --lead-book: 2.5rem;
+  --size-fact: 1.125rem;
+  --lead-fact: 1.625rem;
+  --size-turn: 1.25rem;
+  --lead-turn: 1.75rem;
+  --size-answer: 1.75rem;
+  --lead-answer: 2.125rem;
+  --size-where: 2rem;
+  --lead-where: 2.375rem;
+  --size-call: 1.75rem;
+  --lead-call: 2.125rem;
+  --size-book: 1.125rem;
+  --lead-book: 1.5rem;
 
   /* Space, on a 4 px grid */
   --space-1: 0.25rem;
+  --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
   --space-10: 2.5rem;
-  --space-12: 3rem;
   --space-16: 4rem;
   --space-24: 6rem;
 
   /* Page geometry */
   --pad: 1.25rem;
-  --page-max: 72rem;
+  --page-max: 60rem;
   --measure: 34rem;
-  --measure-turn: 40rem;
-  --measure-where: 15em;
-  --gutter: 2.5rem;
+  --measure-fact: 60rem;
+  --measure-turn: 30em;
+  --measure-answer: 20em;
+  --measure-where: 18em;
+  --measure-call: 16em;
   --masthead-top: 1.25rem;
-  --space-given: 2.5rem;
-  --space-section: 5rem;
+  --space-given: 2rem;
+  --space-band: 2rem;
+  --space-section: 4.5rem;
+  --space-facts: 1rem;
+  --space-answers: 2.5rem;
   --screen: 100svh;
 
   /* Lines */
   --hairline-width: 1px;
   --bar-width: 1px;
+  --radius: 2px;
 
-  /* Links and focus */
+  /* Links and focus. The ring stands off the element, and every control has room
+     around it, so a ring never touches a letter. */
   --underline: 0.0625em;
-  --underline-book: 0.07em;
   --underline-offset: 0.2em;
   --focus-width: 2px;
   --focus-offset: 3px;
-  --focus-radius: 2px;
 
   /* Motion: colour changes only */
   --duration: 120ms;
@@ -181,65 +197,80 @@
 }
 
 /* The dark version is for screens only, so a page printed from a dark device is still
-   dark ink on light paper. */
+   dark ink on light paper. Small labels and thin rings lose the most on a dark ground,
+   so soft ink and unlit are lighter here, and labels a little heavier. */
 @media screen and (prefers-color-scheme: dark) {
   :root {
     --paper: #121110;
     --ink: #EDE9E2;
-    --ink-soft: #A8A298;
+    --ink-soft: #B5AFA5;
     --red: #F2735F;
     --faint: #3B3732;
-    --unlit: #7A7369;
+    --unlit: #8C857A;
     --weight-text: 380;
     --weight-display: 370;
     --weight-strong: 560;
+    --weight-label: 460;
   }
 }
 
+/* From 640 px the marks hang in the margin, so the margin is widened to hold them. */
 @media (min-width: 640px) {
   :root {
-    --pad: 2rem;
+    --pad: 4rem;
     --masthead-top: 1.75rem;
-    --mark: 1.5rem;
-    --mark-where: 2.25rem;
-    --size-turn: 1.625rem;
-    --lead-turn: 2.125rem;
-    --size-answer: 1.875rem;
-    --lead-answer: 2.25rem;
-    --size-fact: 2.75rem;
-    --lead-fact: 3rem;
+    --mark: 1.375rem;
+    --mark-where: 2rem;
+    --mark-gap: 0.875rem;
+    --size-fact: 1.1875rem;
+    --lead-fact: 1.75rem;
+    --size-turn: 1.5rem;
+    --lead-turn: 2rem;
+    --size-answer: 2.25rem;
+    --lead-answer: 2.625rem;
     --size-where: 2.75rem;
     --lead-where: 3.125rem;
-    --size-book: 2.5rem;
-    --lead-book: 3rem;
-    --space-given: 4.5rem;
-    --space-section: 7rem;
+    --size-call: 2.25rem;
+    --lead-call: 2.625rem;
+    --size-book: 1.25rem;
+    --lead-book: 1.75rem;
+    --space-given: 3rem;
+    --space-band: 3rem;
+    --space-section: 6rem;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --pad: 3rem;
+    --pad: 5rem;
     --masthead-top: 2rem;
+    --mark: 1.5rem;
+    --mark-where: 2.25rem;
+    --mark-gap: 1rem;
     --size-meta: 1.0625rem;
     --lead-meta: 1.5rem;
-    --space-given: 6rem;
-    --space-section: 9rem;
+    --size-fact: 1.25rem;
+    --lead-fact: 1.875rem;
+    --measure: 38rem;
+    --space-given: 3rem;
+    --space-band: 3rem;
+    --space-section: 7rem;
+    --space-facts: 0.75rem;
   }
 }
 
 @media (min-width: 1280px) {
   :root {
-    --pad: 4rem;
-    --gutter: 3rem;
-    --size-fact: 3.25rem;
-    --lead-fact: 3.5rem;
-    --size-answer: 2.125rem;
-    --lead-answer: 2.5rem;
-    --size-where: 3.5rem;
+    --size-turn: 1.625rem;
+    --lead-turn: 2.125rem;
+    --size-answer: 2.75rem;
+    --lead-answer: 3.25rem;
+    --size-where: 3.375rem;
     --lead-where: 3.875rem;
-    --size-book: 3rem;
-    --lead-book: 3.5rem;
+    --size-call: 2.75rem;
+    --lead-call: 3.25rem;
+    --size-book: 1.375rem;
+    --lead-book: 1.875rem;
   }
 }
 
@@ -257,10 +288,9 @@
     --mark-on: CanvasText;
     --mark-off: Canvas;
     --mark-ring: CanvasText;
-    --lead-fact: 1.4em;
     --lead-answer: 1.4em;
     --lead-where: 1.4em;
     --lead-turn: 1.4em;
-    --lead-book: 1.4em;
+    --lead-call: 1.4em;
   }
 }

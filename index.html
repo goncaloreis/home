@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ReisierX</title>
-  <meta name="description" content="ReisierX builds businesses, hands on. Three facts no one chooses, what follows from them, and a paid call on the problem that will not move.">
+  <meta name="description" content="ReisierX builds businesses, hands on. Three facts no one chooses, what follows from them, and a paid call on one problem that will not move.">
   <link rel="canonical" href="https://reisierx.com/">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="{{paper}}" media="(prefers-color-scheme: light)">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ReisierX">
   <meta property="og:title" content="ReisierX">
-  <meta property="og:description" content="Three facts no one chooses, what follows from them, and a paid call on the problem that will not move.">
+  <meta property="og:description" content="Three facts no one chooses, what follows from them, and a paid call on one problem that will not move.">
   <meta property="og:url" content="https://reisierx.com/">
   <meta property="og:image" content="https://reisierx.com/og.png">
   <meta property="og:image:width" content="1200">
@@ -37,39 +37,44 @@
 </head>
 <body>
   <div class="page">
+    <a class="skip" href="#main">Skip to the content</a>
+
     <header class="masthead">
       <h1 class="who"><span class="name">ReisierX</span> builds businesses, hands&nbsp;on.</h1>
-      <a class="to-call" href="#call">Book a call<span class="hidden">: the details</span></a>
+      <a class="to-call" href="#call">Book a paid call<span class="hidden">: the details</span></a>
     </header>
 
-    <main>
+    <main id="main">
       <section class="given" aria-labelledby="given-title">
         <h2 class="label" id="given-title">Given</h2>
         <ul class="facts" role="list">
           <li class="fact">
             <!--mark:1-->
-            <h3 class="fact-title">Every result is partly luck.</h3>
-            <p class="gloss">Effort and talent shift the odds; they do not decide the&nbsp;outcome.</p>
+            <div class="premise">
+              <h3 class="fact-title">Every result is partly luck.</h3>
+              <p class="gloss">Effort and talent shift the odds; they do not decide the&nbsp;outcome.</p>
+            </div>
           </li>
           <li class="fact">
             <!--mark:2-->
-            <h3 class="fact-title">No one knows enough.</h3>
-            <p class="gloss">Knowledge is partial, scattered and provisional, ours&nbsp;included.</p>
+            <div class="premise">
+              <h3 class="fact-title">No one knows enough.</h3>
+              <p class="gloss">Knowledge is partial, scattered and provisional, ours&nbsp;included.</p>
+            </div>
           </li>
           <li class="fact">
             <!--mark:3-->
-            <h3 class="fact-title">Time runs out.</h3>
-            <p class="gloss">Every choice is paid for in it, and none of it comes&nbsp;back.</p>
+            <div class="premise">
+              <h3 class="fact-title">Time runs out.</h3>
+              <p class="gloss">Every choice is paid for in it, and none of it comes&nbsp;back.</p>
+            </div>
           </li>
         </ul>
       </section>
 
       <section class="follows" aria-labelledby="follows-title">
         <h2 class="label" id="follows-title">What follows</h2>
-        <div class="intro">
-          <p class="turn">Facts set no aim. Ours is to build businesses that&nbsp;last.</p>
-          <p class="note">Held to that aim, each pair of facts rules out a great deal. Each answer below is what one pair leaves, and its mark shows&nbsp;which.</p>
-        </div>
+        <p class="turn">Facts set no aim. Ours is to build businesses that&nbsp;last.</p>
         <ul class="answers" role="list">
           <li class="answer">
             <!--mark:12-->
@@ -90,28 +95,31 @@
       </section>
 
       <section class="where" aria-labelledby="where-title">
-        <!--mark:123-->
-        <h2 class="where-title" id="where-title">We work where all three bite at&nbsp;once.</h2>
-        <p class="reason">A problem is hard when its outcome is least certain, its answer least known and its road longest. There the answers above count for&nbsp;most.</p>
+        <div class="therefore">
+          <!--mark:123-->
+          <h2 class="where-title" id="where-title">We work where all three bite at&nbsp;once.</h2>
+          <p class="reason">That is where problems stall, and where the answers above count for&nbsp;most.</p>
+        </div>
       </section>
 
       <section class="call" id="call" aria-labelledby="call-title">
         <h2 class="label" id="call-title">The call</h2>
-        <div class="call-body">
-          <p class="offer">One call, on one problem that will not move, in a business you are building or backing. We take it back to its facts, work out what follows, and tell you what we would do and why. The call is paid; you will know the fee before you&nbsp;book.</p>
-          <!-- The one booking link on the site. It opens an email for now. To move to a
-               booking page, change this href and nothing else: the words around it do not
-               depend on how the call is booked, and the build adds the email address under
-               the link only while the link is a mailto. The build fails unless there is
-               exactly one link marked data-book. -->
-          <p class="book-line"><a class="book" data-book href="mailto:hello@reisierx.com?subject=Booking%20a%20call&amp;body=The%20problem%2C%20in%20a%20few%20lines%3A%0D%0A%0D%0A">Book a call</a><!--booking-via--></p>
-          <p class="join">If you would rather work on problems like these with us than bring us one, write to <a href="mailto:hello@reisierx.com">hello@reisierx.com</a>.</p>
-        </div>
+        <p class="call-lead">One paid call, on one problem that will not&nbsp;move.</p>
+        <p class="offer">Bring it from a business you are building or backing. We take it back to its facts, work out what follows, and tell you what we would do and why. You will know the fee before you&nbsp;book.</p>
+        <p class="brief">To book, tell us what the business is, the problem in a few lines, and what has been&nbsp;tried.</p>
+        <!-- The one booking link on the site. It opens an email for now. To move to a
+             booking page, change this href and nothing else: the words around it do not
+             depend on how the call is booked, and the build adds the email address under
+             the link only while the link is a mailto. The build fails unless there is
+             exactly one link marked data-book, and unless its words say the call is
+             paid. -->
+        <p class="book-line"><a class="book" data-book href="mailto:hello@reisierx.com?subject=Booking%20a%20paid%20call&amp;body=The%20business%3A%0D%0A%0D%0AThe%20problem%2C%20in%20a%20few%20lines%3A%0D%0A%0D%0AWhat%20has%20been%20tried%3A%0D%0A%0D%0A">Book a paid call</a><!--booking-via--></p>
       </section>
     </main>
 
     <footer class="colophon">
       <p>ReisierX</p>
+      <p class="join">To work on problems like these with us, write to <a href="mailto:hello@reisierx.com">hello@reisierx.com</a>.</p>
     </footer>
   </div>
 </body>

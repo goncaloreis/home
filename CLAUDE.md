@@ -35,7 +35,8 @@ when the font arrives.
   moving to a booking page means changing that one `href`. The words around
   it do not depend on how the call is booked, and the build prints the email
   address under the link only while it is a `mailto:`. The booking service is
-  the owner's call. The build fails unless there is exactly one booking link.
+  the owner's call. The build fails unless there is exactly one booking link
+  and its words say the call is paid.
 - No price in the code, on the page, or in git history until the owner sets
   one; the build reads no price variable. Any payment setup and any spend need
   the owner's yes first.
@@ -56,17 +57,18 @@ The commit author above is the exception, and is fixed.
 ## Roles
 - **Tech**: builder; one milestone per PR. The builder never grades its own
   work.
-- **Claude** (you): spec and review. You specify and review; you never push
-  code or open PRs.
+- **Claude** (you): builds on a branch. You commit, push that branch and open
+  pull requests when asked. You never merge, never push to `main` and never
+  deploy to production.
 - **The owner**: the gate (answers questions and approves the plan) and the
   taste check before merge.
 
 ## The method
 This project applies the owner's shared **Consulting Claude** method in
 [goncaloreis/suite](https://github.com/goncaloreis/suite); this file only
-adds what is specific to the project and does not restate the method. You are
-the consultant, not the builder, and you may question the framing of a
-problem. In short: problem issue -> spec (your reply) -> the owner's gate ->
+adds what is specific to the project and does not restate the method. You
+build here as well as advise, and you may question the framing of a problem.
+In short: problem issue -> spec (your reply) -> the owner's gate ->
 one milestone per PR -> checks -> fresh Claude review (pass/fail per eval
 with a reason, ending with exactly one line `VERDICT: APPROVE` or
 `VERDICT: REQUEST CHANGES`) -> the owner's taste check on UI changes ->

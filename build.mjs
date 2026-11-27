@@ -2,9 +2,10 @@
 //
 // It copies the pages, styles and fonts; draws the mark into the pages and into the
 // images (og.png, favicon.png, apple-touch-icon.png); and refuses to build if the site
-// breaks one of its own rules: the shape of the argument, one booking link, no price,
-// nothing loaded from another origin, no script, and colours that keep their contrast on
-// the paper in both colour schemes. Nothing is written unless every check passes.
+// breaks one of its own rules: the shape of the argument, one booking link that says the
+// call is paid, a way past the masthead for keyboards, no price, nothing loaded from
+// another origin, no script, and colours that keep their contrast on the paper in both
+// colour schemes. Nothing is written unless every check passes.
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { deflateSync } from "node:zlib";
 
@@ -17,10 +18,11 @@ const check = (holds, rule) => {
 // The mark: three points on an equilateral triangle, one for each fact. Every result is
 // partly luck is the top point, no one knows enough the bottom left, time runs out the
 // bottom right.
-// A filled red point is a fact the line beside it rests on; an open ring is a fact it does
+// A filled red point is a fact the entry beside it rests on; an open ring is a fact it does
 // not use. A ring's radius is cut by half its width, so its outer edge matches a filled
-// point. All three filled is ∴, the sign for "therefore", and marks the conclusion.
-const MARK = { width: 24, height: 22, r: 3.25, ring: 1.3, points: [[12, 4.5], [4.5, 17.5], [19.5, 17.5]] };
+// point, and the ring is drawn thick enough to hold its colour on a dark ground. All three
+// filled is ∴, the sign for "therefore", and marks the conclusion.
+const MARK = { width: 24, height: 22, r: 3.25, ring: 1.6, points: [[12, 4.5], [4.5, 17.5], [19.5, 17.5]] };
 
 // ---- Colour, read from tokens.css ----------------------------------------------------
 
@@ -51,9 +53,11 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-// Ink is held to 7:1. Soft ink and red also set text, so they are held to 4.5:1. Unlit
-// draws the open rings of the mark, a graphic that carries meaning, so 3:1.
-const NEEDS = { ink: 7, "ink-soft": 4.5, red: 4.5, unlit: 3 };
+// Ink is held to 7:1. Soft ink and red also set text, so they are held to 4.5:1; the
+// booking button sets paper on red, the same pair. Unlit draws the open rings of the mark,
+// a graphic that carries meaning; 3:1 is the floor for that, but a thin ring reads fainter
+// than its colour, so it is held to 4:1.
+const NEEDS = { ink: 7, "ink-soft": 4.5, red: 4.5, unlit: 4 };
 const ratios = { light: [], dark: [] };
 for (const [scheme, palette] of [["light", light], ["dark", dark]]) {
   for (const [name, least] of Object.entries(NEEDS)) {
@@ -132,6 +136,12 @@ const index = pages["index.html"];
 check(bookingTags.length === 1 && [...index.matchAll(/\bdata-book\b/g)].length === 1, "index.html has exactly one booking link (data-book)");
 check(/^(mailto:|https:\/\/)/.test(bookingHref), "the booking link is a mailto: or https: address");
 check(index.includes('href="#call"'), "the masthead leads to the call");
+// The link's visible words say the call is paid, whatever the href becomes. Words kept
+// for screen readers only do not count.
+const bookingWords = (source.match(/<a\b[^>]*\bdata-book\b[^>]*>([\s\S]*?)<\/a>/)?.[1] ?? "")
+  .replace(/<span class="hidden">[\s\S]*?<\/span>/g, " ")
+  .replace(/<[^>]+>/g, " ");
+check(/\bpaid\b/i.test(bookingWords), "the booking link says the call is paid");
 
 // A price could hide behind an entity or a word, so those are read first.
 const SYMBOLS = { euro: "€", pound: "£", dollar: "$", yen: "¥", cent: "¢", nbsp: " " };
@@ -141,6 +151,9 @@ const decode = (html) =>
     .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
     .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)));
 const PRICE = /[$€£¥¢]\s*\d|\d\s*[$€£¥¢]|\b(?:EUR|USD|GBP|CHF)\b|\d\s*(?:euros?|dollars?|pounds?|francs?)\b/i;
+// Nor a fee given as a bare number, nor a length for the call: both are the owner's to set.
+const FIGURE =
+  /\b(?:fee|price|cost|rate)s?\b[^.<]{0,40}\d|\d\s*-?\s*(?:min(?:ute)?s?|hours?|hrs?)\b|\b(?:half an|an|one|two|three) hours?\b/i;
 
 // Only the site's own files may be loaded: no scheme, and not protocol-relative.
 const own = (url) => !/^[a-z][a-z0-9+.-]*:/i.test(url.trim()) && !url.trim().startsWith("//");
@@ -149,6 +162,14 @@ const cssUrls = (css) =>
 
 for (const [name, html] of Object.entries(pages)) {
   check(!PRICE.test(decode(html)), `${name} shows no price`);
+  check(!FIGURE.test(decode(html)), `${name} gives no fee figure and no length for the call`);
+  // A keyboard reaches the content without passing the masthead: the first link on the
+  // page skips to the main element.
+  const firstLink = html.slice(html.indexOf("<body")).match(/<a\b[^>]*>/)?.[0] ?? "";
+  check(
+    /\bhref="#main"/.test(firstLink) && /<main\b[^>]*\bid="main"/.test(html),
+    `${name} opens with a link that skips to the main content`,
+  );
   const loads = [];
   let handlers = 0;
   let scriptLinks = 0;

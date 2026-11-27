@@ -1,6 +1,11 @@
 /*
  * ReisierX. One page: three facts no one chooses, what follows from them two at a time,
  * where all three lead, and the call. Every value is a name from tokens.css. Phone first.
+ *
+ * Sizes follow the weight of the argument: the facts are premises, set at reading size;
+ * the answers drawn from them are large, and the conclusion largest. All the text runs
+ * down one edge. From 640 px each mark hangs in the margin beside the first line of its
+ * entry, so the margin, read alone, shows single facts becoming pairs and then all three.
  */
 
 *,
@@ -46,7 +51,7 @@ ul {
 
 ::selection {
   background: var(--red);
-  color: var(--paper);
+  color: var(--on-red);
 }
 
 a {
@@ -55,11 +60,14 @@ a {
   text-decoration-thickness: var(--underline);
   text-underline-offset: var(--underline-offset);
   text-decoration-color: var(--ink-soft);
-  transition: text-decoration-color var(--duration) var(--ease), color var(--duration) var(--ease);
+  transition:
+    text-decoration-color var(--duration) var(--ease),
+    color var(--duration) var(--ease),
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease);
 }
 
-/* Hover only where there is a real pointer, so a tap never leaves a mark behind. The two
-   links to the call are underlined in red already, so their words turn red instead. */
+/* Hover only where there is a real pointer, so a tap never leaves a mark behind. */
 @media (hover: hover) {
   a:hover {
     text-decoration-color: var(--red);
@@ -67,14 +75,31 @@ a {
 
   .to-call:hover,
   .book:hover {
-    color: var(--red);
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
   }
 }
 
+/* Focus: a red ring standing off the element. Every control that gets one has room
+   around it, so the ring never touches a letter. */
 :focus-visible {
   outline: var(--focus-width) solid var(--red);
   outline-offset: var(--focus-offset);
-  border-radius: var(--focus-radius);
+}
+
+/* A link inside running text is filled instead, as selected text is, because a ring
+   there would cross the words around it. The clear outline is drawn in forced colours,
+   where the fill is not. */
+.join a:focus-visible,
+.who a:focus-visible {
+  outline-color: transparent;
+  outline-offset: 0;
+  background: var(--red);
+  color: var(--on-red);
+  text-decoration-color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 /* Words for screen readers only. */
@@ -91,18 +116,41 @@ a {
 }
 
 .page {
+  position: relative;
   max-width: calc(var(--page-max) + 2 * var(--pad));
   margin-inline: auto;
   padding-inline: var(--pad);
 }
 
+/* The first stop for a keyboard: straight to the argument. Shown only while focused,
+   and then in the flow above the masthead, so it covers nothing and its ring has room. */
+.skip {
+  display: block;
+  width: fit-content;
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--size-meta);
+  line-height: var(--lead-meta);
+}
+
+.skip:not(:focus) {
+  position: absolute;
+  width: var(--hairline-width);
+  height: var(--hairline-width);
+  margin: calc(-1 * var(--hairline-width));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* Masthead: what ReisierX is, and the way to the call. On phones the name takes a line
-   of its own, so the masthead is always two lines there and one line from 640 px. */
+   of its own; from 640 px the masthead is one line. */
 .masthead {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  gap: var(--space-6);
+  gap: var(--space-3);
   padding-top: var(--masthead-top);
   font-size: var(--size-meta);
   line-height: var(--lead-meta);
@@ -110,17 +158,19 @@ a {
 
 .name {
   display: block;
+  width: fit-content;
   font-weight: var(--weight-strong);
 }
 
-/* The padding makes the target taller without moving the line. */
+/* The way to the call, framed so it reads as the action it leads to. */
 .to-call {
   position: relative;
-  display: inline-block;
-  padding-block: var(--space-1);
-  margin-block: calc(-1 * var(--space-1));
+  flex: none;
+  padding: var(--space-2) var(--space-3);
+  border: var(--hairline-width) solid var(--ink);
+  border-radius: var(--radius);
+  text-decoration: none;
   white-space: nowrap;
-  text-decoration-color: var(--red);
 }
 
 /* Section labels: a hairline, then the word. */
@@ -129,14 +179,15 @@ a {
   border-top: var(--hairline-width) solid var(--faint);
   font-size: var(--size-label);
   line-height: var(--lead-label);
+  font-weight: var(--weight-label);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--ink-soft);
 }
 
-/* The mark: three points, one for each fact. A filled red point is a fact the line beside
-   it rests on; an open ring is a fact it does not use. All three filled is the sign for
-   therefore, and only the conclusion carries it. */
+/* The mark: three points, one for each fact. A filled red point is a fact the entry
+   beside it rests on; an open ring is a fact it does not use. All three filled is the
+   sign for therefore, and only the conclusion carries it. */
 .mark {
   display: block;
   width: var(--mark);
@@ -154,101 +205,110 @@ a {
   stroke: var(--mark-ring);
 }
 
-.fact-title,
 .turn,
 .answer-title,
 .where-title,
-.book {
+.call-lead,
+.lost-title {
   font-family: var(--font-display);
   font-weight: var(--weight-display);
   letter-spacing: var(--track-display);
 }
 
-/* Given: the three facts. */
+/* Given: the three facts, each run on into what it means. They are premises, so they
+   are set at reading size, below everything that follows from them. */
 .given {
   margin-top: var(--space-given);
 }
 
 .facts {
   display: grid;
-  row-gap: var(--space-8);
+  row-gap: var(--space-facts);
   margin-top: var(--space-6);
 }
 
-.fact,
-.answer,
-.where {
+.fact {
   display: grid;
-  align-content: start;
-  row-gap: var(--space-3);
+  grid-template-columns: var(--mark) minmax(0, 1fr);
+  column-gap: var(--mark-gap);
+  align-items: start;
 }
 
-.fact-title {
+/* Each mark is centred on the first line of its entry. Its font size is the entry's, so
+   a leading given in em resolves as it does for the line. */
+.fact > .mark {
+  margin-top: calc((var(--lead-fact) - var(--mark-height)) / 2);
+  font-size: var(--size-fact);
+}
+
+.premise {
+  max-width: var(--measure-fact);
   font-size: var(--size-fact);
   line-height: var(--lead-fact);
-  text-wrap: balance;
-}
-
-.gloss {
-  max-width: var(--measure);
-  color: var(--ink-soft);
   text-wrap: pretty;
 }
 
-/* What follows: why facts can lead anywhere at all, then one answer for each pair of
-   facts. */
-.follows {
-  margin-top: var(--space-section);
+.premise > * {
+  display: inline;
 }
 
-.intro {
-  margin-top: var(--space-8);
+.gloss {
+  color: var(--ink-soft);
+}
+
+/* What follows: the aim the facts do not set, then one answer for each pair of facts. */
+.follows {
+  margin-top: var(--space-band);
 }
 
 .turn {
+  margin-top: var(--space-6);
   max-width: var(--measure-turn);
   font-size: var(--size-turn);
   line-height: var(--lead-turn);
   text-wrap: balance;
 }
 
-.note {
-  margin-top: var(--space-3);
-  max-width: var(--measure);
-  font-size: var(--size-note);
-  line-height: var(--lead-note);
-  color: var(--ink-soft);
-  text-wrap: pretty;
-}
-
 .answers {
   display: grid;
-  row-gap: var(--space-12);
-  margin-top: var(--space-12);
+  row-gap: var(--space-answers);
+  margin-top: var(--space-8);
 }
 
 .answer-title {
+  max-width: var(--measure-answer);
   font-size: var(--size-answer);
   line-height: var(--lead-answer);
   text-wrap: balance;
 }
 
 .reason {
+  margin-top: var(--space-3);
   max-width: var(--measure);
   text-wrap: pretty;
+}
+
+/* On phones the mark of an answer, and of the conclusion, stands above it. */
+.answer > .mark,
+.therefore > .mark {
+  margin-bottom: var(--space-3);
+}
+
+.answer > .mark {
+  font-size: var(--size-answer);
 }
 
 /* Where all three lead: one bar in ink under the whole argument, then the conclusion,
    the only line with all three points filled. */
 .where {
-  row-gap: var(--space-4);
   margin-top: var(--space-section);
   padding-top: var(--space-8);
   border-top: var(--bar-width) solid var(--ink);
 }
 
-.where .mark {
+.therefore > .mark {
   width: var(--mark-where);
+  font-size: var(--size-where);
 }
 
 .where-title {
@@ -258,55 +318,76 @@ a {
   text-wrap: balance;
 }
 
-/* The call: what it is, the one booking link, and the address for everything else. */
+/* The call: what it is and that it is paid, what to write, and only then the one
+   booking link, the only filled block on the page. */
 .call {
   margin-top: var(--space-section);
   scroll-margin-top: var(--space-6);
 }
 
-.call-body {
+.call-lead {
   margin-top: var(--space-6);
+  max-width: var(--measure-call);
+  font-size: var(--size-call);
+  line-height: var(--lead-call);
+  text-wrap: balance;
 }
 
-.offer {
+.offer,
+.brief {
   max-width: var(--measure);
   text-wrap: pretty;
 }
 
+.offer {
+  margin-top: var(--space-4);
+}
+
+.brief {
+  margin-top: var(--space-3);
+}
+
 .book-line {
+  display: grid;
+  justify-items: stretch;
+  row-gap: var(--space-3);
   margin-top: var(--space-8);
 }
 
+/* The transparent border is drawn in forced colours, where the fill is not. */
 .book {
+  padding: var(--space-4) var(--space-6);
+  border: var(--hairline-width) solid transparent;
+  border-radius: var(--radius);
+  background: var(--red);
+  color: var(--on-red);
   font-size: var(--size-book);
   line-height: var(--lead-book);
-  text-decoration-color: var(--red);
-  text-decoration-thickness: var(--underline-book);
+  text-align: center;
+  text-decoration: none;
 }
 
 /* Shown by the build only while the booking link is an email. */
 .via {
-  display: block;
-  margin-top: var(--space-1);
+  font-size: var(--size-note);
+  line-height: var(--lead-note);
+  color: var(--ink-soft);
+}
+
+.colophon {
+  display: grid;
+  row-gap: var(--space-1);
+  margin-top: var(--space-24);
+  padding-block: var(--space-4) var(--space-10);
+  border-top: var(--hairline-width) solid var(--faint);
   font-size: var(--size-note);
   line-height: var(--lead-note);
   color: var(--ink-soft);
 }
 
 .join {
-  margin-top: var(--space-8);
   max-width: var(--measure);
-  font-size: var(--size-note);
-  line-height: var(--lead-note);
-  color: var(--ink-soft);
   text-wrap: pretty;
-}
-
-.colophon {
-  padding-block: var(--space-24) var(--space-10);
-  font-size: var(--size-label);
-  line-height: var(--lead-label);
-  color: var(--ink-soft);
 }
 
 /* The 404 page, in the same voice. */
@@ -319,83 +400,47 @@ a {
 }
 
 .lost-title {
-  font-family: var(--font-display);
-  font-weight: var(--weight-display);
-  letter-spacing: var(--track-display);
-  font-size: var(--size-fact);
-  line-height: var(--lead-fact);
+  font-size: var(--size-answer);
+  line-height: var(--lead-answer);
   text-wrap: balance;
 }
 
+/* From 640 px every mark hangs in the margin, right-aligned a gap away from the text and
+   centred on its first line, so all the text starts on one edge. */
 @media (min-width: 640px) {
   .name {
     display: inline;
   }
-}
 
-/* Wide screens: statements on the left, their reasons on the right, first lines on one
-   baseline. Read down the left column alone and it is the whole argument: the facts, why
-   they lead anywhere, the answers, the conclusion, and the link to book. */
-@media (min-width: 1024px) {
   .fact,
   .answer,
-  .where,
-  .intro,
-  .call-body {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    column-gap: var(--gutter);
-    align-items: baseline;
-  }
-
-  .facts {
-    row-gap: var(--space-10);
+  .therefore {
+    position: relative;
+    display: block;
   }
 
   .fact > .mark,
   .answer > .mark,
-  .where > .mark {
-    grid-row: 1;
-    grid-column: 1;
+  .therefore > .mark {
+    position: absolute;
+    inset-inline-end: calc(100% + var(--mark-gap));
+    margin: 0;
   }
 
-  .fact-title,
-  .answer-title,
-  .where-title {
-    grid-row: 2;
-    grid-column: 1;
+  .fact > .mark {
+    top: calc((var(--lead-fact) - var(--mark-height)) / 2);
   }
 
-  .gloss,
-  .reason {
-    grid-row: 2;
-    grid-column: 2;
+  .answer > .mark {
+    top: calc((var(--lead-answer) - var(--mark-height)) / 2);
   }
 
-  .turn {
-    grid-column: 1;
-  }
-
-  .note {
-    grid-column: 2;
-    margin-top: 0;
+  .therefore > .mark {
+    top: calc((var(--lead-where) - var(--mark-where-height)) / 2);
   }
 
   .book-line {
-    grid-row: 1;
-    grid-column: 1;
-    margin-top: 0;
-  }
-
-  .offer {
-    grid-row: 1;
-    grid-column: 2;
-  }
-
-  .join {
-    grid-row: 2;
-    grid-column: 2;
-    margin-top: var(--space-6);
+    justify-items: start;
   }
 }
 
@@ -407,6 +452,7 @@ a {
 }
 
 @media print {
+  .skip,
   .to-call {
     display: none;
   }
@@ -417,7 +463,15 @@ a {
 
   .fact,
   .answer,
-  .where {
+  .therefore {
     break-inside: avoid;
+  }
+
+  .book {
+    padding: 0;
+    background: none;
+    color: var(--ink);
+    text-align: start;
+    text-decoration: underline;
   }
 }
