@@ -1,13 +1,12 @@
 // Builds reisierx.com into ./site for Vercel (vercel.json runs `node build.mjs`).
 //
-// It copies the pages, styles and fonts; draws the mark into the pages and into the
-// images (og.png, favicon.png, apple-touch-icon.png); and refuses to build if the site
-// breaks one of its own rules: the shape of the argument, one booking link that says the
-// call is paid, the call's length stated once wherever the call is offered and the same in
-// every place, no price anywhere, a way past the masthead for keyboards, nothing loaded from another
-// origin, no script, and colours that keep their contrast in both colour schemes. Every page
-// is also stamped with the commit it was built from. Nothing is written unless every check
-// passes.
+// It copies the pages, styles and fonts; draws the mark beside the name on every page and
+// into the images (og.png, favicon.png, apple-touch-icon.png); and refuses to build if the
+// site breaks one of its own rules: one booking link that says the call is paid, the call's
+// length stated once wherever the call is offered and the same in every place, no price
+// anywhere, a way past the masthead for keyboards, nothing loaded from another origin, no
+// script, and colours that keep their contrast in both colour schemes. Every page is also
+// stamped with the commit it was built from. Nothing is written unless every check passes.
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { deflateSync } from "node:zlib";
@@ -18,14 +17,10 @@ const check = (holds, rule) => {
   if (!holds) failures.push(rule);
 };
 
-// The mark: three points on an equilateral triangle, one for each fact. Every result is
-// partly luck is the top point, no one knows enough the bottom left, time runs out the
-// bottom right.
-// A filled red point is a fact the entry beside it rests on; an open ring is a fact it does
-// not use. A ring's radius is cut by half its width, so its outer edge matches a filled
-// point, and the ring is drawn thick enough to hold its colour on a dark ground. All three
-// filled is ∴, the sign for "therefore", and marks the conclusion.
-const MARK = { width: 24, height: 22, r: 3.25, ring: 1.6, points: [[12, 4.5], [4.5, 17.5], [19.5, 17.5]] };
+// The mark: three red points on an equilateral triangle, ∴, the sign for "therefore". It is
+// the company's sign: it stands beside the name at the head of every page, and it is the
+// favicon, the touch icon and the card a shared link shows.
+const MARK = { width: 24, height: 22, r: 3.25, points: [[12, 4.5], [4.5, 17.5], [19.5, 17.5]] };
 
 // ---- Colour, read from tokens.css ----------------------------------------------------
 
@@ -56,15 +51,17 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-// Ink is held to 7:1. Soft ink and red also set text, so they are held to 4.5:1. Unlit
-// draws the open rings of the mark, a graphic that carries meaning; 3:1 is the floor for
-// that, but a thin ring reads fainter than its colour, so it is held to 4:1. The booking
-// button sets on-act on act: its words are held to 4.5:1 on the fill, and the fill, the
-// shape of a control, to 3:1 on the paper.
-const NEEDS = { ink: 7, "ink-soft": 4.5, red: 4.5, unlit: 4 };
+// Ink is held to 7:1. Soft ink and red are held to 4.5:1: soft ink sets text, and red
+// draws the focus ring and the underline of the masthead's way to the call. The booking
+// button sets on-act on act: its words are held to 4.5:1 on the fill, and on the fill it
+// takes while pointed at or pressed; both fills, the shape of a control, to 3:1 on the
+// paper.
+const NEEDS = { ink: 7, "ink-soft": 4.5, red: 4.5 };
 const PAIRS = [
   ["on-act", "act", 4.5],
+  ["on-act", "act-press", 4.5],
   ["act", "paper", 3],
+  ["act-press", "paper", 3],
 ];
 const ratios = { light: [], dark: [] };
 for (const [scheme, palette] of [["light", light], ["dark", dark]]) {
@@ -112,56 +109,32 @@ const SHA = /^[0-9a-f]{7,64}$/i.test(commit) ? commit.toLowerCase() : "unknown";
 
 const source = readFileSync("index.html", "utf8");
 
-// The facts, in the order of the points of the mark, as the page states them.
-const facts = [...source.matchAll(/<h3 class="fact-title">([\s\S]*?)<\/h3>/g)].map((m) =>
-  m[1]
-    .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .trim()
-    .replace(/\.$/, "")
-    .replace(/^./, (c) => c.toLowerCase()),
-);
-check(facts.length === MARK.points.length, "index.html states one fact for each point of the mark");
-
-// The shape of the argument: each fact marked once, each pair of facts giving one answer,
-// and all three together giving the conclusion.
-const marks = [...source.matchAll(/<!--mark:([1-3]+)-->/g)].map((m) => [...m[1]].sort().join(""));
-check(
-  marks.slice().sort().join(" ") === ["1", "2", "3", "12", "13", "23", "123"].sort().join(" "),
-  "the marks cover each fact once, each pair of facts once, and all three once",
-);
-
 // The one booking link, read from the source so the page can say how it is booked.
 const bookingTags = [...source.matchAll(/<a\b[^>]*\bdata-book\b[^>]*>/g)].map((m) => m[0]);
 const bookingHref = (bookingTags[0]?.match(/\bhref="([^"]*)"/)?.[1] ?? "").replace(/&amp;/g, "&");
 const bookingAddress = bookingHref.startsWith("mailto:") ? bookingHref.slice(7).split("?")[0] : "";
 
-function mark(lit) {
-  const dots = MARK.points
-    .map(([cx, cy], i) =>
-      lit.includes(i + 1)
-        ? `<circle class="on" cx="${cx}" cy="${cy}" r="${MARK.r}"/>`
-        : `<circle class="off" cx="${cx}" cy="${cy}" r="${MARK.r - MARK.ring / 2}" stroke-width="${MARK.ring}"/>`,
-    )
-    .join("");
-  // A single filled point stands beside its own fact and adds nothing to the words. Two or
-  // three say what a line rests on, so screen readers are told which.
-  let a11y = 'aria-hidden="true"';
-  if (lit.length === MARK.points.length) a11y = 'role="img" aria-label="Rests on all three facts."';
-  else if (lit.length > 1) a11y = `role="img" aria-label="Rests on two facts: ${lit.map((n) => facts[n - 1]).join("; ")}."`;
-  return `<svg class="mark" viewBox="0 0 ${MARK.width} ${MARK.height}" width="${MARK.width}" height="${MARK.height}" ${a11y} focusable="false">${dots}</svg>`;
-}
+// The mark beside the name says nothing the name does not, so screen readers pass over it.
+const MARK_SVG =
+  `<svg class="mark" viewBox="0 0 ${MARK.width} ${MARK.height}" width="${MARK.width}" height="${MARK.height}" aria-hidden="true" focusable="false">` +
+  MARK.points.map(([cx, cy]) => `<circle cx="${cx}" cy="${cy}" r="${MARK.r}"/>`).join("") +
+  `</svg>`;
 
 // A comment runs from <!-- to the first --> after it, and no further.
 const COMMENT = "<!--(?:(?!-->)[\\s\\S])*-->";
 
 function page(file) {
   let html = readFileSync(file, "utf8");
-  html = html.replace(/<!--mark:([1-3]+)-->/g, (_, digits) => mark([...digits].map(Number)));
+  html = html.replace(/<!--mark-->/g, MARK_SVG);
   check(!/<!--\s*mark/i.test(html), `${file} has no mark the build could not read`);
-  // While booking is by email, the address is printed under the link, for anyone whose
-  // mail program does not open. A booking page needs no such line.
-  html = html.replace(/<!--booking-via-->/g, bookingAddress ? `<span class="via">By email, to ${bookingAddress}</span>` : "");
+  check(
+    (html.match(/<svg class="mark"/g) ?? []).length === 1 && /class="brand"[^>]*>\s*<svg class="mark"/.test(html),
+    `${file} shows the mark once, beside the name`,
+  );
+  // While booking is by email, the line under the link says what pressing it will do and
+  // gives the address, for anyone whose mail program does not open. A booking page needs
+  // no such line.
+  html = html.replace(/<!--booking-via-->/g, bookingAddress ? `<span class="via">Opens an email to ${bookingAddress}</span>` : "");
   // Notes in the source are for whoever edits it; they are not shipped.
   html = html.replace(new RegExp(`^[ \\t]*${COMMENT}[ \\t]*\\r?\\n`, "gm"), "").replace(new RegExp(COMMENT, "g"), "");
   html = html.replace(/\{\{paper\}\}/g, light.paper ?? "").replace(/\{\{paper-dark\}\}/g, dark.paper ?? "");
@@ -193,28 +166,48 @@ check(/\bpaid\b/i.test(bookingWords), "the booking link says the call is paid");
 // a change to the pages alone.
 // No page states a price. The owner keeps the fee off the site, so that changing it never
 // means changing the pages; the booking link still says the call is paid. A price could
-// hide behind an entity, so entities are read first.
+// hide behind an entity or in an encoded link, so both are read first. Three rules keep it
+// off: no currency, as a sign, a code or a word, anywhere in a page or its links; no fee
+// given as a bare number beside a word for one; and no figure at all in what a visitor
+// reads (the text, the descriptions and the links) other than the call's length, so a
+// price in words or with no currency is caught too.
 const SYMBOLS = { euro: "€", pound: "£", dollar: "$", yen: "¥", cent: "¢", nbsp: " " };
 const decode = (html) =>
   html
     .replace(/&([a-z]+);/gi, (whole, name) => SYMBOLS[name.toLowerCase()] ?? whole)
     .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
     .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)));
-const AMOUNT = String.raw`\d+(?:[.,]\d+)*`;
-const FEE = new RegExp(
-  String.raw`[$€£¥¢]\s*${AMOUNT}|${AMOUNT}\s*(?:[$€£¥¢]|(?:EUR|USD|GBP|CHF|euros?|dollars?|pounds?|francs?)\b)|\b(?:EUR|USD|GBP|CHF)\s*${AMOUNT}`,
-  "gi",
-);
-// A price could also be given as a bare number beside a word for it.
+const CURRENCY =/[$€£¥¢₹₽₩₺₪]|\b(?:EUR|USD|GBP|CHF|JPY|AUD|CAD|BRL|euros?|dollars?|pounds?|francs?|quid|bucks)\b/i;
 const BARE_FEE = /\b(?:fees?|prices?|priced|costs?|costing|rates?|charges?|charged)\b[^.<]{0,40}?\d/i;
+// A price in words needs one of these.
+const AMOUNT_WORDS = /\b(?:hundreds?|thousands?)\b/i;
+// A link as the browser reads it, so a sign or figure cannot hide behind percent-encoding.
+const readLink = (href) => {
+  const raw = href.replace(/&amp;/g, "&");
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+};
+// What a visitor reads: the text of the body, its links and any words in its attributes,
+// and the two descriptions.
+const readable = (html) => {
+  const body = html.slice(Math.max(0, html.search(/<body\b/i)));
+  const said = [...body.matchAll(/\b(?:alt|title|aria-label|placeholder)="([^"]*)"/g)].map((m) => m[1]);
+  const links = [...body.matchAll(/\bhref="([^"]*)"/g)].map((m) => readLink(m[1]));
+  const text = body.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, " ").replace(/<[^>]+>/g, " ");
+  return decode([text, ...said, ...links, metaContent(html, "description") ?? "", metaContent(html, "og:description") ?? ""].join("\n"));
+};
 // A length in figures or words, in hours or minutes, read as minutes so that "one hour",
 // "an hour" and "sixty minutes" agree, and "an hour and a half" does not.
 const WORDS = {
-  "half an": 0.5, half: 0.5, an: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, ten: 10, fifteen: 15,
-  twenty: 20, thirty: 30, "forty-five": 45, forty: 40, fifty: 50, sixty: 60, ninety: 90,
+  "three quarters of an": 0.75, "quarter of an": 0.25, "half an": 0.5, half: 0.5, an: 1, one: 1, two: 2, three: 3,
+  four: 4, five: 5, six: 6, ten: 10, fifteen: 15, twenty: 20, thirty: 30, "forty-five": 45, forty: 40, fifty: 50,
+  sixty: 60, ninety: 90,
 };
 const LENGTH = new RegExp(
-  String.raw`\b(${Object.keys(WORDS).join("|")}|\d+(?:[.,]\d+)?)[\s-]*(hours?|hrs?|minutes?|mins?)\b(\s+and\s+a\s+half)?`,
+  String.raw`\b(${Object.keys(WORDS).join("|")}|\d+(?:[.,]\d+)?)[\s-]*(hours?|hrs?|h|minutes?|mins?)\b(\s+and\s+a\s+half)?`,
   "gi",
 );
 const minutesOf = ([, amount, unit, andHalf]) =>
@@ -258,7 +251,13 @@ for (const [name, html] of Object.entries(pages)) {
     stated.forEach((match) => lengths.add(minutesOf(match)));
   }
   check(found(LENGTH, html).length === places.length, `${name} states the call's length nowhere but where the call is offered`);
-  check(found(FEE, html).length === 0 && !BARE_FEE.test(decode(html)), `${name} states no price, in figures or as a bare number`);
+  const whole = [decode(html), ...[...html.matchAll(/\bhref="([^"]*)"/g)].map((m) => readLink(m[1]))].join("\n");
+  check(!CURRENCY.test(whole) && !BARE_FEE.test(whole), `${name} names no currency and gives no fee as a bare number`);
+  const read = readable(html).replace(LENGTH, " ");
+  check(
+    !/\d/.test(read) && !AMOUNT_WORDS.test(read),
+    `${name} gives no figure, in digits or in words, in what a visitor reads, other than the call's length`,
+  );
   // A keyboard reaches the content without passing the masthead: the first link on the
   // page skips to the main element.
   const firstLink = html.slice(html.indexOf("<body")).match(/<a\b[^>]*>/)?.[0] ?? "";
@@ -399,7 +398,7 @@ for (const [name, image] of Object.entries(images)) {
 }
 
 console.log(
-  `built ${OUT}/: ${Object.keys(pages).length} pages, ${marks.length} marks, ${Object.keys(images).length} images; ` +
+  `built ${OUT}/: ${Object.keys(pages).length} pages, ${Object.keys(images).length} images; ` +
     `booking by ${bookingHref.split(":")[0]}; ` +
     `the call stated in ${Object.values(PLACES).flat().length} places as ${[...lengths][0]} minutes, with no price; ` +
     `contrast, light: ${ratios.light.join(", ")}; dark: ${ratios.dark.join(", ")}; ` +

@@ -2,11 +2,12 @@
 
 ## What this is
 The public company site for ReisierX, served at reisierx.com. One static page:
-a line that says what the company does and why to book it, then the reasoning
-behind it in the open (three facts no one chooses, three answers that each
-follow from two of them, and what all three say about a business that stalls),
-and the call. It is plain HTML and CSS. The current build, its medium and its
-checks are recorded in [`BUILD-NOTES.md`](BUILD-NOTES.md).
+a line that says what the company does and why to book it; under it, in plain
+words, what building businesses has shown that no one can change, and what
+the company wants; the habits that follow, each met in a case from a
+business; and the call. It reasons in sentences, not in apparatus. It is plain
+HTML and CSS. The current build, its medium and its checks are recorded in
+[`BUILD-NOTES.md`](BUILD-NOTES.md).
 
 ## Who it's for
 People with a hard problem in building a business who want it worked through
@@ -47,9 +48,10 @@ when the font arrives.
   another.
 - No page states the call's price (the owner's decision, 27 Nov 2026: the fee
   may change, and the pages should not have to change with it). The booking
-  link still says the call is paid. The build fails if any page gives a price,
-  in figures, with a currency, or as a bare number beside a word for it. Any
-  payment setup and any spend need the owner's yes first.
+  link still says the call is paid. The build fails if a page names a
+  currency anywhere (its links read decoded), gives a fee as a bare number,
+  or shows any figure, in digits or in words, other than the call's length.
+  Any payment setup and any spend need the owner's yes first.
 - No personal name anywhere on the site, and no named clients or firms.
 - Commits use the author `Gonçalo Reis <28686327+goncaloreis@users.noreply.github.com>`.
 - Medium and files are as in BUILD-NOTES.md: `index.html`, `404.html`,

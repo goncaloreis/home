@@ -1,15 +1,13 @@
 /*
- * ReisierX. One page: a line that says what the company does and why to book it, then
- * the reasoning behind it in the open: three facts no one chooses, what follows from them
- * two at a time, what all three say about a business that stalls, and the call. Every
- * value is a name from tokens.css. Phone first.
+ * ReisierX. One page: a line that says what the company does and why to book it; under
+ * it, in plain words, what building businesses has shown that no one can change, and what
+ * the company wants; the habits that follow, each met in a case from a business; and the
+ * call. Every value is a name from tokens.css. Phone first.
  *
  * The serif sets everything the page says. The device's sans sets what is used to find
  * the way and to act: the section labels, the two links to the call and the note under
- * the booking button. On every size each mark hangs in the margin beside the first line
- * of its entry, so the text keeps one edge and the margin, read alone, shows single facts
- * becoming pairs and then all three. From 1024 px the section labels stand in a rail to
- * the left of the text.
+ * the booking button. The margins are the same on both sides at every width. From 1024 px
+ * the section labels stand in a rail to the left of the text.
  */
 
 *,
@@ -67,11 +65,13 @@ a {
   transition:
     text-decoration-color var(--duration) var(--ease),
     color var(--duration) var(--ease),
-    background-color var(--duration) var(--ease),
-    border-color var(--duration) var(--ease);
+    background-color var(--duration) var(--ease);
 }
 
-/* Hover only where there is a real pointer, so a tap never leaves a mark behind. */
+/* Hover only where there is a real pointer, so a tap never leaves a mark behind. The
+   booking button underlines its words and, on light paper, deepens its red, rather than
+   changing colour, so it stays the same control under the pointer. The underline also
+   shows in forced colours, where the fill is not drawn. */
 @media (hover: hover) {
   a:hover {
     text-decoration-color: var(--red);
@@ -81,34 +81,48 @@ a {
     text-decoration-line: underline;
   }
 
-  .to-call:hover,
-  .book:hover {
-    border-color: var(--ink);
-    background: var(--ink);
-    color: var(--paper);
+  .to-call:hover {
+    text-decoration-color: var(--ink);
   }
+
+  .book:hover {
+    background: var(--act-press);
+    text-decoration-line: underline;
+    text-decoration-color: currentColor;
+  }
+}
+
+.book:active {
+  background: var(--act-press);
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
 }
 
 /* Focus: a red ring standing off the element, drawn at once (an outline has no
    transition). Every control that gets one has room around it, so the ring never
-   touches a letter. */
+   touches a letter. On the red button a red ring would melt into the fill, so there it
+   is drawn in ink. */
 :focus-visible {
   outline: var(--focus-width) solid var(--red);
   outline-offset: var(--focus-offset);
 }
 
+.book:focus-visible {
+  outline-color: var(--ink);
+}
+
 /* A link inside a line of text gets the same ring, drawn closer, with its underline
    cleared; the footer's lines are spaced so the ring clears the lines above and below. */
-.join a:focus-visible {
+.contact a:focus-visible {
   outline-offset: var(--focus-offset-inline);
   text-decoration-color: transparent;
 }
 
 .page {
   position: relative;
-  max-width: calc(var(--page-max) + var(--pad-start) + var(--pad-end));
+  max-width: calc(var(--page-max) + 2 * var(--pad));
   margin-inline: auto;
-  padding-inline: var(--pad-start) var(--pad-end);
+  padding-inline: var(--pad);
 }
 
 /* The first stop for a keyboard: straight to the content. Shown only while focused,
@@ -134,8 +148,8 @@ a {
   white-space: nowrap;
 }
 
-/* Masthead: the name, and the way to the call with its terms. Where the two do not fit
-   on one line, the way to the call drops below the name. */
+/* Masthead: the mark and the name, and the way to the call. Where the two do not fit on
+   one line, the way to the call drops below the name. */
 .masthead {
   display: flex;
   flex-wrap: wrap;
@@ -146,31 +160,46 @@ a {
 }
 
 .brand {
+  display: flex;
+  align-items: center;
+  gap: var(--mark-gap);
   font-size: var(--size-brand);
   line-height: var(--lead-brand);
   font-weight: var(--weight-strong);
   text-decoration-line: none;
 }
 
-/* The way to the call, framed so it reads as the action it leads to. */
+/* The mark: three red points, the sign for therefore, the company's sign. */
+.mark {
+  display: block;
+  flex: none;
+  width: var(--mark);
+  height: auto;
+  forced-color-adjust: none;
+}
+
+.mark circle {
+  fill: var(--mark-on);
+}
+
+/* The way to the call: a verb, underlined in red, so it reads as the action it leads
+   to. The space above and below it gives it room to tap and room for its ring. */
 .to-call {
   flex: none;
-  padding: var(--space-2) var(--space-4);
-  border: var(--hairline-width) solid var(--ink);
-  border-radius: var(--radius);
+  padding-block: var(--space-2);
   font-family: var(--font-ui);
   font-size: var(--size-ui);
   line-height: var(--lead-ui);
   font-weight: var(--weight-ui);
   letter-spacing: var(--track-ui);
-  text-decoration: none;
+  text-decoration-color: var(--red);
+  text-decoration-thickness: var(--underline-act);
   white-space: nowrap;
 }
 
 .tagline,
-.turn,
-.answer-title,
-.where-title,
+.lede,
+.habit-title,
 .call-lead,
 .lost-title {
   font-family: var(--font-display);
@@ -189,8 +218,18 @@ a {
   text-wrap: balance;
 }
 
-/* Each part of the argument opens on a hairline. On phones its label stands above it;
-   from 1024 px the label moves into the rail. */
+/* Under it, in plain words, what building businesses has shown and what the company
+   wants. */
+.lede {
+  margin-top: var(--space-lede);
+  max-width: var(--measure-lede);
+  font-size: var(--size-lede);
+  line-height: var(--lead-lede);
+  text-wrap: pretty;
+}
+
+/* Each part opens on a hairline. On phones its label stands above it; from 1024 px the
+   label moves into the rail. */
 .part {
   padding-top: var(--part-top);
   border-top: var(--hairline-width) solid var(--faint);
@@ -207,106 +246,20 @@ a {
   color: var(--ink-soft);
 }
 
-/* The mark: three points, one for each fact. A filled red point is a fact the entry
-   beside it rests on; an open ring is a fact it does not use. All three filled is the
-   sign for therefore, and only the conclusion carries it. */
-.mark {
-  display: block;
-  width: var(--mark);
-  height: auto;
-  overflow: visible;
-  forced-color-adjust: none;
-}
-
-.mark .on {
-  fill: var(--mark-on);
-}
-
-.mark .off {
-  fill: var(--mark-off);
-  stroke: var(--mark-ring);
-}
-
-/* Every mark hangs in the margin, a gap away from the text and centred on the first line
-   of its entry, so all the text starts on one edge. Its font size is the entry's, so a
-   leading given in em resolves as it does for the line. */
-.fact,
-.answer,
-.therefore {
-  position: relative;
-}
-
-.fact > .mark,
-.answer > .mark,
-.therefore > .mark {
-  position: absolute;
-  inset-inline-end: calc(100% + var(--mark-gap));
-}
-
-.fact > .mark {
-  top: calc((var(--lead-fact) - var(--mark-height)) / 2);
-  font-size: var(--size-fact);
-}
-
-.answer > .mark {
-  top: calc((var(--lead-answer) - var(--mark-height)) / 2);
-  font-size: var(--size-answer);
-}
-
-.therefore > .mark {
-  width: var(--mark-where);
-  top: calc((var(--lead-where) - var(--mark-where-height)) / 2);
-  font-size: var(--size-where);
-}
-
-/* Given: the three facts, each run on into what it means. They are premises, so they
-   are set at reading size, below everything that follows from them. */
-.given {
-  margin-top: var(--space-given);
-}
-
-.facts {
-  display: grid;
-  row-gap: var(--space-facts);
-}
-
-.premise {
-  max-width: var(--measure-fact);
-  font-size: var(--size-fact);
-  line-height: var(--lead-fact);
-  text-wrap: pretty;
-}
-
-.premise > * {
-  display: inline;
-}
-
-.gloss {
-  color: var(--ink-soft);
-}
-
-/* What follows: the aim the facts do not set, then one answer for each pair of facts. */
-.follows {
+/* The habits: each a short line, then a case from a business and what we do about it. */
+.habits {
   margin-top: var(--space-band);
 }
 
-.turn {
-  max-width: var(--measure-turn);
-  font-size: var(--size-turn);
-  line-height: var(--lead-turn);
-  text-wrap: balance;
-}
-
-.answers {
+.habit-list {
   display: grid;
-  row-gap: var(--space-answers);
-  margin-top: var(--space-8);
+  row-gap: var(--space-habits);
 }
 
-.answer-title {
-  max-width: var(--measure-answer);
-  font-size: var(--size-answer);
-  line-height: var(--lead-answer);
+.habit-title {
+  max-width: var(--measure-habit);
+  font-size: var(--size-habit);
+  line-height: var(--lead-habit);
   text-wrap: balance;
 }
 
@@ -316,25 +269,15 @@ a {
   text-wrap: pretty;
 }
 
-/* The conclusion: one bar in ink under the whole argument, then the only line with all
-   three points filled. */
-.where {
-  margin-top: var(--space-section);
-  padding-top: var(--space-8);
-  border-top: var(--bar-width) solid var(--ink);
-}
-
-.where-title {
-  max-width: var(--measure-where);
-  font-size: var(--size-where);
-  line-height: var(--lead-where);
-  text-wrap: balance;
-}
-
-/* The call: what it is and that it is paid, what it costs and how long it lasts, what to
-   write, and only then the one booking link, the only filled block on the page. */
+/* The call: what it is and that it is paid, what happens in it, how long it lasts and
+   what to write, and only then the one booking link, the only filled block on the page.
+   It is tall enough that the masthead's link always stops in the blank gap above it,
+   with nothing cut in half at the top of the screen (see --call-min). Its parts stay at
+   the top of that height. */
 .call {
   margin-top: var(--space-section);
+  min-height: var(--call-min);
+  align-content: start;
   scroll-margin-top: var(--space-6);
 }
 
@@ -346,8 +289,7 @@ a {
 }
 
 .offer,
-.terms,
-.brief {
+.terms {
   max-width: var(--measure);
   text-wrap: pretty;
 }
@@ -356,8 +298,7 @@ a {
   margin-top: var(--space-4);
 }
 
-.terms,
-.brief {
+.terms {
   margin-top: var(--space-3);
 }
 
@@ -384,7 +325,8 @@ a {
   text-decoration: none;
 }
 
-/* Shown by the build only while the booking link is an email. */
+/* Shown by the build only while the booking link is an email: what pressing it does,
+   and the address, for anyone whose mail program does not open. */
 .via {
   font-family: var(--font-ui);
   font-size: var(--size-ui);
@@ -395,7 +337,7 @@ a {
 .colophon {
   display: grid;
   row-gap: var(--space-1);
-  margin-top: var(--space-24);
+  margin-top: var(--space-16);
   padding-block: var(--space-4) var(--space-10);
   border-top: var(--hairline-width) solid var(--faint);
   font-size: var(--size-note);
@@ -403,7 +345,7 @@ a {
   color: var(--ink-soft);
 }
 
-.join {
+.contact {
   max-width: var(--measure);
   text-wrap: pretty;
 }
@@ -418,8 +360,8 @@ a {
 }
 
 .lost-title {
-  font-size: var(--size-answer);
-  line-height: var(--lead-answer);
+  font-size: var(--size-habit);
+  line-height: var(--lead-habit);
   text-wrap: balance;
 }
 
@@ -436,9 +378,7 @@ a {
 }
 
 /* From 1024 px each part is two columns: its label in the rail, set on the baseline of
-   the part's first line, and the text beside it. The marks hang in the gutter between,
-   and the footer keeps the same columns. A fact and its meaning would run past the
-   column's edge by a few words, so each takes a line of its own instead. */
+   the part's first line, and the text beside it. The footer keeps the same columns. */
 @media (min-width: 1024px) {
   .part,
   .colophon {
@@ -455,12 +395,8 @@ a {
   }
 
   .part > :not(.label),
-  .colophon > .join {
+  .colophon > .contact {
     grid-column: 2;
-  }
-
-  .premise > * {
-    display: block;
   }
 }
 
@@ -481,9 +417,11 @@ a {
     max-width: none;
   }
 
-  .fact,
-  .answer,
-  .therefore {
+  .call {
+    min-height: 0;
+  }
+
+  .habit {
     break-inside: avoid;
   }
 

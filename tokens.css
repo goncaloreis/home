@@ -35,7 +35,7 @@
  * takes the same room before the web font arrives. size-adjust matches the average
  * advance width; the overrides are 103.6% and 33.5% divided by size-adjust (Chromium
  * scales overrides by size-adjust), which puts every baseline where Source Serif 4 puts
- * it. Display: the opening line, the answers, the conclusion and other large lines.
+ * it. Display: the opening line, the paragraph under it, the habits and other large lines.
  * Text: reading sizes.
  */
 @font-face {
@@ -95,32 +95,26 @@
 :root {
   color-scheme: light dark;
 
-  /* Colour: paper, ink and one red. The build checks ink (at least 7:1), soft ink and
-     red (at least 4.5:1) and unlit (at least 4:1) against the paper. Faint is only for
-     hairlines. Unlit draws the points of the mark that are not lit, as open rings, so
-     every mark shows its whole triangle and a single red point reads as a position.
-     Act is the booking button's fill and on-act its words: the build holds the words to
-     4.5:1 on the fill, and the fill to 3:1 on the paper. */
+  /* Colour: paper, ink and one red. The build checks ink (at least 7:1), and soft ink and
+     red (at least 4.5:1), against the paper. Faint is only for hairlines. Act is the
+     booking button's fill, act-press the deeper red it takes while pointed at or pressed,
+     and on-act its words: the build holds the words to 4.5:1 on both fills, and the fill
+     to 3:1 on the paper. */
   --paper: #F7F5F0;
   --ink: #141210;
   --ink-soft: #5B564F;
   --red: #B3261E;
   --faint: #D9D3C9;
-  --unlit: #7A7369;
   --act: #B3261E;
+  --act-press: #8E1D17;
   --on-act: #F7F5F0;
   --on-red: var(--paper);
 
-  /* The mark: lit points filled in red, the others open rings. The points, radius and
-     ring width are geometry, set by build.mjs, which draws the mark 24 wide and 22 high. */
+  /* The mark beside the name: three red points, the sign for therefore. Its points and
+     radius are geometry, set by build.mjs, which draws it 24 wide and 22 high. */
   --mark-on: var(--red);
-  --mark-off: none;
-  --mark-ring: var(--unlit);
-  --mark: 1.25rem;
-  --mark-where: 1.5rem;
-  --mark-gap: 0.625rem;
-  --mark-height: calc(var(--mark) * 22 / 24);
-  --mark-where-height: calc(var(--mark-where) * 22 / 24);
+  --mark: 1.125rem;
+  --mark-gap: 0.5rem;
 
   /* Type. The sans is the device's own: San Francisco, Segoe UI or Roboto. */
   --font-display: "Source Serif 4", "Fallback Display Georgia", "Fallback Display Liberation", "Fallback Display Noto", ui-serif, Georgia, serif;
@@ -137,8 +131,8 @@
   --track-ui: 0.01em;
 
   /* Sizes on phones; wider screens raise them below. The opening line is the largest:
-     it says what the company does and why to book it. Then the conclusion, the answers,
-     the aim, and the facts, which are premises and sit at reading size. */
+     it says what the company does and why to book it. Then the habits and the line that
+     opens the call, then the paragraph under the opening line, then reading text. */
   --size-label: 0.75rem;
   --lead-label: 1.125rem;
   --size-ui: 0.875rem;
@@ -149,18 +143,14 @@
   --lead-note: 1.75rem;
   --size-body: 1.125rem;
   --lead-body: 1.75rem;
-  --size-hero: 2rem;
-  --lead-hero: 2.375rem;
-  --size-fact: 1.125rem;
-  --lead-fact: 1.625rem;
-  --size-turn: 1.25rem;
-  --lead-turn: 1.75rem;
-  --size-answer: 1.625rem;
-  --lead-answer: 2rem;
-  --size-where: 1.875rem;
-  --lead-where: 2.25rem;
-  --size-call: 1.625rem;
-  --lead-call: 2rem;
+  --size-hero: 1.875rem;
+  --lead-hero: 2.25rem;
+  --size-lede: 1.25rem;
+  --lead-lede: 1.875rem;
+  --size-habit: 1.5rem;
+  --lead-habit: 1.875rem;
+  --size-call: 1.5rem;
+  --lead-call: 1.875rem;
   --size-book: 1.0625rem;
   --lead-book: 1.5rem;
 
@@ -175,41 +165,45 @@
   --space-16: 4rem;
   --space-24: 6rem;
 
-  /* Page geometry. On phones the margin before the text is the wider one, because the
-     marks hang in it. From 1024 px a rail to the left of the text holds the section
-     labels, and the page is as wide as the rail, the gutter and the text. */
-  --pad-start: 2.75rem;
-  --pad-end: 1.5rem;
+  /* Page geometry. The margins are the same on both sides at every width. From 1024 px a
+     rail to the left of the text holds the section labels, and the page is as wide as the
+     rail, the gutter and the text. */
+  --pad: 1.5rem;
   --rail: 0rem;
   --gutter: 0rem;
   --text-column: 42rem;
   --page-max: 60rem;
   --measure: 34rem;
-  --measure-fact: 60rem;
   --measure-hero: 18em;
-  --measure-turn: 30em;
-  --measure-answer: 20em;
-  --measure-where: 20em;
-  --measure-call: 16em;
+  --measure-lede: 32em;
+  --measure-habit: 20em;
+  --measure-call: 20em;
   --masthead-top: 1.25rem;
   --space-hero: 2.5rem;
-  --space-given: 3rem;
-  --space-band: 2.5rem;
+  --space-lede: 1.25rem;
+  --space-band: 3.5rem;
   --space-section: 4.5rem;
   --part-top: 0.75rem;
-  --space-facts: 1rem;
-  --space-answers: 2.5rem;
+  --space-habits: 2.5rem;
   --screen: 100svh;
+
+  /* The call section's least height. When the masthead's link brings the call up, the page
+     runs out before the call reaches the top, and the screen stops in the blank gap above
+     the call. This height puts that stop at least 1rem below the last line of the habits:
+     a screen, less the call's gap but 1rem, less the footer's gap (4rem) and a one-line
+     footer (5rem, a little under its height). No line is cut at the top edge, and the call
+     leaves no more blank below it than that needs. */
+  --call-min: calc(var(--screen) - var(--space-section) - 8rem);
 
   /* Lines */
   --hairline-width: 1px;
-  --bar-width: 1px;
   --radius: 2px;
 
   /* Links and focus. The ring stands off the element, and every control has room around
      it, so a ring never touches a letter. A link inside a line of text has its ring drawn
      closer, and that line is spaced to hold it. */
   --underline: 0.0625em;
+  --underline-act: 0.125em;
   --underline-offset: 0.2em;
   --focus-width: 2px;
   --focus-offset: 3px;
@@ -221,10 +215,12 @@
 }
 
 /* The dark version is for screens only, so a page printed from a dark device is still
-   dark ink on light paper. Small labels and thin rings lose the most on a dark ground,
-   so soft ink and unlit are lighter here, and labels a little heavier. The red of the
-   points must be light to show on the dark paper, but a light fill under dark words reads
-   as peach, so the booking button keeps a deep red with light words, as on paper. */
+   dark ink on light paper. Small labels lose the most on a dark ground, so soft ink is
+   lighter here, and labels a little heavier. The red of the mark and the focus ring must
+   be light to show on the dark paper, but a light fill under dark words reads as peach,
+   so the booking button keeps a deep red with light words, as on paper. That red has no
+   room to deepen without losing its edge against the dark paper, so here the button
+   shows it is pointed at or pressed by its underline alone. */
 @media screen and (prefers-color-scheme: dark) {
   :root {
     --paper: #121110;
@@ -232,8 +228,8 @@
     --ink-soft: #B5AFA5;
     --red: #F2735F;
     --faint: #3B3732;
-    --unlit: #8C857A;
     --act: #B8332A;
+    --act-press: #B8332A;
     --on-act: #EDE9E2;
     --weight-text: 380;
     --weight-display: 370;
@@ -243,67 +239,61 @@
   }
 }
 
-/* From 640 px the margins are even and wide enough to hold the marks. */
+/* From 360 px the opening line takes its full phone size; below that it is a step
+   smaller, so its first words keep to one line on the narrowest phones. */
+@media (min-width: 360px) {
+  :root {
+    --size-hero: 2rem;
+    --lead-hero: 2.375rem;
+  }
+}
+
 @media (min-width: 640px) {
   :root {
-    --pad-start: 4rem;
-    --pad-end: 4rem;
+    --pad: 4rem;
     --masthead-top: 1.75rem;
-    --mark: 1.375rem;
-    --mark-where: 2rem;
-    --mark-gap: 0.875rem;
+    --mark: 1.25rem;
     --size-hero: 2.75rem;
     --lead-hero: 3.125rem;
-    --size-fact: 1.1875rem;
-    --lead-fact: 1.75rem;
-    --size-turn: 1.5rem;
-    --lead-turn: 2rem;
-    --size-answer: 2.125rem;
-    --lead-answer: 2.5rem;
-    --size-where: 2.5rem;
-    --lead-where: 2.875rem;
-    --size-call: 2.125rem;
-    --lead-call: 2.5rem;
+    --size-lede: 1.3125rem;
+    --lead-lede: 2rem;
+    --size-habit: 1.75rem;
+    --lead-habit: 2.125rem;
+    --size-call: 1.75rem;
+    --lead-call: 2.125rem;
     --size-book: 1.125rem;
     --lead-book: 1.625rem;
     --space-hero: 4rem;
-    --space-given: 4.5rem;
-    --space-band: 3rem;
+    --space-lede: 1.5rem;
+    --space-band: 4.5rem;
     --space-section: 6rem;
   }
 }
 
-/* From 1024 px the section labels move into the rail. The gutter between rail and text
-   holds the marks of the facts and the answers, each a mark's width and its gap from the
-   text. The conclusion's larger mark reaches a little into the rail, where that part has
-   no label. Each fact now takes two lines, so the facts stand further apart. */
+/* From 1024 px the section labels move into the rail, with a gutter between rail and
+   text. The opening line and the paragraph under it keep the full width. */
 @media (min-width: 1024px) {
   :root {
-    --pad-start: 5rem;
-    --pad-end: 5rem;
+    --pad: 5rem;
     --rail: 10rem;
     --gutter: 3rem;
     --page-max: calc(var(--rail) + var(--gutter) + var(--text-column));
     --masthead-top: 2rem;
-    --mark: 1.5rem;
-    --mark-where: 2.25rem;
-    --mark-gap: 1rem;
     --size-ui: 0.9375rem;
     --lead-ui: 1.375rem;
     --size-brand: 1.125rem;
     --lead-brand: 1.625rem;
     --size-hero: 3rem;
     --lead-hero: 3.5rem;
-    --size-fact: 1.25rem;
-    --lead-fact: 1.875rem;
+    --size-lede: 1.375rem;
+    --lead-lede: 2.0625rem;
     --measure: 38rem;
     --space-hero: 4.5rem;
-    --space-given: 5rem;
-    --space-band: 3.5rem;
+    --space-lede: 1.75rem;
+    --space-band: 5rem;
     --space-section: 7rem;
     --part-top: 1.5rem;
-    --space-facts: 1.25rem;
-    --space-answers: 3rem;
+    --space-habits: 3rem;
   }
 }
 
@@ -312,14 +302,12 @@
     --rail: 12rem;
     --size-hero: 3.5rem;
     --lead-hero: 3.875rem;
-    --size-turn: 1.625rem;
-    --lead-turn: 2.125rem;
-    --size-answer: 2.5rem;
-    --lead-answer: 3rem;
-    --size-where: 3rem;
-    --lead-where: 3.5rem;
-    --size-call: 2.5rem;
-    --lead-call: 3rem;
+    --size-lede: 1.5rem;
+    --lead-lede: 2.25rem;
+    --size-habit: 1.875rem;
+    --lead-habit: 2.375rem;
+    --size-call: 1.875rem;
+    --lead-call: 2.375rem;
     --lead-book: 1.75rem;
   }
 }
@@ -330,18 +318,14 @@
   }
 }
 
-/* High contrast: system colours, the mark redrawn as filled and open points, and the
-   leading of large lines opened so the plates painted behind each line never cover the
-   descenders of the line above. */
+/* High contrast: system colours, the mark drawn in the text colour, and the leading of
+   large lines opened so the plates painted behind each line never cover the descenders
+   of the line above. */
 @media (forced-colors: active) {
   :root {
     --mark-on: CanvasText;
-    --mark-off: Canvas;
-    --mark-ring: CanvasText;
     --lead-hero: 1.4em;
-    --lead-answer: 1.4em;
-    --lead-where: 1.4em;
-    --lead-turn: 1.4em;
+    --lead-habit: 1.4em;
     --lead-call: 1.4em;
   }
 }
